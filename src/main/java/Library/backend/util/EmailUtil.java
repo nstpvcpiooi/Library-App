@@ -14,7 +14,7 @@ public class EmailUtil {
         String from = "duongtuanminh2005@gmail.com";
         String host = "smtp.gmail.com";
         final String username = "duongtuanminh2005@gmail.com";
-        final String password = "xxed tevp gavq nphs";
+        final String password = "";
         Properties properties = System.getProperties();
         properties.setProperty("mail.smtp.host", host);
         properties.setProperty("mail.smtp.auth", "true");
