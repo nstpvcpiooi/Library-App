@@ -13,10 +13,10 @@ public class JDBCUtil {
         //	com.mysql.cj.jdbc.Driver driver = new com.mysql.cj.jdbc.Driver();
         try {
             // đăng ký mysql driver vơi drivermanager
-            DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
+
             String url = "jdbc:mySQL://localhost:3306/library";
             String username = "root";
-            String password = "";
+            String password = "minhbg123";
 
             c = DriverManager.getConnection(url, username, password);
         } catch (SQLException e) {
