@@ -14,7 +14,9 @@ public interface MemberDAO {
     String getOtpByEmail(String email);
     boolean deleteMemberById(int memberId);
     List<Member> searchMembers(String criteria, String value);
-
-
+    void forgotPass(String email);
+    boolean checkOTP(String email, String input);
+    boolean changePass(String email, String newPassword);
+    Member login(String userName, String password);
     
 }
