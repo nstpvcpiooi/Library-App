@@ -14,9 +14,8 @@ public class Member {
     private String otp;
     private int duty;
 
-    private static MemberDAO memberDAO = MemberDAOImpl.getInstance();
-    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    private static final int OTP_LENGTH = 6;
+
+
 
     // Getters and Setters
     public int getMemberID() {
@@ -75,52 +74,8 @@ public class Member {
         this.duty = duty;
     }
 
-    // Methods for login, create account, and delete member
-    public static Member authenticate(String userName, String password) {
-        return memberDAO.getMemberByUserNameAndPassword(userName, password);
-    }
 
-    public static boolean createAccount(Member member) {
-        return memberDAO.createMember(member);
-    }
 
-    public static boolean deleteMemberById(int memberId) {
-        return memberDAO.deleteMemberById(memberId);
-    }
 
-    // Methods for forgot password functionality
-    private static String generateOTP() {
-        StringBuilder otp = new StringBuilder(OTP_LENGTH);
-        for (int i = 0; i < OTP_LENGTH; i++) {
-            int index = (int) (Math.random() * CHARACTERS.length());
-            otp.append(CHARACTERS.charAt(index));
-        }
-        return otp.toString();
-    }
 
-    public static void forgotPass(String email) {
-        EmailUtil emailUtil = new EmailUtil();
-        String otp = generateOTP();
-        emailUtil.sendEmail(email, "OTP", otp);
-
-        Member member = memberDAO.getMemberByEmail(email);
-        if (member != null) {
-            member.setOtp(otp);
-            memberDAO.updateOtp(member);
-        }
-    }
-
-    public static boolean checkOTP(String email, String input) {
-        String storedOtp = memberDAO.getOtpByEmail(email);
-        return storedOtp != null && storedOtp.equals(input);
-    }
-
-    public static boolean changePass(String email, String newPassword) {
-        Member member = memberDAO.getMemberByEmail(email);
-        if (member != null) {
-            member.setPassword(newPassword);
-            return memberDAO.updateMember(member);
-        }
-        return false;
-    }
 }

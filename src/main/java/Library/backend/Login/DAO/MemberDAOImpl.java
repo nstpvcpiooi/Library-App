@@ -236,6 +236,53 @@ public class MemberDAOImpl implements MemberDAO {
         }
         return members;
     }
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private static final int OTP_LENGTH = 6;
+
+    private String generateOTP() {
+        StringBuilder otp = new StringBuilder(OTP_LENGTH);
+        for (int i = 0; i < OTP_LENGTH; i++) {
+            int index = (int) (Math.random() * CHARACTERS.length());
+            otp.append(CHARACTERS.charAt(index));
+        }
+        return otp.toString();
+    }
+
+    private void sendEmail(String to, String subject, String body) {
+        EmailUtil.sendEmail(to, subject, body);
+    }
+
+    @Override
+    public void forgotPass(String email) {
+        String otp = generateOTP();
+        sendEmail(email, "OTP", otp);
+
+        Member member = getMemberByEmail(email);
+        if (member != null) {
+            member.setOtp(otp);
+            updateOtp(member);
+        }
+    }
+
+    @Override
+    public boolean checkOTP(String email, String input) {
+        String storedOtp = getOtpByEmail(email);
+        return storedOtp != null && storedOtp.equals(input);
+    }
+
+    @Override
+    public boolean changePass(String email, String newPassword) {
+        Member member = getMemberByEmail(email);
+        if (member != null) {
+            member.setPassword(newPassword);
+            return updateMember(member);
+        }
+        return false;
+    }
+    @Override
+    public Member login(String userName, String password) {
+        return getMemberByUserNameAndPassword(userName, password);
+    }
 
 
 }

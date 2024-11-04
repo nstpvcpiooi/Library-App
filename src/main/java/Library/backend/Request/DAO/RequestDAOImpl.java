@@ -112,4 +112,20 @@ public class RequestDAOImpl implements RequestDAO{
         }
         return borrowHistory;
     }
+    @Override
+    public void borrowRequest(int memberID, int bookID) {
+        LocalDateTime borrowDate = LocalDateTime.now();
+        LocalDateTime returnDate = borrowDate.plusDays(7);
+        createBorrowRequest(new Request(memberID, bookID, borrowDate, returnDate));
+    }
+
+    @Override
+    public void returnBook(int memberID, int bookID) {
+        List<Request> requests = getMemberBorrowHistory(memberID);
+        for (Request request : requests) {
+            if (request.getBookID() == bookID && request.getReturnDate() == null) {
+                updateReturnTime(request.getRequestID(), LocalDateTime.now());
+            }
+        }
+    }
 }
