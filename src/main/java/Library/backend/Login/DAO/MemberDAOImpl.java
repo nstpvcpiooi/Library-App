@@ -5,10 +5,7 @@ import Library.backend.Login.Model.Member;
 import Library.backend.database.JDBCUtil;
 import Library.backend.util.EmailUtil;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +36,7 @@ public class MemberDAOImpl implements MemberDAO {
         Member member = null;
 
         try {
+
             connection = JDBCUtil.getConnection();
             String query = "SELECT * FROM Members WHERE userName = ? AND password = ?";
             preparedStatement = connection.prepareStatement(query);
@@ -197,16 +195,16 @@ public class MemberDAOImpl implements MemberDAO {
         }
     }
     @Override
-    public boolean deleteMemberById(int memberId) {
+    public void deleteMemberById(int memberId) {
         try (Connection connection = JDBCUtil.getConnection()) {
             String sql = "DELETE FROM members WHERE memberID = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, memberId);
             int rowsDeleted = preparedStatement.executeUpdate();
-            return rowsDeleted > 0;
+
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+
         }
     }
 
@@ -283,6 +281,30 @@ public class MemberDAOImpl implements MemberDAO {
     public Member login(String userName, String password) {
         return getMemberByUserNameAndPassword(userName, password);
     }
+    @Override
+    public List<Member> DisplayMembers() {
+        List<Member> members = new ArrayList<>();
+        String query = "SELECT * FROM Members";
 
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                Member member = new Member();
+                member.setMemberID(resultSet.getInt("memberID"));
+                member.setUserName(resultSet.getString("userName"));
+                member.setPassword(resultSet.getString("password"));
+                member.setEmail(resultSet.getString("email"));
+                member.setPhone(resultSet.getString("phone"));
+                member.setOtp(resultSet.getString("otp"));
+                member.setDuty(resultSet.getInt("duty"));
+                members.add(member);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return members;
+    }
 
 }

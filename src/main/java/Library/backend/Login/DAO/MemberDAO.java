@@ -12,11 +12,11 @@ public interface MemberDAO {
     boolean updateMember(Member member);
     void updateOtp(Member member);
     String getOtpByEmail(String email);
-    boolean deleteMemberById(int memberId);
+    void deleteMemberById(int memberId);
     List<Member> searchMembers(String criteria, String value);
     void forgotPass(String email);
     boolean checkOTP(String email, String input);
     boolean changePass(String email, String newPassword);
     Member login(String userName, String password);
-    
+    List<Member> DisplayMembers();
 }

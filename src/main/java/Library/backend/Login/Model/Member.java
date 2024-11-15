@@ -2,10 +2,16 @@ package Library.backend.Login.Model;
 
 import Library.backend.Login.DAO.MemberDAO;
 import Library.backend.Login.DAO.MemberDAOImpl;
+import Library.backend.bookDao.BookDao;
+import Library.backend.bookDao.MysqlBookDao;
+import Library.backend.bookModel.Book;
 import Library.backend.util.EmailUtil;
+
+import java.util.List;
 
 
 public class Member {
+    private BookDao bookDao= MysqlBookDao.getInstance();
     private int memberID;
     private String userName;
     private String password;
@@ -13,8 +19,18 @@ public class Member {
     private String phone;
     private String otp;
     private int duty;
-
-
+    @Override
+    public String toString() {
+        return "Member{" +
+                "memberID=" + memberID +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", otp='" + otp + '\'' +
+                ", duty=" + duty +
+                '}';
+    }
 
 
     // Getters and Setters
@@ -73,7 +89,10 @@ public class Member {
     public void setDuty(int duty) {
         this.duty = duty;
     }
-
+    public List<Book> searchBooks(String criteria, String value) {
+        // Implementation for searching books
+        return bookDao.searchBooks(criteria, value);
+    }
 
 
 
