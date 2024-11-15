@@ -1,10 +1,13 @@
 package Library.backend.Login.Model;
 
 import Library.backend.bookDao.BookDao;
+import Library.backend.bookDao.MysqlBookDao;
 import Library.backend.bookModel.Book;
 
+import java.util.List;
+
 public class Admin extends Member {
-    private BookDao bookDao;
+    private BookDao bookDao = MysqlBookDao.getInstance();
 
     public Admin(Member member) {
         this.setMemberID(member.getMemberID());
@@ -25,4 +28,5 @@ public class Admin extends Member {
         // Implementation for removing a book
         bookDao.deleteBook(bookId);
     }
+
 }
