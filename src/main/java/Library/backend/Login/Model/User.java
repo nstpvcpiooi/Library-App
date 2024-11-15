@@ -1,9 +1,16 @@
 package Library.backend.Login.Model;
-import Library.backend.Request.Controller.RequestController;
+
+
+import Library.backend.Request.DAO.RequestDAO;
+import Library.backend.Request.DAO.RequestDAOImpl;
+import Library.backend.Request.Model.Request;
+import Library.backend.bookDao.BookDao;
+
+import java.util.List;
 
 public class User extends Member {
+    private RequestDAO requestDAO = RequestDAOImpl.getInstance();
 
-    RequestController requestController = new RequestController();
     public User(Member member) {
         this.setMemberID(member.getMemberID());
         this.setUserName(member.getUserName());
@@ -13,13 +20,14 @@ public class User extends Member {
         this.setOtp(member.getOtp());
         this.setDuty(0);
     }
-    public void borrowBook(int bookId) {
-        // Implementation for borrowing a book
-        requestController.BorrowRequest(this.getMemberID(), bookId);
+    public void borrowBook(int bookID){
+        requestDAO.borrowRequest(this.getMemberID(), bookID);
     }
-    public void returnBook(int bookId) {
-        // Implementation for returning a book
-        requestController.returnBook(this.getMemberID(), bookId);
+    public void returnBook(int bookID){
+        requestDAO.returnBook(this.getMemberID(), bookID);
+    }
+    public List<Request> getRequests(){
+        return requestDAO.getMemberBorrowHistory(this.getMemberID());
     }
 
 }
