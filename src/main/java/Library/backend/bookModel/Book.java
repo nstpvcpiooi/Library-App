@@ -152,4 +152,8 @@ public class Book {
     public void setStatus(int status) {
         this.status = status;
     }
+
+    public static List<Book> fetchAllBooksFromAPI(){
+        return GoogleBookDao.getInstance().fetchAllBooksFromAPI();
+    }
 }

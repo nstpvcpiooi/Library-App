@@ -45,16 +45,18 @@ for(Book b : books){
     System.out.println(b);
 }
 
-/*
+*//*
 Book book1 = Book.fetchBookInfoFromAPI("9781466626874");
        System.out.println(book1);
+       book1.addBook();
+       */
      //   System.out.println(book1.fetchBookDescriptionFromAPI());
-        /*
+/*
         List<Book> allBooks = GoogleBookDao.getInstance().fetchAllBooksFromAPI();
         for (Book book1 : allBooks) {
             book1.addBook();
         }
-*/
+
 
         // Tạo mã QR cho sách
         //     System.out.println(book1.generateQrCodeForBook());

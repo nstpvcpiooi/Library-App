@@ -277,7 +277,7 @@ public class GoogleBookDao implements BookDao {
 
     public List<Book> fetchAllBooksFromAPI() {
         List<Book> allBooks = new ArrayList<>();
-        String searchTerm = "fiction"; // Chủ đề tìm kiếm, có thể thay đổi
+        String searchTerm = "Self-Help"; // Chủ đề tìm kiếm, có thể thay đổi
 
         int startIndex = 0;
         final int maxResults = 40; // Số lượng sách tối đa mỗi lần
