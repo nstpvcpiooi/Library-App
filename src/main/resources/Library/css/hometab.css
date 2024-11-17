@@ -1,0 +1,20 @@
+#welcome {
+    -fx-background-radius: 10px;
+    -fx-background-color: #e89e5f;
+}
+
+#welcomeText {
+    -fx-font-family: Barlow;
+    -fx-font-weight: bold;
+    -fx-font-size: 24;
+    -fx-text-fill: #ffffff;
+}
+
+#searchButton {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 50px;
+    -fx-font-family: Barlow;
+    -fx-font-weight: bold;
+    -fx-font-size: 16;
+    -fx-cursor: text;
+}

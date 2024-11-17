@@ -6,10 +6,12 @@ module libraryapp.libraryapp {
     requires mysql.connector.j;
     requires com.google.zxing;
     requires com.google.zxing.javase;
-
     requires java.mail;
+    requires jdk.compiler;
 
 
     opens Library to javafx.fxml;
     exports Library;
+    exports Library.ui;
+    opens Library.ui to javafx.fxml;
 }

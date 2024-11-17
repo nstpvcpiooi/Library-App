@@ -1,0 +1,7 @@
+#back {
+    -fx-background-color: #e3e3e3;
+    -fx-background-radius: 10px;
+    -fx-font-family: Inter;
+    -fx-font-size: 16;
+    -fx-cursor: hand;
+}

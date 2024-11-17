@@ -1,0 +1,33 @@
+VBox {
+    -fx-background-color: #f9e7d9;
+}
+
+#ContentPane {
+    -fx-background-color: #ffffff;
+}
+
+.MenuButton {
+    -fx-font-family: Barlow;
+    -fx-font-weight: bold;
+    -fx-font-size: 16;
+    -fx-background-radius: 10px;
+    -fx-cursor: hand;
+}
+
+.MenuButtonPressed {
+    -fx-background-color: #e89e5f;
+    -fx-font-family: Barlow;
+    -fx-font-weight: bold;
+    -fx-font-size: 16;
+    -fx-background-radius: 10px;
+    -fx-cursor: hand;
+}
+
+.MenuButtonPressed Label {
+    -fx-text-fill: #ffffff;
+}
+
+.MenuButton:hover {
+    -fx-background-color: #fff1bf;
+
+}
