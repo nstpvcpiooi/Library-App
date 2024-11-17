@@ -1,11 +1,9 @@
 package Library.ui;
 
 import Library.MainApplication;
-import com.sun.tools.javac.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -40,7 +38,7 @@ public class MainController implements Initializable {
     public AnchorPane searchTab;
 
     @FXML
-    void ButtonClick(MouseEvent event) throws Exception {
+    void ButtonClick(MouseEvent event) {
 
         Pane b = (Pane) event.getSource();
 

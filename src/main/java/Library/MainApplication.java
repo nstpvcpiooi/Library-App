@@ -1,19 +1,13 @@
 package Library;
 
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.util.Optional;
+import java.util.Objects;
 
 public class MainApplication extends Application {
 
@@ -29,7 +23,7 @@ public class MainApplication extends Application {
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
 
-        stage.getIcons().add(new Image(MainApplication.class.getResourceAsStream("icon/icon-512.png")));
+        stage.getIcons().add(new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("icon/icon-512.png"))));
         stage.setTitle("Library App");
 
         stage.setResizable(false); // không cho phóng to, thu nhỏ cửa sổ
