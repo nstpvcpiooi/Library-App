@@ -84,7 +84,8 @@ public class MysqlRecommendationDao implements RecommendationDao {
                         resultSet.getString("category"),
                         resultSet.getString("isbn"),
                         resultSet.getString("qrCode"),
-                        resultSet.getInt("status")
+                        resultSet.getInt("status"),
+                        resultSet.getInt("quantiy")
                 );
                 booksList.add(book);
             }
@@ -115,7 +116,8 @@ public class MysqlRecommendationDao implements RecommendationDao {
                         resultSet.getString("category"),
                         resultSet.getString("isbn"),
                         resultSet.getString("coverCode"),
-                        resultSet.getInt("status")
+                        resultSet.getInt("status"),
+                        resultSet.getInt("quantity")
                 );
                 booksList.add(book);
             }
@@ -149,7 +151,9 @@ public class MysqlRecommendationDao implements RecommendationDao {
                         resultSet.getString("category"),
                         resultSet.getString("isbn"),
                         resultSet.getString("coverCode"),
-                        resultSet.getInt("status")
+                        resultSet.getInt("status"),
+                        resultSet.getInt("quantity")
+
                 );
                 booksList.add(book);
             }
@@ -186,7 +190,9 @@ public class MysqlRecommendationDao implements RecommendationDao {
                         resultSet.getString("category"),
                         resultSet.getString("isbn"),
                         resultSet.getString("coverCode"),
-                        resultSet.getInt("status")
+                        resultSet.getInt("status"),
+                        resultSet.getInt("quantity")
+
                 );
                 booksList.add(book);
             }

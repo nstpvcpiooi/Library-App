@@ -113,7 +113,7 @@ public class GoogleBookDao implements BookDao {
                     String coverCode = bookInfo.has("imageLinks") ? bookInfo.getJSONObject("imageLinks").optString("thumbnail", "") : "";
 
                     // Tạo đối tượng Book và trả về
-                    return new Book(bookID, title, author, publishYear, category, isbn13, coverCode, 1); // 1: trạng thái có sẵn
+                    return new Book(bookID, title, author, publishYear, category, isbn13, coverCode, 1,1); // 1: trạng thái có sẵn
                 } else {
                     System.out.println("Không tìm thấy sách với ISBN này.");
                     return null;
@@ -342,7 +342,7 @@ public class GoogleBookDao implements BookDao {
                         }
 
                         // Tạo đối tượng Book và thêm vào danh sách
-                        allBooks.add(new Book(bookID, title, author, year, category, isbn13, coverCode, 1)); // 1: trạng thái có sẵn
+                        allBooks.add(new Book(bookID, title, author, year, category, isbn13, coverCode, 1,100)); // 1: trạng thái có sẵn
                     }
 
                     // Tăng chỉ số để lấy sách tiếp theo

@@ -9,8 +9,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.List;
+
+import static Library.backend.bookModel.Book.searchBooks;
 
 public class HelloApplication extends Application {
     @Override
@@ -45,11 +48,13 @@ for(Book b : books){
     System.out.println(b);
 }
 
-*//*
-Book book1 = Book.fetchBookInfoFromAPI("9781466626874");
-       System.out.println(book1);
-       book1.addBook();
-       */
+*/
+ArrayList<Book> b= (ArrayList<Book>) searchBooks("bookid","--AMAQAAIAAJ");
+       for(Book bo : b){
+           System.out.println(bo);
+       }
+      // book1.addBook();
+
      //   System.out.println(book1.fetchBookDescriptionFromAPI());
 /*
         List<Book> allBooks = GoogleBookDao.getInstance().fetchAllBooksFromAPI();
