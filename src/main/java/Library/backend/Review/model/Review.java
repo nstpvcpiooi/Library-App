@@ -1,77 +1,68 @@
 package Library.backend.Review.model;
 
 import Library.backend.Review.Dao.MysqlReviewDao;
+
 import java.util.List;
 
 public class Review {
-    private String reviewID;
-    private String memberID;
-    private String bookID;
-    private int rating; // Rating for the book, value from 1 to 5
-    private String comment; // Optional comment by the user
-    private String reviewTimestamp; // Time when the review was created
+    private String bookID; // ID của sách
+    private int memberID; // ID của thành viên
+    private int rating; // Đánh giá từ 1 đến 5
+    private String reviewTimestamp; // Thời gian tạo đánh giá
+    private String comment; // Nhận xét tùy chọn
 
-    // Private constructor for the builder
+    // Private constructor for the Builder
     private Review(Builder builder) {
-        this.reviewID = builder.reviewID;
-        this.memberID = builder.memberID;
         this.bookID = builder.bookID;
+        this.memberID = builder.memberID;
         this.rating = builder.rating;
-        this.comment = builder.comment;
         this.reviewTimestamp = builder.reviewTimestamp;
+        this.comment = builder.comment;
     }
 
     // Getters
-    public String getReviewID() {
-        return reviewID;
-    }
-
-    public String getMemberID() {
-        return memberID;
-    }
-
     public String getBookID() {
         return bookID;
+    }
+
+    public int getMemberID() {
+        return memberID;
     }
 
     public int getRating() {
         return rating;
     }
 
-    public String getComment() {
-        return comment;
-    }
-
     public String getReviewTimestamp() {
         return reviewTimestamp;
     }
 
+    public String getComment() {
+        return comment;
+    }
+
     // Setters
-    public void setReviewID(String reviewID) {
-        this.reviewID = reviewID;
-    }
-
-    public void setMemberID(String memberID) {
-        this.memberID = memberID;
-    }
-
     public void setBookID(String bookID) {
         this.bookID = bookID;
     }
 
+    public void setMemberID(int memberID) {
+        this.memberID = memberID;
+    }
+
     public void setRating(int rating) {
         if (rating < 1 || rating > 5) {
-            throw new IllegalArgumentException("Rating must be between 1 and 5");
+            throw new IllegalArgumentException("Rating must be between 1 and 5.");
         }
         this.rating = rating;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
     public void setReviewTimestamp(String reviewTimestamp) {
         this.reviewTimestamp = reviewTimestamp;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     // Convenience methods to interact with MysqlReviewDao
@@ -84,19 +75,19 @@ public class Review {
     }
 
     public boolean delete() {
-        return MysqlReviewDao.getInstance().deleteReview(this.reviewID);
+        return MysqlReviewDao.getInstance().deleteReview(this.bookID, this.memberID);
     }
 
-    public static Review findById(String reviewID) {
-        return MysqlReviewDao.getInstance().getReviewById(reviewID);
+    public static Review findByBookAndMember(String bookID, int memberID) {
+        return MysqlReviewDao.getInstance().getReviewByBookAndMember(bookID, memberID);
     }
 
     public static List<Review> findByBookId(String bookID) {
         return MysqlReviewDao.getInstance().getReviewsForBook(bookID);
     }
 
-    public static List<Review> findByMemberId(String memberID) {
-        return MysqlReviewDao.getInstance().getReviewsByMember(memberID);
+    public static List<Review> findByMemberId(int memberID) {
+        return MysqlReviewDao.getInstance().getReviewsByMember(String.valueOf(memberID));
     }
 
     public static double getAverageRating(String bookID) {
@@ -106,54 +97,47 @@ public class Review {
     @Override
     public String toString() {
         return "Review{" +
-                "reviewID='" + reviewID + '\'' +
-                ", memberID='" + memberID + '\'' +
-                ", bookID='" + bookID + '\'' +
+                "bookID='" + bookID + '\'' +
+                ", memberID=" + memberID +
                 ", rating=" + rating +
-                ", comment='" + comment + '\'' +
                 ", reviewTimestamp='" + reviewTimestamp + '\'' +
+                ", comment='" + comment + '\'' +
                 '}';
     }
 
     // Builder class
     public static class Builder {
-        private String reviewID;
-        private String memberID;
         private String bookID;
+        private int memberID;
         private int rating;
-        private String comment;
         private String reviewTimestamp;
-
-        public Builder reviewID(String reviewID) {
-            this.reviewID = reviewID;
-            return this;
-        }
-
-        public Builder memberID(String memberID) {
-            this.memberID = memberID;
-            return this;
-        }
+        private String comment;
 
         public Builder bookID(String bookID) {
             this.bookID = bookID;
             return this;
         }
 
+        public Builder memberID(int memberID) {
+            this.memberID = memberID;
+            return this;
+        }
+
         public Builder rating(int rating) {
             if (rating < 1 || rating > 5) {
-                throw new IllegalArgumentException("Rating must be between 1 and 5");
+                throw new IllegalArgumentException("Rating must be between 1 and 5.");
             }
             this.rating = rating;
             return this;
         }
 
-        public Builder comment(String comment) {
-            this.comment = comment;
+        public Builder reviewTimestamp(String reviewTimestamp) {
+            this.reviewTimestamp = reviewTimestamp;
             return this;
         }
 
-        public Builder reviewTimestamp(String reviewTimestamp) {
-            this.reviewTimestamp = reviewTimestamp;
+        public Builder comment(String comment) {
+            this.comment = comment;
             return this;
         }
 

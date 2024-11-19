@@ -13,7 +13,7 @@ import java.util.List;
 public class MysqlReviewDao implements ReviewDao {
     private static MysqlReviewDao instance;
 
-    // Singleton pattern for Dao instance
+    // Singleton Pattern
     public static MysqlReviewDao getInstance() {
         if (instance == null) {
             synchronized (MysqlReviewDao.class) {
@@ -27,15 +27,14 @@ public class MysqlReviewDao implements ReviewDao {
 
     @Override
     public boolean addReview(Review review) {
-        String query = "INSERT INTO Review (reviewID, memberID, bookID, rating, comment, reviewTimestamp) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Reviews (bookID, memberID, rating, reviewTimestamp, comment) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, review.getReviewID());
-            statement.setString(2, review.getMemberID());
-            statement.setString(3, review.getBookID());
-            statement.setInt(4, review.getRating());
+            statement.setString(1, review.getBookID());
+            statement.setInt(2, review.getMemberID());
+            statement.setInt(3, review.getRating());
+            statement.setDate(4, java.sql.Date.valueOf(review.getReviewTimestamp()));
             statement.setString(5, review.getComment());
-            statement.setString(6, review.getReviewTimestamp());
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -45,15 +44,14 @@ public class MysqlReviewDao implements ReviewDao {
 
     @Override
     public boolean updateReview(Review review) {
-        String query = "UPDATE Review SET memberID = ?, bookID = ?, rating = ?, comment = ?, reviewTimestamp = ? WHERE reviewID = ?";
+        String query = "UPDATE Reviews SET rating = ?, reviewTimestamp = ?, comment = ? WHERE bookID = ? AND memberID = ?";
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, review.getMemberID());
-            statement.setString(2, review.getBookID());
-            statement.setInt(3, review.getRating());
-            statement.setString(4, review.getComment());
-            statement.setString(5, review.getReviewTimestamp());
-            statement.setString(6, review.getReviewID());
+            statement.setInt(1, review.getRating());
+            statement.setDate(2, java.sql.Date.valueOf(review.getReviewTimestamp()));
+            statement.setString(3, review.getComment());
+            statement.setString(4, review.getBookID());
+            statement.setInt(5, review.getMemberID());
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -62,11 +60,12 @@ public class MysqlReviewDao implements ReviewDao {
     }
 
     @Override
-    public boolean deleteReview(String reviewID) {
-        String query = "DELETE FROM Review WHERE reviewID = ?";
+    public boolean deleteReview(String bookID, int memberID) {
+        String query = "DELETE FROM Reviews WHERE bookID = ? AND memberID = ?";
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, reviewID);
+            statement.setString(1, bookID);
+            statement.setInt(2, memberID);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,20 +74,20 @@ public class MysqlReviewDao implements ReviewDao {
     }
 
     @Override
-    public Review getReviewById(String reviewID) {
-        String query = "SELECT * FROM Review WHERE reviewID = ?";
+    public Review getReviewByBookAndMember(String bookID, int memberID) {
+        String query = "SELECT * FROM Reviews WHERE bookID = ? AND memberID = ?";
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, reviewID);
+            statement.setString(1, bookID);
+            statement.setInt(2, memberID);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return new Review.Builder()
-                        .reviewID(resultSet.getString("reviewID"))
-                        .memberID(resultSet.getString("memberID"))
                         .bookID(resultSet.getString("bookID"))
+                        .memberID(resultSet.getInt("memberID"))
                         .rating(resultSet.getInt("rating"))
+                        .reviewTimestamp(resultSet.getDate("reviewTimestamp").toString())
                         .comment(resultSet.getString("comment"))
-                        .reviewTimestamp(resultSet.getString("reviewTimestamp"))
                         .build();
             }
         } catch (SQLException e) {
@@ -99,57 +98,55 @@ public class MysqlReviewDao implements ReviewDao {
 
     @Override
     public List<Review> getReviewsForBook(String bookID) {
-        List<Review> reviewsList = new ArrayList<>();
-        String query = "SELECT * FROM Review WHERE bookID = ?";
+        List<Review> reviews = new ArrayList<>();
+        String query = "SELECT * FROM Reviews WHERE bookID = ?";
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, bookID);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Review review = new Review.Builder()
-                        .reviewID(resultSet.getString("reviewID"))
-                        .memberID(resultSet.getString("memberID"))
                         .bookID(resultSet.getString("bookID"))
+                        .memberID(resultSet.getInt("memberID"))
                         .rating(resultSet.getInt("rating"))
+                        .reviewTimestamp(resultSet.getDate("reviewTimestamp").toString())
                         .comment(resultSet.getString("comment"))
-                        .reviewTimestamp(resultSet.getString("reviewTimestamp"))
                         .build();
-                reviewsList.add(review);
+                reviews.add(review);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return reviewsList;
+        return reviews;
     }
 
     @Override
     public List<Review> getReviewsByMember(String memberID) {
-        List<Review> reviewsList = new ArrayList<>();
-        String query = "SELECT * FROM Review WHERE memberID = ?";
+        List<Review> reviews = new ArrayList<>();
+        String query = "SELECT * FROM Reviews WHERE memberID = ?";
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, memberID);
+            statement.setInt(1, Integer.parseInt(memberID));
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Review review = new Review.Builder()
-                        .reviewID(resultSet.getString("reviewID"))
-                        .memberID(resultSet.getString("memberID"))
                         .bookID(resultSet.getString("bookID"))
+                        .memberID(resultSet.getInt("memberID"))
                         .rating(resultSet.getInt("rating"))
+                        .reviewTimestamp(resultSet.getDate("reviewTimestamp").toString())
                         .comment(resultSet.getString("comment"))
-                        .reviewTimestamp(resultSet.getString("reviewTimestamp"))
                         .build();
-                reviewsList.add(review);
+                reviews.add(review);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return reviewsList;
+        return reviews;
     }
 
     @Override
     public double getAverageRatingForBook(String bookID) {
-        String query = "SELECT AVG(rating) AS averageRating FROM Review WHERE bookID = ?";
+        String query = "SELECT AVG(rating) AS averageRating FROM Reviews WHERE bookID = ?";
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, bookID);
