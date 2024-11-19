@@ -42,17 +42,13 @@ public class HelloApplication extends Application {
             System.out.println("Không tìm thấy sách nào.");
         }
         */
-/*
-  List<Book> books = Book.searchBooks("category","fiction");
-for(Book b : books){
-    System.out.println(b);
-}
 
+  Book b1= Book.getBookById("--AMAQAAIAAJ");
+        System.out.println(b1);
+        b1.updateQuantity(-1);
+/*
 */
-ArrayList<Book> b= (ArrayList<Book>) searchBooks("bookid","--AMAQAAIAAJ");
-       for(Book bo : b){
-           System.out.println(bo);
-       }
+
       // book1.addBook();
 
      //   System.out.println(book1.fetchBookDescriptionFromAPI());

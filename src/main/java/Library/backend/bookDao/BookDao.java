@@ -15,7 +15,7 @@ public interface BookDao {
 
     Book fetchBookInfoFromAPI(String isbn);
 
-    void updateBookStatus(String bookID, int newStatus);
+    void updateQuantity(String bookID, int n);
 
     void generateQrCodeForBook(String bookID);
 

@@ -113,7 +113,7 @@ public class GoogleBookDao implements BookDao {
                     String coverCode = bookInfo.has("imageLinks") ? bookInfo.getJSONObject("imageLinks").optString("thumbnail", "") : "";
 
                     // Tạo đối tượng Book và trả về
-                    return new Book(bookID, title, author, publishYear, category, isbn13, coverCode, 1,1); // 1: trạng thái có sẵn
+                    return new Book(bookID, title, author, publishYear, category, isbn13, coverCode, 1); // 1: trạng thái có sẵn
                 } else {
                     System.out.println("Không tìm thấy sách với ISBN này.");
                     return null;
@@ -126,6 +126,11 @@ public class GoogleBookDao implements BookDao {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public void updateQuantity(String bookID, int n) {
+
     }
 
 
@@ -176,12 +181,13 @@ public class GoogleBookDao implements BookDao {
         }
     }
 
-
+/*
     @Override
     public void updateBookStatus(String bookID, int newStatus) {
         // Chức năng này không áp dụng trong GoogleBookDao
         throw new UnsupportedOperationException("updateBookStatus not supported in GoogleBookDao.");
     }
+    */
 
     // Lấy link preview từ API
     public String fetchBookPreviewLinkFromAPI(Book book) {
@@ -342,7 +348,7 @@ public class GoogleBookDao implements BookDao {
                         }
 
                         // Tạo đối tượng Book và thêm vào danh sách
-                        allBooks.add(new Book(bookID, title, author, year, category, isbn13, coverCode, 1,100)); // 1: trạng thái có sẵn
+                        allBooks.add(new Book(bookID, title, author, year, category, isbn13, coverCode, 100)); // 1: trạng thái có sẵn
                     }
 
                     // Tăng chỉ số để lấy sách tiếp theo

@@ -36,7 +36,7 @@ public class MysqlBookDao implements BookDao {
         try {
             Connection con = JDBCUtil.getConnection();
 
-            String sql = "INSERT INTO Books (bookID, title, author, publishYear, category, isbn, coverCode, status, quantity) " +
+            String sql = "INSERT INTO Books (bookID, title, author, publishYear, category, isbn, coverCode, quantity) " +
                     "VALUES (?,?,?,?,?,?,?,?,?);";
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setString(1, t.getBookID());
@@ -46,7 +46,6 @@ public class MysqlBookDao implements BookDao {
             pst.setString(5, t.getCategory());
             pst.setString(6, t.getIsbn());
             pst.setString(7, t.getCoverCode());
-            pst.setInt(8, t.getStatus());
             pst.setInt(9, t.getQuantity());  // Thêm giá trị quantity
 
             // Thực thi câu lệnh INSERT
@@ -81,7 +80,7 @@ public class MysqlBookDao implements BookDao {
         try {
             Connection con = JDBCUtil.getConnection();
 
-            String sql = "UPDATE Books SET title=?, author=?, publishYear=?, category=?, isbn=?, coverCode=?, status=?, quantity=? WHERE bookID = ?";
+            String sql = "UPDATE Books SET title=?, author=?, publishYear=?, category=?, isbn=?, coverCode=?, quantity=? WHERE bookID = ?";
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setString(1, t.getTitle());
             pst.setString(2, t.getAuthor());
@@ -89,7 +88,7 @@ public class MysqlBookDao implements BookDao {
             pst.setString(4, t.getCategory());
             pst.setString(5, t.getIsbn());
             pst.setString(6, t.getCoverCode());
-            pst.setInt(7, t.getStatus());
+      //      pst.setInt(7, t.getStatus());
             pst.setInt(8, t.getQuantity());  // Cập nhật giá trị quantity
             pst.setString(9, t.getBookID());
 
@@ -123,7 +122,6 @@ public class MysqlBookDao implements BookDao {
                         rs.getString("category"),
                         rs.getString("isbn"),
                         rs.getString("coverCode"),
-                        rs.getInt("status"),
                         rs.getInt("quantity") // Lấy giá trị quantity từ cơ sở dữ liệu
                 );
                 books.add(book);
@@ -143,6 +141,33 @@ public class MysqlBookDao implements BookDao {
     }
 
     @Override
+    public void updateQuantity(String bookID, int quantity) {
+        try {
+            // Lấy kết nối từ JDBCUtil
+            Connection con = JDBCUtil.getConnection();
+
+            // Câu lệnh SQL để cập nhật số lượng sách
+            String sql = "UPDATE Books SET quantity = quantity + ? WHERE bookID = ?";
+
+            // Tạo PreparedStatement
+            PreparedStatement pst = con.prepareStatement(sql);
+
+            // Thiết lập các giá trị cho câu lệnh SQL
+            pst.setInt(1, quantity);   // Cập nhật số lượng sách
+            pst.setString(2, bookID);  // Điều kiện tìm kiếm sách theo bookID
+
+            // Thực thi câu lệnh UPDATE
+            pst.executeUpdate();
+
+            // Đóng kết nối
+            JDBCUtil.closeConnection(con);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+/*
+    @Override
     public void updateBookStatus(String bookID, int newStatus) {
         try {
             Connection con = JDBCUtil.getConnection();
@@ -158,6 +183,8 @@ public class MysqlBookDao implements BookDao {
             e.printStackTrace();
         }
     }
+    */
+
 
     @Override
     public void generateQrCodeForBook(String bookID) {
@@ -169,4 +196,6 @@ public class MysqlBookDao implements BookDao {
         // TODO Auto-generated method stub
         return null;
     }
+
+
 }
