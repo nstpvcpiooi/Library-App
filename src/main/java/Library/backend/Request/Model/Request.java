@@ -1,22 +1,23 @@
 package Library.backend.Request.Model;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 
 public class Request {
     private int requestID;
     private int memberID;
-    private int bookID;
+    private String bookID;
     private LocalDateTime borrowDate;
+    private LocalDateTime returnDate;
 
-    public Request(int memberID, int bookID, LocalDateTime borrowDate, LocalDateTime returnDate) {
+    public Request(int memberID, String bookID, LocalDateTime borrowDate, LocalDateTime returnDate) {
         this.memberID = memberID;
         this.bookID = bookID;
         this.borrowDate = borrowDate;
         this.returnDate = returnDate;
     }
-    public Request(){
 
-    }
+    public Request() {}
+
     public int getRequestID() {
         return requestID;
     }
@@ -33,11 +34,11 @@ public class Request {
         this.memberID = memberID;
     }
 
-    public int getBookID() {
+    public String getBookID() {
         return bookID;
     }
 
-    public void setBookID(int bookID) {
+    public void setBookID(String bookID) {
         this.bookID = bookID;
     }
 
@@ -56,6 +57,4 @@ public class Request {
     public void setReturnDate(LocalDateTime returnDate) {
         this.returnDate = returnDate;
     }
-
-    private LocalDateTime returnDate;
 }
