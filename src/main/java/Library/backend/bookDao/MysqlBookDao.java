@@ -88,9 +88,9 @@ public class MysqlBookDao implements BookDao {
             pst.setString(4, t.getCategory());
             pst.setString(5, t.getIsbn());
             pst.setString(6, t.getCoverCode());
-      //      pst.setInt(7, t.getStatus());
-            pst.setInt(8, t.getQuantity());  // Cập nhật giá trị quantity
-            pst.setString(9, t.getBookID());
+            //      pst.setInt(7, t.getStatus());
+            pst.setInt(7, t.getQuantity());  // Cập nhật giá trị quantity
+            pst.setString(8, t.getBookID());
 
             // Thực thi câu lệnh UPDATE
             pst.executeUpdate();

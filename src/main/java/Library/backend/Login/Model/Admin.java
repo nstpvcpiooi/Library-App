@@ -2,6 +2,8 @@ package Library.backend.Login.Model;
 
 import Library.backend.Login.DAO.MemberDAO;
 import Library.backend.Login.DAO.MemberDAOImpl;
+import Library.backend.Review.Dao.MysqlReviewDao;
+import Library.backend.Review.Dao.ReviewDao;
 import Library.backend.bookDao.BookDao;
 import Library.backend.bookDao.MysqlBookDao;
 import Library.backend.bookModel.Book;
@@ -11,6 +13,7 @@ import java.util.List;
 public class Admin extends Member {
     private BookDao bookDao = MysqlBookDao.getInstance();
     private MemberDAO memberDao = MemberDAOImpl.getInstance();
+    private ReviewDao ReviewDao = MysqlReviewDao.getInstance();
     public Admin(Member member) {
         this.setMemberID(member.getMemberID());
         this.setUserName(member.getUserName());
@@ -46,5 +49,8 @@ public class Admin extends Member {
         // Implementation for updating a book
         bookDao.updateBook(book);
     }
-
+    public void deleteReview(int memberID, String bookID) {
+        // Implementation for deleting a review
+        ReviewDao.deleteReview(bookID, memberID);
+    }
 }
