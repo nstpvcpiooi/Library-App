@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox id="container" fx:id="container" prefHeight="112.0" prefWidth="255.0" stylesheets="@../css/BookCard.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.BookCardSmallController">
+   <children>
+      <ImageView id="cover" fx:id="cover" fitHeight="92.0" fitWidth="71.0" pickOnBounds="true" preserveRatio="true">
+         <HBox.margin>
+            <Insets left="10.0" top="10.0" />
+         </HBox.margin>
+      </ImageView>
+      <VBox maxHeight="-Infinity" prefHeight="92.0" prefWidth="163.0">
+         <HBox.margin>
+            <Insets left="10.0" top="10.0" />
+         </HBox.margin>
+         <children>
+            <Label id="title" fx:id="author" alignment="TOP_LEFT" prefHeight="16.0" prefWidth="146.0" text="Tên tác giả" wrapText="true">
+               <font>
+                  <Font name="Barlow Light" size="12.0" />
+               </font>
+            </Label>
+            <Label id="title" fx:id="title" alignment="TOP_LEFT" prefHeight="67.0" prefWidth="147.0" text="Tên sách" wrapText="true">
+               <font>
+                  <Font name="Barlow SemiBold" size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </VBox.margin>
+            </Label>
+         </children>
+      </VBox>
+   </children>
+</HBox>

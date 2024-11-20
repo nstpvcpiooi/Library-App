@@ -10,33 +10,33 @@
    <children>
       <VBox prefHeight="700.0" prefWidth="250.0">
          <children>
+            <Pane fx:id="searchButton" onMouseClicked="#ButtonClick" prefHeight="40.0" prefWidth="250.0" styleClass="MenuButton">
+               <children>
+                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" prefHeight="24.0" prefWidth="152.0" text="Tìm kiếm" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="100.0" />
+               </VBox.margin>
+            </Pane>
             <Pane fx:id="homeButton" onMouseClicked="#ButtonClick" prefHeight="40.0" prefWidth="250.0" styleClass="MenuButton">
                <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="150.0" />
+                  <Insets bottom="10.0" left="10.0" right="10.0" />
                </VBox.margin>
                <children>
-                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" prefHeight="24.0" prefWidth="152.0" text="Trang chủ" />
+                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" prefHeight="24.0" prefWidth="152.0" text="Khám phá" />
                </children>
             </Pane>
-            <Pane fx:id="button2" onMouseClicked="#ButtonClick" prefHeight="40.0" prefWidth="250.0" styleClass="MenuButton">
+            <Pane fx:id="historyButton" onMouseClicked="#ButtonClick" prefHeight="40.0" prefWidth="250.0" styleClass="MenuButton">
                <children>
-                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" prefHeight="24.0" prefWidth="152.0" text="Label 2" />
+                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" prefHeight="24.0" prefWidth="152.0" text="Lịch sử mượn sách" />
                </children>
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" />
                </VBox.margin>
             </Pane>
-            <Pane fx:id="button3" onMouseClicked="#ButtonClick" prefHeight="40.0" prefWidth="250.0" styleClass="MenuButton">
+            <Pane fx:id="profileButton" onMouseClicked="#ButtonClick" prefHeight="40.0" prefWidth="250.0" styleClass="MenuButton">
                <children>
-                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" prefHeight="24.0" prefWidth="152.0" text="Label 3" />
-               </children>
-               <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" />
-               </VBox.margin>
-            </Pane>
-            <Pane fx:id="button4" onMouseClicked="#ButtonClick" prefHeight="40.0" prefWidth="250.0" styleClass="MenuButton">
-               <children>
-                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" prefHeight="24.0" prefWidth="152.0" text="Label 4" />
+                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" prefHeight="24.0" prefWidth="152.0" text="Hồ sơ của tôi" />
                </children>
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" />

@@ -1,0 +1,10 @@
+#container:hover {
+    -fx-background-color: #fffaf7;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-cursor: hand;
+}
+
+VBox, HBox {
+    -fx-background-color: transparent;
+}

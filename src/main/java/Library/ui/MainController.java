@@ -16,13 +16,14 @@ public class MainController implements Initializable {
     private Pane homeButton;
 
     @FXML
-    private Pane button2;
+    private Pane historyButton;
 
     @FXML
-    private Pane button3;
+    private Pane searchButton;
 
     @FXML
-    private Pane button4;
+    private Pane profileButton;
+
 
     private Pane currentTab;
 
@@ -37,32 +38,31 @@ public class MainController implements Initializable {
     public SearchTabController searchTabController;
     public AnchorPane searchTab;
 
+    /** History Tab */
+    public HistoryTabController historyTabController;
+    public AnchorPane historyTab;
+
+    /** Profile Tab */
+    public ProfileTabController profileTabController;
+    public AnchorPane profileTab;
+
     @FXML
     void ButtonClick(MouseEvent event) {
-
-        Pane b = (Pane) event.getSource();
-
-        if (!b.equals(currentTab)) {
-            b.getStyleClass().clear();
-            b.getStyleClass().add("MenuButtonPressed");
-
-            if (currentTab != null) {
-                currentTab.getStyleClass().clear();
-                currentTab.getStyleClass().add("MenuButton");
-            }
-            currentTab = b;
-        }
+        setCurrentTab((Pane) event.getSource());
 
         // NOTE: CHƯA CÓ HIỂN THỊ NỘI DUNG TAB?
         if (currentTab.equals(homeButton)) {
             System.out.println("Home Button Clicked");
             setContentPane(homeTab);
-        } else if (currentTab.equals(button2)) {
-            System.out.println("Button 2 Clicked");
-        } else if (currentTab.equals(button3)) {
-            System.out.println("Button 3 Clicked");
-        } else if (currentTab.equals(button4)) {
-            System.out.println("Button 4 Clicked");
+        } else if (currentTab.equals(historyButton)) {
+            System.out.println("History Button Clicked");
+            setContentPane(historyTab);
+        } else if (currentTab.equals(searchButton)) {
+            System.out.println("Search Button Clicked");
+            setContentPane(searchTab);
+        } else if (currentTab.equals(profileButton)) {
+            System.out.println("Profile Button Clicked");
+            setContentPane(profileTab);
         }
     }
 
@@ -103,6 +103,28 @@ public class MainController implements Initializable {
             e.printStackTrace();
         }
 
+        // KHỞI TẠO HISTORY TAB
+        System.out.println("History Tab Initialized");
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/HistoryTabView.fxml"));
+            historyTab = fxmlLoader.load();
+            historyTabController = fxmlLoader.getController();
+            historyTabController.setMainController(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // KHỞI TẠO PROFILE TAB
+        System.out.println("Profile Tab Initialized");
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/ProfileTabView.fxml"));
+            profileTab = fxmlLoader.load();
+            profileTabController = fxmlLoader.getController();
+            profileTabController.setMainController(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         ContentPane.getChildren().add(homeTab);
     }
 
@@ -110,5 +132,36 @@ public class MainController implements Initializable {
     public void setContentPane(AnchorPane contentPane) {
         ContentPane.getChildren().clear();
         ContentPane.getChildren().add(contentPane);
+    }
+
+    // Set currentTab
+    public void setCurrentTab(Pane b) {
+        if (!b.equals(currentTab)) {
+            b.getStyleClass().clear();
+            b.getStyleClass().add("MenuButtonPressed");
+
+            if (currentTab != null) {
+                currentTab.getStyleClass().clear();
+                currentTab.getStyleClass().add("MenuButton");
+            }
+            currentTab = b;
+        }
+    }
+
+
+    public Pane getHomeButton() {
+        return homeButton;
+    }
+
+    public Pane getHistoryButton() {
+        return historyButton;
+    }
+
+    public Pane getSearchButton() {
+        return searchButton;
+    }
+
+    public Pane getProfileButton() {
+        return profileButton;
     }
 }

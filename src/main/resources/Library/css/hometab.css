@@ -1,20 +1,25 @@
 #welcome {
-    -fx-background-radius: 10px;
-    -fx-background-color: #e89e5f;
+    -fx-background-radius: 20px;
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 0);
 }
 
 #welcomeText {
     -fx-font-family: Barlow;
     -fx-font-weight: bold;
     -fx-font-size: 24;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: #e89e5f;
 }
 
 #searchButton {
-    -fx-background-color: #ffffff;
+    -fx-background-color: #fff3e9;
     -fx-background-radius: 50px;
     -fx-font-family: Barlow;
     -fx-font-weight: bold;
     -fx-font-size: 16;
     -fx-cursor: text;
+}
+
+#BookLayout, ScrollPane, ScrollPane .viewport, ScrollPane .scroll-bar {
+    -fx-background-color: transparent;
 }

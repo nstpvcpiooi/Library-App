@@ -19,6 +19,7 @@ public class MainApplication extends Application {
         // CỬA SỔ ĐĂNG NHẬP
 //        selectDictionary(stage);
 
+        /** MAIN. */
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/MainView.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
@@ -28,6 +29,12 @@ public class MainApplication extends Application {
 
         stage.setResizable(false); // không cho phóng to, thu nhỏ cửa sổ
         stage.setScene(scene);
+
+        /** DEMO BOOK. - BỎ */
+//        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/BookCard_small.fxml"));
+//        Parent root = fxmlLoader.load();
+//        Scene scene = new Scene(root);
+//        stage.setScene(scene);
 
         // KHI TẮT APP
 

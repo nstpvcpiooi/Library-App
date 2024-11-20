@@ -2,18 +2,26 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="700.0" prefWidth="950.0" stylesheets="@../css/hometab.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.HomeTabController">
    <children>
-      <VBox id="welcome" fx:id="welcomeBox" alignment="CENTER" layoutX="20.0" layoutY="24.0" prefHeight="180.0" prefWidth="910.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+      <ImageView fitHeight="210.0" fitWidth="950.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../image/peakpx.jpg" />
+         </image>
+      </ImageView>
+      <VBox id="welcome" fx:id="welcomeBox" alignment="CENTER" layoutX="73.0" layoutY="54.0" prefHeight="210.0" prefWidth="804.0" AnchorPane.leftAnchor="73.0" AnchorPane.rightAnchor="73.28571428571433" AnchorPane.topAnchor="54.0">
          <children>
-            <Label id="welcomeText" text="Welcome to UET-Library" />
-            <Pane id="searchButton" fx:id="searchButton" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#SearchButtonClicked" prefHeight="45.0" prefWidth="467.0">
+            <Label id="welcomeText" text="WELCOME TO UET-LIBRARY" />
+            <Pane id="searchButton" fx:id="searchBar" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#SearchButtonClicked" prefHeight="45.0" prefWidth="467.0">
                <VBox.margin>
                   <Insets top="40.0" />
                </VBox.margin>
@@ -28,5 +36,15 @@
             </Pane>
          </children>
       </VBox>
+      <ScrollPane layoutX="20.0" layoutY="350.0" prefHeight="115.0" prefWidth="910.0">
+         <content>
+            <HBox id="BookLayout" fx:id="BookLayout" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="110.0" prefWidth="904.0" />
+         </content>
+      </ScrollPane>
+      <Label layoutX="20.0" layoutY="310.0" prefHeight="17.0" prefWidth="271.0" text="Recommendation for you" textFill="#e89e5f">
+         <font>
+            <Font name="Barlow SemiBold" size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

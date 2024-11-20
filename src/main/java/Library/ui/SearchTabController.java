@@ -15,6 +15,7 @@ public class SearchTabController {
     void BackToHome(ActionEvent event) {
         System.out.println("Back to Home Button Clicked");
         mainController.setContentPane(mainController.homeTab);
+        mainController.setCurrentTab(mainController.getHomeButton());
     }
 
     public MainController getMainController() {
