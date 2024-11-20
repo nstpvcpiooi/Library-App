@@ -1,6 +1,7 @@
 package Library.backend.Recommendation.Dao;
 
 import Library.backend.Recommendation.model.Recommendation;
+import Library.backend.bookModel.Book;
 import Library.backend.database.JDBCUtil;
 
 import java.sql.Connection;
@@ -8,12 +9,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
-
+import java.util.HashSet;
 public class MysqlRecommendationDao implements RecommendationDao {
     private static MysqlRecommendationDao instance;
 
-    // Singleton pattern for Dao instance
+    // Singleton pattern
     public static MysqlRecommendationDao getInstance() {
         if (instance == null) {
             synchronized (MysqlRecommendationDao.class) {
@@ -27,15 +29,11 @@ public class MysqlRecommendationDao implements RecommendationDao {
 
     @Override
     public boolean addRecommendation(Recommendation recommendation) {
-        String query = "INSERT INTO Recommendation (recommendationID, memberID, bookID, preferenceCategory, popularityScore, generatedTimestamp) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Recommendations (memberID, preferenceCategory) VALUES (?, ?)";
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, recommendation.getRecommendationID());
-            statement.setString(2, recommendation.getMemberID());
-            statement.setString(3, recommendation.getBookID());
-            statement.setString(4, recommendation.getPreferenceCategory());
-            statement.setInt(5, recommendation.getPopularityScore());
-            statement.setString(6, recommendation.getGeneratedTimestamp());
+            statement.setInt(1, recommendation.getMemberID());
+            statement.setString(2, recommendation.getPreferenceCategory());
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -44,75 +42,17 @@ public class MysqlRecommendationDao implements RecommendationDao {
     }
 
     @Override
-    public boolean updateRecommendation(Recommendation recommendation) {
-        String query = "UPDATE Recommendation SET memberID = ?, bookID = ?, preferenceCategory = ?, popularityScore = ?, generatedTimestamp = ? WHERE recommendationID = ?";
+    public List<Recommendation> getRecommendationsForMember(int memberID) {
+        List<Recommendation> recommendationsList = new ArrayList<>();
+        String query = "SELECT * FROM Recommendations WHERE memberID = ?";
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, recommendation.getMemberID());
-            statement.setString(2, recommendation.getBookID());
-            statement.setString(3, recommendation.getPreferenceCategory());
-            statement.setInt(4, recommendation.getPopularityScore());
-            statement.setString(5, recommendation.getGeneratedTimestamp());
-            statement.setString(6, recommendation.getRecommendationID());
-            return statement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    @Override
-    public boolean deleteRecommendation(String recommendationID) {
-        String query = "DELETE FROM Recommendation WHERE recommendationID = ?";
-        try (Connection connection = JDBCUtil.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, recommendationID);
-            return statement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    @Override
-    public Recommendation getRecommendationById(String recommendationID) {
-        String query = "SELECT * FROM Recommendation WHERE recommendationID = ?";
-        try (Connection connection = JDBCUtil.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, recommendationID);
+            statement.setInt(1, memberID);
             ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                return new Recommendation.Builder()
-                        .recommendationID(resultSet.getString("recommendationID"))
-                        .memberID(resultSet.getString("memberID"))
-                        .bookID(resultSet.getString("bookID"))
+            while (resultSet.next()) {
+                Recommendation recommendation = new Recommendation.Builder()
+                        .memberID(resultSet.getInt("memberID"))
                         .preferenceCategory(resultSet.getString("preferenceCategory"))
-                        .popularityScore(resultSet.getInt("popularityScore"))
-                        .generatedTimestamp(resultSet.getString("generatedTimestamp"))
-                        .build();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public List<Recommendation> getRecommendationsForMember(String memberID) {
-        List<Recommendation> recommendationsList = new ArrayList<>();
-        String query = "SELECT * FROM Recommendation WHERE memberID = ?";
-        try (Connection connection = JDBCUtil.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, memberID);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Recommendation recommendation = new Recommendation.Builder()
-                        .recommendationID(resultSet.getString("recommendationID"))
-                        .memberID(resultSet.getString("memberID"))
-                        .bookID(resultSet.getString("bookID"))
-                        .preferenceCategory(resultSet.getString("preferenceCategory"))
-                        .popularityScore(resultSet.getInt("popularityScore"))
-                        .generatedTimestamp(resultSet.getString("generatedTimestamp"))
                         .build();
                 recommendationsList.add(recommendation);
             }
@@ -123,54 +63,160 @@ public class MysqlRecommendationDao implements RecommendationDao {
     }
 
     @Override
-    public List<Recommendation> getRecommendationsBasedOnPreferencesAndRequests(String memberID) {
-        List<Recommendation> recommendationsList = new ArrayList<>();
-        String query = "SELECT * FROM Books WHERE category IN (SELECT DISTINCT category FROM Requests WHERE memberID = ?) " +
-                "OR category = (SELECT preferenceCategory FROM Members WHERE memberID = ?) " +
-                "OR bookID IN (SELECT bookID FROM Reviews WHERE rating >= 4) ORDER BY RAND() LIMIT 10";
+    public List<Book> getRecommendationsBasedOnPreferencesAndRequests(int memberID) {
+        List<Book> booksList = new ArrayList<>();
+        String query = "SELECT DISTINCT b.* FROM Books b " +
+                "LEFT JOIN Requests r ON b.bookID = r.bookID " +
+                "WHERE r.memberID = ? OR b.category IN (" +
+                "  SELECT preferenceCategory FROM Recommendations WHERE memberID = ?" +
+                ") ORDER BY RAND() LIMIT 10";
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, memberID);
-            statement.setString(2, memberID);
+            statement.setInt(1, memberID);
+            statement.setInt(2, memberID);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                Recommendation recommendation = new Recommendation.Builder()
-                        .recommendationID(resultSet.getString("bookID") + "_rec")
-                        .memberID(memberID)
-                        .bookID(resultSet.getString("bookID"))
-                        .preferenceCategory(resultSet.getString("category"))
-                        .popularityScore(0) // Popularity score can be computed as needed
-                        .generatedTimestamp(String.valueOf(System.currentTimeMillis()))
-                        .build();
-                recommendationsList.add(recommendation);
+                Book book = new Book(
+                        resultSet.getString("bookID"),
+                        resultSet.getString("title"),
+                        resultSet.getString("author"),
+                        resultSet.getInt("publishYear"),
+                        resultSet.getString("category"),
+                        resultSet.getString("isbn"),
+                        resultSet.getString("qrCode"),
+                       // resultSet.getInt("status"),
+                        resultSet.getInt("quantiy")
+                );
+                booksList.add(book);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return recommendationsList;
+        return booksList;
     }
 
     @Override
-    public List<Recommendation> getPopularRecommendations() {
-        List<Recommendation> recommendationsList = new ArrayList<>();
-        String query = "SELECT * FROM Books ORDER BY (SELECT COUNT(*) FROM Reviews WHERE Reviews.bookID = Books.bookID AND Reviews.rating >= 4) DESC LIMIT 10";
+    public List<Book> getPopularRecommendations() {
+        List<Book> booksList = new ArrayList<>();
+        String query = "SELECT b.*, AVG(r.rating) AS avgRating " +
+                "FROM Books b " +
+                "INNER JOIN Reviews r ON b.bookID = r.bookID " +
+                "GROUP BY b.bookID " +
+                "HAVING avgRating >= 4 " +
+                "ORDER BY avgRating DESC, COUNT(r.rating) DESC LIMIT 10";
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                Recommendation recommendation = new Recommendation.Builder()
-                        .recommendationID(resultSet.getString("bookID") + "_popular")
-                        .memberID(null)
-                        .bookID(resultSet.getString("bookID"))
-                        .preferenceCategory(resultSet.getString("category"))
-                        .popularityScore(0) // Popularity score can be computed as needed
-                        .generatedTimestamp(String.valueOf(System.currentTimeMillis()))
-                        .build();
-                recommendationsList.add(recommendation);
+                Book book = new Book(
+                        resultSet.getString("bookID"),
+                        resultSet.getString("title"),
+                        resultSet.getString("author"),
+                        resultSet.getInt("publishYear"),
+                        resultSet.getString("category"),
+                        resultSet.getString("isbn"),
+                        resultSet.getString("coverCode"),
+                      //  resultSet.getInt("status"),
+                        resultSet.getInt("quantity")
+                );
+                booksList.add(book);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return recommendationsList;
+        return booksList;
     }
+
+
+    @Override
+    public List<Book> getRecommendationsBasedOnBorrowHistory(int memberID) {
+        List<Book> booksList = new ArrayList<>();
+        String query = "SELECT DISTINCT b.* FROM Books b " +
+                "WHERE b.category IN (" +
+                "    SELECT DISTINCT b2.category " +
+                "    FROM Requests r " +
+                "    JOIN Books b2 ON r.bookID = b2.bookID " +
+                "    WHERE r.memberID = ?" +
+                ") ORDER BY RAND() LIMIT 10";
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, memberID);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Book book = new Book(
+                        resultSet.getString("bookID"),
+                        resultSet.getString("title"),
+                        resultSet.getString("author"),
+                        resultSet.getInt("publishYear"),
+                        resultSet.getString("category"),
+                        resultSet.getString("isbn"),
+                        resultSet.getString("coverCode"),
+                 //       resultSet.getInt("status"),
+                        resultSet.getInt("quantity")
+
+                );
+                booksList.add(book);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return booksList;
+    }
+
+    @Override
+    public List<Book> getRecommendationsFromSimilarUsers(int memberID) {
+        List<Book> booksList = new ArrayList<>();
+        String query = "SELECT DISTINCT b.* FROM Books b " +
+                "JOIN Requests r ON b.bookID = r.bookID " +
+                "WHERE r.memberID IN (" +
+                "    SELECT DISTINCT r2.memberID " +
+                "    FROM Requests r1 " +
+                "    JOIN Requests r2 ON r1.bookID = r2.bookID " +
+                "    WHERE r1.memberID = ?" +
+                ") AND b.bookID NOT IN (" +
+                "    SELECT bookID FROM Requests WHERE memberID = ?" +
+                ") ORDER BY RAND() LIMIT 10";
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, memberID);
+            statement.setInt(2, memberID);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Book book = new Book(
+                        resultSet.getString("bookID"),
+                        resultSet.getString("title"),
+                        resultSet.getString("author"),
+                        resultSet.getInt("publishYear"),
+                        resultSet.getString("category"),
+                        resultSet.getString("isbn"),
+                        resultSet.getString("coverCode"),
+                    //    resultSet.getInt("status"),
+                        resultSet.getInt("quantity")
+
+                );
+                booksList.add(book);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return booksList;
+    }
+
+    @Override
+    public List<Book> getCombinedRecommendations(int memberID) {
+        // Lấy danh sách từ các phương pháp khác nhau
+        List<Book> basedOnPreferences = getRecommendationsBasedOnPreferencesAndRequests(memberID);
+        List<Book> basedOnBorrowHistory = getRecommendationsBasedOnBorrowHistory(memberID);
+        List<Book> basedOnSimilarUsers = getRecommendationsFromSimilarUsers(memberID);
+        List<Book> popularBooks = getPopularRecommendations();
+
+        LinkedHashSet<Book> combinedRecommendations = new LinkedHashSet<>();
+        combinedRecommendations.addAll(basedOnPreferences);
+        combinedRecommendations.addAll(basedOnBorrowHistory);
+        combinedRecommendations.addAll(basedOnSimilarUsers);
+        combinedRecommendations.addAll(popularBooks);
+
+        return new ArrayList<>(combinedRecommendations);
+    }
+
 }

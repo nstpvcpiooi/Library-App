@@ -128,6 +128,11 @@ public class GoogleBookDao implements BookDao {
         }
     }
 
+    @Override
+    public void updateQuantity(String bookID, int n) {
+
+    }
+
 
     public String fetchBookDescriptionFromAPI(Book book) {
         String isbn = book.getIsbn(); // Lấy ISBN từ đối tượng Book
@@ -176,12 +181,13 @@ public class GoogleBookDao implements BookDao {
         }
     }
 
-
+/*
     @Override
     public void updateBookStatus(String bookID, int newStatus) {
         // Chức năng này không áp dụng trong GoogleBookDao
         throw new UnsupportedOperationException("updateBookStatus not supported in GoogleBookDao.");
     }
+    */
 
     // Lấy link preview từ API
     public String fetchBookPreviewLinkFromAPI(Book book) {
@@ -342,7 +348,7 @@ public class GoogleBookDao implements BookDao {
                         }
 
                         // Tạo đối tượng Book và thêm vào danh sách
-                        allBooks.add(new Book(bookID, title, author, year, category, isbn13, coverCode, 1)); // 1: trạng thái có sẵn
+                        allBooks.add(new Book(bookID, title, author, year, category, isbn13, coverCode, 100)); // 1: trạng thái có sẵn
                     }
 
                     // Tăng chỉ số để lấy sách tiếp theo

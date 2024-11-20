@@ -1,7 +1,9 @@
 package Library.backend.Request.DAO;
 
-
 import Library.backend.Request.Model.Request;
+import Library.backend.bookModel.Book;
+import Library.backend.database.JDBCUtil;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,14 +12,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import Library.backend.database.JDBCUtil;
-import Library.backend.Request.Model.Request;
-public class RequestDAOImpl implements RequestDAO{
+public class RequestDAOImpl implements RequestDAO {
     private static RequestDAOImpl instance;
+
     private RequestDAOImpl() {
         // Private constructor to prevent instantiation
     }
+
     public static RequestDAOImpl getInstance() {
         if (instance == null) {
             synchronized (RequestDAOImpl.class) {
@@ -54,6 +55,7 @@ public class RequestDAOImpl implements RequestDAO{
             e.printStackTrace();
         }
     }
+
     @Override
     public void createBorrowRequest(Request request) {
         String checkQuery = "SELECT COUNT(*) FROM Requests WHERE memberID = ? AND bookID = ?";
@@ -65,7 +67,7 @@ public class RequestDAOImpl implements RequestDAO{
 
             // Check for duplicate requests
             checkStatement.setInt(1, request.getMemberID());
-            checkStatement.setInt(2, request.getBookID());
+            checkStatement.setString(2, request.getBookID());
             ResultSet resultSet = checkStatement.executeQuery();
             if (resultSet.next() && resultSet.getInt(1) > 0) {
                 throw new SQLException("Duplicate borrow request: memberID and bookID combination already exists.");
@@ -73,7 +75,7 @@ public class RequestDAOImpl implements RequestDAO{
 
             // No duplicates, proceed with insert
             insertStatement.setInt(1, request.getMemberID());
-            insertStatement.setInt(2, request.getBookID());
+            insertStatement.setString(2, request.getBookID());
             insertStatement.setObject(3, request.getBorrowDate());
             insertStatement.setObject(4, request.getReturnDate());
 
@@ -88,6 +90,7 @@ public class RequestDAOImpl implements RequestDAO{
             e.printStackTrace();
         }
     }
+
     @Override
     public List<Request> getMemberBorrowHistory(int memberID) {
         List<Request> borrowHistory = new ArrayList<>();
@@ -102,7 +105,7 @@ public class RequestDAOImpl implements RequestDAO{
                 Request request = new Request();
                 request.setRequestID(resultSet.getInt("requestID"));
                 request.setMemberID(resultSet.getInt("memberID"));
-                request.setBookID(resultSet.getInt("bookID"));
+                request.setBookID(resultSet.getString("bookID"));
                 request.setBorrowDate(resultSet.getObject("borrowDate", LocalDateTime.class));
                 request.setReturnDate(resultSet.getObject("returnDate", LocalDateTime.class));
                 borrowHistory.add(request);
@@ -112,19 +115,26 @@ public class RequestDAOImpl implements RequestDAO{
         }
         return borrowHistory;
     }
+
     @Override
-    public void borrowRequest(int memberID, int bookID) {
-        LocalDateTime borrowDate = LocalDateTime.now();
-        LocalDateTime returnDate = borrowDate.plusDays(7);
-        createBorrowRequest(new Request(memberID, bookID, borrowDate, returnDate));
+    public void borrowRequest(int memberID, Book book) {
+        if (book.getQuantity() > 0) {
+            LocalDateTime borrowDate = LocalDateTime.now();
+            LocalDateTime returnDate = borrowDate.plusDays(7);
+            createBorrowRequest(new Request(memberID, book.getBookID(), borrowDate, returnDate));
+            book.updateQuantity(book.getQuantity()-1);
+        } else {
+            throw new IllegalStateException("Cannot borrow book: Quantity is 0.");
+        }
     }
 
     @Override
-    public void returnBook(int memberID, int bookID) {
+    public void returnBook(int memberID, Book book) {
         List<Request> requests = getMemberBorrowHistory(memberID);
         for (Request request : requests) {
-            if (request.getBookID() == bookID && request.getReturnDate() == null) {
+            if (request.getBookID().equals(book.getBookID()) && request.getReturnDate() == null) {
                 updateReturnTime(request.getRequestID(), LocalDateTime.now());
+                book.updateQuantity(book.getQuantity()+1); // Increase the quantity by 1
             }
         }
     }

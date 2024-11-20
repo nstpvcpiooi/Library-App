@@ -170,6 +170,7 @@ public class MemberDAOImpl implements MemberDAO {
                 member.setPassword(resultSet.getString("password"));
                 member.setEmail(resultSet.getString("email"));
                 member.setPhone(resultSet.getString("phone"));
+                member.setOtp(resultSet.getString("otp"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -254,7 +255,6 @@ public class MemberDAOImpl implements MemberDAO {
     public void forgotPass(String email) {
         String otp = generateOTP();
         sendEmail(email, "OTP", otp);
-
         Member member = getMemberByEmail(email);
         if (member != null) {
             member.setOtp(otp);
@@ -264,8 +264,8 @@ public class MemberDAOImpl implements MemberDAO {
 
     @Override
     public boolean checkOTP(String email, String input) {
-        String storedOtp = getOtpByEmail(email);
-        return storedOtp != null && storedOtp.equals(input);
+        Member member = getMemberByEmail(email);
+        return member != null && member.getOtp().equals(input);
     }
 
     @Override

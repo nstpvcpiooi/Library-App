@@ -19,4 +19,5 @@ public interface MemberDAO {
     boolean changePass(String email, String newPassword);
     Member login(String userName, String password);
     List<Member> DisplayMembers();
+
 }
