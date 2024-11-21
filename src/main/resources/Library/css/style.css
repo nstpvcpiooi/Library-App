@@ -10,24 +10,21 @@ VBox {
     -fx-font-family: Barlow;
     -fx-font-weight: bold;
     -fx-font-size: 16;
-    -fx-background-radius: 10px;
+    /*-fx-background-radius: 10px;*/
     -fx-cursor: hand;
 }
 
 .MenuButtonPressed {
-    -fx-background-color: #e89e5f;
+    -fx-background-color: #f4d2ba;
     -fx-font-family: Barlow;
     -fx-font-weight: bold;
     -fx-font-size: 16;
-    -fx-background-radius: 10px;
+    /*-fx-background-radius: 10px;*/
     -fx-cursor: hand;
 }
 
-.MenuButtonPressed Label {
-    -fx-text-fill: #ffffff;
-}
 
 .MenuButton:hover {
-    -fx-background-color: #fff1bf;
+    -fx-background-color: #f4d2ba;
 
 }

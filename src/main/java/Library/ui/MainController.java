@@ -11,7 +11,15 @@ import javafx.scene.layout.Pane;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller cho giao diện chính của ứng dụng.
+ * (gồm các nút điều hướng và phần chứa nội dung chính của các tab)
+ */
 public class MainController implements Initializable {
+
+    /**
+     * Các nút điều hướng giữa các tab.
+     */
     @FXML
     private Pane homeButton;
 
@@ -24,9 +32,14 @@ public class MainController implements Initializable {
     @FXML
     private Pane profileButton;
 
-
+    /**
+     * Nút hiện tại đang được chọn.
+     */
     private Pane currentTab;
 
+    /**
+     * Phần chứa nội dung của các tab. (Home, Search, History, Profile...)
+     */
     @FXML
     private AnchorPane ContentPane;
 
@@ -46,11 +59,13 @@ public class MainController implements Initializable {
     public ProfileTabController profileTabController;
     public AnchorPane profileTab;
 
+    /**
+     * Xử lý sự kiện khi click vào các nút điều hướng -> hiển thị tab tương ứng (setContentPane).
+     */
     @FXML
     void ButtonClick(MouseEvent event) {
         setCurrentTab((Pane) event.getSource());
 
-        // NOTE: CHƯA CÓ HIỂN THỊ NỘI DUNG TAB?
         if (currentTab.equals(homeButton)) {
             System.out.println("Home Button Clicked");
             setContentPane(homeTab);
@@ -67,16 +82,19 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Called to initialize a controller after its root element has been
-     * completely processed.
-     *
-     * @param location  The location used to resolve relative paths for the root object, or
-     *                  {@code null} if the location is not known.
-     * @param resources The resources used to localize the root object, or {@code null} if
-     *                  the root object was not localized.
+     * Thay đổi nội dung của ContentPane.
+     */
+    public void setContentPane(AnchorPane contentPane) {
+        ContentPane.getChildren().clear();
+        ContentPane.getChildren().add(contentPane);
+    }
+
+    /**
+     * Khởi tạo giao diện chính của ứng dụng.
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // ĐẶT HOME TAB LÀ TAB MẶC ĐỊNH KHI KHỞI ĐỘNG ỨNG DỤNG
         currentTab = homeButton;
         currentTab.getStyleClass().clear();
         currentTab.getStyleClass().add("MenuButtonPressed");
@@ -128,13 +146,9 @@ public class MainController implements Initializable {
         ContentPane.getChildren().add(homeTab);
     }
 
-    // Set ContentPane
-    public void setContentPane(AnchorPane contentPane) {
-        ContentPane.getChildren().clear();
-        ContentPane.getChildren().add(contentPane);
-    }
-
-    // Set currentTab
+    /**
+     * Đặt nút hiện tại đang được chọn.
+     */
     public void setCurrentTab(Pane b) {
         if (!b.equals(currentTab)) {
             b.getStyleClass().clear();
@@ -147,7 +161,6 @@ public class MainController implements Initializable {
             currentTab = b;
         }
     }
-
 
     public Pane getHomeButton() {
         return homeButton;

@@ -2,6 +2,7 @@ package Library.ui;
 
 import Library.MainApplication;
 import Library.backend.bookModel.Book;
+import Library.ui.BookCard.BookCardSmallController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -12,19 +13,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * Controller cho home tab.
+ */
 public class HomeTabController implements Initializable {
 
+    /** Nút tìm kiếm. Khi bấm vào sẽ chuyển sang Search tab */
     @FXML
     private Pane searchBar;
 
+    /** Layout chứa các sách được đề xuất (reccomendation) */
     @FXML
     private HBox BookLayout;
 
+    /** Box chào mừng khi mở app */
     @FXML
     private VBox welcomeBox;
 
     private MainController mainController;
 
+    /** LIST SÁCH ĐỀ XUẤT */
+    private List<Book> recommendations;
+
+    /** Khi click vào nút tìm kiếm, chuyển sang tab tìm kiếm */
     @FXML
     void SearchButtonClicked(MouseEvent event) throws Exception {
         System.out.println("Search Button Clicked");
@@ -60,12 +71,12 @@ public class HomeTabController implements Initializable {
         }
     }
 
-    /** RECCOMENDATION.*/
-    private List<Book> recommendations;
 
-    // Get recommendations from database/backend
+    // TODO Lấy reccomendation từ back-end (lưu ý: chỉ lấy 4 cuốn sách)
     private List<Book> getRecommendations() {
         List<Book> ls = new ArrayList<>();
+
+        // TODO HERE
         ls.add(new Book("", "RICH DAD & POOR DAD", "Robert T.Kiyosaki",
                 1997, "Business", "978-3-16-148410-0",
                 "image/img.png", 1));
@@ -78,6 +89,8 @@ public class HomeTabController implements Initializable {
         ls.add(new Book("", "THINK AND GROW RICH", "Napoleon Hill",
                 1937, "Business", "978-3-16-148410-0",
                 "image/img.png", 1));
+
+        // RETURN
         return ls;
     }
 }
