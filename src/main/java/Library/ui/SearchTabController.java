@@ -11,10 +11,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -58,10 +60,17 @@ public class SearchTabController implements Initializable {
         mainController.setCurrentTab(mainController.getHomeButton());
     }
 
+    @FXML
+    void search(KeyEvent event) {
+        String query = SearchText.getText();
+        SearchResult.getItems().clear();
+        SearchResult.getItems().addAll(getSearchList(query));
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         SearchResult.setCellFactory(lv -> new BookListCell());
-        SearchResult.getItems().addAll(getSearch(""));
+        SearchResult.getItems().addAll(getSearchList(""));
     }
 
     /**
@@ -70,22 +79,43 @@ public class SearchTabController implements Initializable {
      * @param query từ khóa tìm kiếm
      * @return danh sách kết quả tìm kiếm
      */
-    private List<Book> getSearch(String query) {
+    private List<Book> getSearchList(String query) {
         List<Book> ls = new ArrayList<>();
 
+        if (query.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         // TODO HERE
-        ls.add(new Book("", "RICH DAD & POOR DAD", "Robert T.Kiyosaki",
-                1997, "Business", "978-3-16-148410-0",
-                "image/img.png", 1));
-        ls.add(new Book("", "THE RICHEST MAN IN BABYLON", "George Samuel Clason",
-                1926, "Business", "978-3-16-148410-0",
-                "image/img.png", 1));
-        ls.add(new Book("", "THE 7 HABITS OF HIGHLY EFFECTIVE PEOPLE", "Stephen R.Covey",
-                1989, "Business", "978-3-16-148410-0",
-                "image/img.png", 1));
-        ls.add(new Book("", "THINK AND GROW RICH", "Napoleon Hill",
-                1937, "Business", "978-3-16-148410-0",
-                "image/img.png", 1));
+        if (query.equals("Business")) {
+            ls.add(new Book("", "RICH DAD & POOR DAD", "Robert T.Kiyosaki",
+                    1997, "Business", "978-3-16-148410-0",
+                    "image/img.png", 1));
+        } else if (query.equals("Science")) {
+            ls.add(new Book("", "A BRIEF HISTORY OF TIME", "Stephen Hawking",
+                    1988, "Science", "978-3-16-148410-1",
+                    "image/img.png", 1));
+        } else if (query.equals("Literature")) {
+            ls.add(new Book("", "THE GREAT GATSBY", "F. Scott Fitzgerald",
+                    1925, "Literature", "978-3-16-148410-2",
+                    "image/img.png", 1));
+        } else if (query.equals("Technology")) {
+            ls.add(new Book("", "STEVE JOBS", "Walter Isaacson",
+                    2011, "Technology", "978-3-16-148410-3",
+                    "image/img.png", 1));
+            ls.add(new Book("", "SAPIENS", "Yuval Noah Harari",
+                    2011, "History", "978-3-16-148410-4",
+                    "image/img.png", 1));
+            ls.add(new Book("", "THE ALCHEMIST", "Paulo Coelho",
+                    1988, "Novel", "978-3-16-148410-5",
+                    "image/img.png", 1));
+            ls.add(new Book("", "THE POWER OF HABIT", "Charles Duhigg",
+                    2012, "Health", "978-3-16-148410-7",
+                    "image/img.png", 1));
+            ls.add(new Book("", "SALT, FAT, ACID, HEAT", "Samin Nosrat",
+                    2017, "Cooking", "978-3-16-148410-8",
+                    "image/img.png", 1));
+        }
 
         // RETURN
         return ls;
