@@ -8,3 +8,7 @@
 VBox, HBox {
     -fx-background-color: transparent;
 }
+
+Label {
+    -fx-text-fill: #e89e5f;
+}

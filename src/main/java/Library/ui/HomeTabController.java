@@ -2,10 +2,15 @@ package Library.ui;
 
 import Library.MainApplication;
 import Library.backend.bookModel.Book;
+import Library.ui.BookCard.BookCardLargeController;
 import Library.ui.BookCard.BookCardSmallController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Orientation;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import java.net.URL;
@@ -22,9 +27,9 @@ public class HomeTabController implements Initializable {
     @FXML
     private Pane searchBar;
 
-    /** Layout chứa các sách được đề xuất (reccomendation) */
+    /** LIST SÁCH ĐỀ XUẤT */
     @FXML
-    private HBox BookLayout;
+    private ListView<Book> RecommendationList;
 
     /** Box chào mừng khi mở app */
     @FXML
@@ -32,8 +37,7 @@ public class HomeTabController implements Initializable {
 
     private MainController mainController;
 
-    /** LIST SÁCH ĐỀ XUẤT */
-    private List<Book> recommendations;
+
 
     /** Khi click vào nút tìm kiếm, chuyển sang tab tìm kiếm */
     @FXML
@@ -45,34 +49,17 @@ public class HomeTabController implements Initializable {
         // CLick/hover search tab button? chưa có
     }
 
-    public MainController getMainController() {
-        return mainController;
-    }
-
-    public void setMainController(MainController mainController) {
-        this.mainController = mainController;
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         System.out.println("HomeTabController initialized");
-        recommendations = new ArrayList<>(getRecommendations());
-        try {
-            for (Book b : recommendations) {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(MainApplication.class.getResource("fxml/BookCard_small.fxml"));
-                HBox bookCard = loader.load();
-                BookCardSmallController controller = loader.getController();
-                controller.setData(b);
-                BookLayout.getChildren().add(bookCard);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        RecommendationList.setCellFactory(lv -> new HomeTabController.BookListCell());
+        RecommendationList.getItems().addAll(getRecommendations());
     }
 
 
-    // TODO Lấy reccomendation từ back-end (lưu ý: chỉ lấy 4 cuốn sách)
+    // TODO Lấy reccomendation từ back-end
     private List<Book> getRecommendations() {
         List<Book> ls = new ArrayList<>();
 
@@ -89,8 +76,49 @@ public class HomeTabController implements Initializable {
         ls.add(new Book("", "THINK AND GROW RICH", "Napoleon Hill",
                 1937, "Business", "978-3-16-148410-0",
                 "image/img.png", 1));
+        ls.add(new Book("", "RICH DAD & POOR DAD", "Robert T.Kiyosaki",
+                1997, "Business", "978-3-16-148410-0",
+                "image/img.png", 1));
+        ls.add(new Book("", "I LOVE YOU", "Robert T.Kiyosaki",
+                1997, "Business", "978-3-16-148410-0",
+                "image/img.png", 1));
 
         // RETURN
         return ls;
     }
+
+    /**
+     * Cell cho ListView kết quả tìm kiếm (BookCardLarge)
+     */
+    private static class BookListCell extends ListCell<Book> {
+        @Override
+        protected void updateItem(Book book, boolean empty) {
+            super.updateItem(book, empty);
+            if (empty || book == null) {
+                setText(null);
+                setGraphic(null);
+            } else {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(MainApplication.class.getResource("fxml/BookCard_small.fxml"));
+                try {
+                    HBox bookCard = loader.load();
+                    BookCardSmallController controller = loader.getController();
+                    controller.setData(book);
+                    setGraphic(bookCard);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
+    public MainController getMainController() {
+        return mainController;
+    }
+
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
+
 }
