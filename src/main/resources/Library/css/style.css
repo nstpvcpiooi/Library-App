@@ -1,5 +1,5 @@
 VBox {
-    -fx-background-color: #f9e7d9;
+    -fx-background-color: #fbdacf;
 }
 
 #ContentPane {
@@ -10,21 +10,20 @@ VBox {
     -fx-font-family: Barlow;
     -fx-font-weight: bold;
     -fx-font-size: 16;
-    /*-fx-background-radius: 10px;*/
     -fx-cursor: hand;
 }
 
 .MenuButtonPressed {
-    -fx-background-color: #f4d2ba;
+    -fx-background-color: #fdcbbb;
     -fx-font-family: Barlow;
     -fx-font-weight: bold;
     -fx-font-size: 16;
-    /*-fx-background-radius: 10px;*/
     -fx-cursor: hand;
 }
 
 
 .MenuButton:hover {
-    -fx-background-color: #f4d2ba;
+    -fx-background-color: #fdcbbb;
 
 }
+

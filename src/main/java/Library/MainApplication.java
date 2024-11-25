@@ -1,6 +1,6 @@
 package Library;
 
-import Library.ui.LogInView;
+import Library.ui.LogIn.LogInViewController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -16,22 +16,21 @@ public class MainApplication extends Application {
 
     // GỌI BACKEND THƯ VIỆN ????
 
-    LogInView.LogInType logInType;
+    public LogInViewController.LogInType logInType;
 
     @Override
     public void start(Stage stage) throws Exception {
 
         // CỬA SỔ ĐĂNG NHẬP
-//        ShowLogInWindow();
-        logInType = LogInView.LogInType.USER;
+        ShowLogInWindow();
 
         stage.getIcons().add(new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("icon/icon-512.png"))));
         stage.setResizable(false); // không cho phóng to, thu nhỏ cửa sổ
 
         // CỬA SỔ CHÍNH
-        if (logInType == LogInView.LogInType.USER) {
+        if (logInType == LogInViewController.LogInType.USER) {
             ShowUserWindow(stage);
-        } else if (logInType == LogInView.LogInType.ADMIN) {
+        } else if (logInType == LogInViewController.LogInType.ADMIN) {
             ShowAdminWindow(stage);
         }
 
@@ -41,10 +40,16 @@ public class MainApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/LogInView.fxml"));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
+        LogInViewController controller = fxmlLoader.getController();
 
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.showAndWait();
+        Stage Firststage = new Stage();
+        Firststage.setTitle("Library App - Log In");
+        Firststage.getIcons().add(new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("icon/icon-512.png"))));
+        Firststage.setResizable(false); // không cho phóng to, thu nhỏ cửa sổ
+        Firststage.setScene(scene);
+        Firststage.showAndWait();
+
+        logInType = controller.getReturnType();
 
     }
 
@@ -78,6 +83,21 @@ public class MainApplication extends Application {
     }
 
     private static void ShowAdminWindow(Stage stage) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/AdminMainView.fxml"));
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root);
+
+        stage.setTitle("Library App - Admin");
+        stage.setScene(scene);
+
+        // KHI ĐÓNG CỬA SỔ
+        stage.setOnCloseRequest(windowEvent -> {
+            //???
+            Platform.exit();
+            System.exit(0);
+        });
+
+        stage.show();
     }
 
 

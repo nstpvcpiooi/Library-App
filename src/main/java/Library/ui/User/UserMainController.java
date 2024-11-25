@@ -1,10 +1,6 @@
-package Library.ui;
+package Library.ui.User;
 
 import Library.MainApplication;
-import Library.ui.UserTab.CategoryTabController;
-import Library.ui.UserTab.HomeTabController;
-import Library.ui.UserTab.ProfileTabController;
-import Library.ui.UserTab.SearchTabController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;

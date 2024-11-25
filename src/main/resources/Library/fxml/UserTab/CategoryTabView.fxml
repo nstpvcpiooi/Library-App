@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane prefHeight="700.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.UserTab.CategoryTabController">
+<AnchorPane prefHeight="700.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.User.CategoryTabController">
    <children>
       <Label layoutX="417.0" layoutY="341.0" text="ĐÂY LÀ TAB HISTORY" />
    </children>

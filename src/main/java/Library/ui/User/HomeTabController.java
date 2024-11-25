@@ -1,9 +1,8 @@
-package Library.ui.UserTab;
+package Library.ui.User;
 
 import Library.MainApplication;
 import Library.backend.bookModel.Book;
 import Library.ui.BookCard.BookCardSmallController;
-import Library.ui.UserMainController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -34,8 +33,6 @@ public class HomeTabController implements Initializable {
     private VBox welcomeBox;
 
     private UserMainController userMainController;
-
-
 
     /** Khi click vào nút tìm kiếm, chuyển sang tab tìm kiếm */
     @FXML
@@ -96,8 +93,7 @@ public class HomeTabController implements Initializable {
                 setText(null);
                 setGraphic(null);
             } else {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(MainApplication.class.getResource("fxml/BookCard/BookCard_small.fxml"));
+                FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("fxml/BookCard/BookCard_small.fxml"));
                 try {
                     HBox bookCard = loader.load();
                     BookCardSmallController controller = loader.getController();

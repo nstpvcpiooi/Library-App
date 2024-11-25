@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="700.0" prefWidth="950.0" stylesheets="@../../css/searchtab.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.UserTab.SearchTabController">
+<AnchorPane prefHeight="700.0" prefWidth="950.0" stylesheets="@../../css/searchtab.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.User.SearchTabController">
    <children>
       <HBox id="SearchBar" fx:id="SearchBar" alignment="CENTER" layoutX="25.0" layoutY="70.0" prefHeight="54.0" prefWidth="896.0">
          <children>

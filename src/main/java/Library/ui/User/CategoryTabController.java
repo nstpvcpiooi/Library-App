@@ -1,10 +1,8 @@
-package Library.ui.UserTab;
+package Library.ui.User;
 
-import Library.ui.UserMainController;
+public class CategoryTabController {
 
-public class ProfileTabController {
-
-    // ???
+    // ??
 
     private UserMainController userMainController;
 

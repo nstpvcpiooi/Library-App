@@ -8,11 +8,11 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.User.UserMainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.Admin.AdminMainController">
    <children>
       <VBox prefHeight="700.0" prefWidth="250.0">
          <children>
-            <Pane fx:id="homeButton" onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
+            <Pane onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
                <VBox.margin>
                   <Insets top="200.0" />
                </VBox.margin>
@@ -25,7 +25,7 @@
                   </ImageView>
                </children>
             </Pane>
-            <Pane fx:id="searchButton" onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
+            <Pane onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
                <children>
                   <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Tìm kiếm" />
                   <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="31.0" layoutY="15.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
@@ -38,7 +38,7 @@
                   <Insets />
                </VBox.margin>
             </Pane>
-            <Pane fx:id="categoryButton" onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
+            <Pane onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
                <children>
                   <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Thể loại sách" />
                   <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="31.0" layoutY="15.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
@@ -51,7 +51,7 @@
                   <Insets />
                </VBox.margin>
             </Pane>
-            <Pane fx:id="profileButton" onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
+            <Pane onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
                <children>
                   <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Hồ sơ của tôi" />
                   <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="31.0" layoutY="15.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
@@ -64,7 +64,7 @@
                   <Insets />
                </VBox.margin>
             </Pane>
-            <Pane fx:id="settingsButton" onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
+            <Pane onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
                <children>
                   <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Cài đặt" />
                   <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="31.0" layoutY="15.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
