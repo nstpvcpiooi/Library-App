@@ -38,13 +38,12 @@ ListView {
 }
 
 .list-cell:filled:selected:focused Label, .list-cell:filled:selected Label {
-    -fx-text-fill: black;
+    -fx-text-fill: #e89e5f;
 }
-
-
 
 .scroll-bar:vertical {
     -fx-background-color: transparent;
+    -fx-pref-width: 9;
 }
 
 .scroll-bar:vertical .increment-arrow,
@@ -57,8 +56,6 @@ ListView {
     -fx-background-insets : 2.0, 0.0, 0.0;
     -fx-background-radius : 2.0em;
 }
-
-
 
 
 /*ẩn horizontal scroll bar*/

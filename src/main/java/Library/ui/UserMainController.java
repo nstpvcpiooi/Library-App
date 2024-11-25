@@ -1,6 +1,10 @@
 package Library.ui;
 
 import Library.MainApplication;
+import Library.ui.UserTab.CategoryTabController;
+import Library.ui.UserTab.HomeTabController;
+import Library.ui.UserTab.ProfileTabController;
+import Library.ui.UserTab.SearchTabController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,7 +19,7 @@ import java.util.ResourceBundle;
  * Controller cho giao diện chính của ứng dụng.
  * (gồm các nút điều hướng và phần chứa nội dung chính của các tab)
  */
-public class MainController implements Initializable {
+public class UserMainController implements Initializable {
 
     /**
      * Các nút điều hướng giữa các tab.
@@ -24,7 +28,10 @@ public class MainController implements Initializable {
     private Pane homeButton;
 
     @FXML
-    private Pane historyButton;
+    private Pane categoryButton;
+
+    @FXML
+    private Pane settingsButton;
 
     @FXML
     private Pane searchButton;
@@ -51,13 +58,16 @@ public class MainController implements Initializable {
     public SearchTabController searchTabController;
     public AnchorPane searchTab;
 
-    /** History Tab */
-    public HistoryTabController historyTabController;
-    public AnchorPane historyTab;
+    /** Category Tab */
+    public CategoryTabController categoryTabController;
+    public AnchorPane categoryTab;
 
     /** Profile Tab */
     public ProfileTabController profileTabController;
     public AnchorPane profileTab;
+
+    /** Settings Tab */
+    // TODO: Khai báo controller và tab tương ứng cho SettingsTab
 
     /**
      * Xử lý sự kiện khi click vào các nút điều hướng -> hiển thị tab tương ứng (setContentPane).
@@ -69,9 +79,9 @@ public class MainController implements Initializable {
         if (currentTab.equals(homeButton)) {
             System.out.println("Home Button Clicked");
             setContentPane(homeTab);
-        } else if (currentTab.equals(historyButton)) {
+        } else if (currentTab.equals(categoryButton)) {
             System.out.println("History Button Clicked");
-            setContentPane(historyTab);
+            setContentPane(categoryTab);
         } else if (currentTab.equals(searchButton)) {
             System.out.println("Search Button Clicked");
             setContentPane(searchTab);
@@ -102,7 +112,7 @@ public class MainController implements Initializable {
         // KHỞI TẠO HOME TAB
         System.out.println("Home Tab Initialized");
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/HomeTabView.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/UserTab/HomeTabView.fxml"));
             homeTab = fxmlLoader.load();
             homeTabController = fxmlLoader.getController();
             homeTabController.setMainController(this);
@@ -113,7 +123,7 @@ public class MainController implements Initializable {
         // KHỞI TẠO SEARCH TAB
         System.out.println("Search Tab Initialized");
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/SearchTabView.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/UserTab/SearchTabView.fxml"));
             searchTab = fxmlLoader.load();
             searchTabController = fxmlLoader.getController();
             searchTabController.setMainController(this);
@@ -121,13 +131,13 @@ public class MainController implements Initializable {
             e.printStackTrace();
         }
 
-        // KHỞI TẠO HISTORY TAB
-        System.out.println("History Tab Initialized");
+        // KHỞI TẠO CATEGORY TAB
+        System.out.println("Category Tab Initialized");
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/HistoryTabView.fxml"));
-            historyTab = fxmlLoader.load();
-            historyTabController = fxmlLoader.getController();
-            historyTabController.setMainController(this);
+            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/UserTab/CategoryTabView.fxml"));
+            categoryTab = fxmlLoader.load();
+            categoryTabController = fxmlLoader.getController();
+            categoryTabController.setMainController(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -135,7 +145,7 @@ public class MainController implements Initializable {
         // KHỞI TẠO PROFILE TAB
         System.out.println("Profile Tab Initialized");
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/ProfileTabView.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/UserTab/ProfileTabView.fxml"));
             profileTab = fxmlLoader.load();
             profileTabController = fxmlLoader.getController();
             profileTabController.setMainController(this);
@@ -166,8 +176,8 @@ public class MainController implements Initializable {
         return homeButton;
     }
 
-    public Pane getHistoryButton() {
-        return historyButton;
+    public Pane getCategoryButton() {
+        return categoryButton;
     }
 
     public Pane getSearchButton() {

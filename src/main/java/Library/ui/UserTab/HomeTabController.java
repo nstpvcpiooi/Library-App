@@ -1,16 +1,14 @@
-package Library.ui;
+package Library.ui.UserTab;
 
 import Library.MainApplication;
 import Library.backend.bookModel.Book;
-import Library.ui.BookCard.BookCardLargeController;
 import Library.ui.BookCard.BookCardSmallController;
+import Library.ui.UserMainController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Orientation;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import java.net.URL;
@@ -35,7 +33,7 @@ public class HomeTabController implements Initializable {
     @FXML
     private VBox welcomeBox;
 
-    private MainController mainController;
+    private UserMainController userMainController;
 
 
 
@@ -43,8 +41,8 @@ public class HomeTabController implements Initializable {
     @FXML
     void SearchButtonClicked(MouseEvent event) throws Exception {
         System.out.println("Search Button Clicked");
-        mainController.setContentPane(mainController.searchTab);
-        mainController.setCurrentTab(mainController.getSearchButton());
+        userMainController.setContentPane(userMainController.searchTab);
+        userMainController.setCurrentTab(userMainController.getSearchButton());
 
         // CLick/hover search tab button? chưa có
     }
@@ -99,7 +97,7 @@ public class HomeTabController implements Initializable {
                 setGraphic(null);
             } else {
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(MainApplication.class.getResource("fxml/BookCard_small.fxml"));
+                loader.setLocation(MainApplication.class.getResource("fxml/BookCard/BookCard_small.fxml"));
                 try {
                     HBox bookCard = loader.load();
                     BookCardSmallController controller = loader.getController();
@@ -113,12 +111,12 @@ public class HomeTabController implements Initializable {
 
     }
 
-    public MainController getMainController() {
-        return mainController;
+    public UserMainController getMainController() {
+        return userMainController;
     }
 
-    public void setMainController(MainController mainController) {
-        this.mainController = mainController;
+    public void setMainController(UserMainController userMainController) {
+        this.userMainController = userMainController;
     }
 
 }

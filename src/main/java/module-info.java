@@ -16,4 +16,6 @@ module libraryapp.libraryapp {
     opens Library.ui to javafx.fxml;
     exports Library.ui.BookCard;
     opens Library.ui.BookCard to javafx.fxml;
+    exports Library.ui.UserTab;
+    opens Library.ui.UserTab to javafx.fxml;
 }
