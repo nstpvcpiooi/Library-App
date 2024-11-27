@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 import java.net.URL;
@@ -64,6 +65,12 @@ public class SearchTabController implements Initializable {
         String query = SearchText.getText();
         SearchResult.getItems().clear();
         SearchResult.getItems().addAll(getSearchList(query));
+    }
+
+    @FXML
+    void SelectBook(MouseEvent event) {
+        Book selectedBook = SearchResult.getSelectionModel().getSelectedItem();
+        getMainController().getBookInfoView().display(selectedBook);
     }
 
     @Override

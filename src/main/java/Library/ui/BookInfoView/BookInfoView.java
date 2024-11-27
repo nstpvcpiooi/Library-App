@@ -48,9 +48,9 @@ public class BookInfoView {
     }
 
     public void display(Book selectedBook) {
-        bookInfostage.setTitle(selectedBook.getTitle());
-        bookInfostage.close();
         mainController.setBackgroundEffect();
+
+        bookInfostage.close();
         bookInfostage.show();
     }
 
