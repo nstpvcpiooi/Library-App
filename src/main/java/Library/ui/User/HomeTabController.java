@@ -53,8 +53,6 @@ public class HomeTabController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         System.out.println("HomeTabController initialized");
-
-//        RecommendationList.setCellFactory(lv -> new HomeTabController.BookListCell());
         RecommendationList.setCellFactory(lv -> new BookCardCell(SMALL));
         RecommendationList.getItems().addAll(getRecommendations());
     }

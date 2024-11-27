@@ -3,6 +3,7 @@ package Library.ui;
 import Library.ui.BookInfoView.BookInfoView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
@@ -24,10 +25,18 @@ public abstract class MainController implements Initializable {
     @FXML
     protected AnchorPane ContentPane;
 
+    public AnchorPane getRoot() {
+        return root;
+    }
+
+    @FXML
+    protected AnchorPane root;
+
 
     public void initialize(URL location, ResourceBundle resources) {
         // KHỞI TẠO BOOK INFO VIEW
         bookInfoView = new BookInfoView();
+        bookInfoView.setMainController(this);
     }
 
     /**
@@ -56,5 +65,16 @@ public abstract class MainController implements Initializable {
 
     public BookInfoView getBookInfoView() {
         return bookInfoView;
+    }
+
+    /** set background effect for root */
+    public void setBackgroundEffect() {
+        ColorAdjust colorAdjust = new ColorAdjust();
+        colorAdjust.setBrightness(-0.3);
+        root.setEffect(colorAdjust);
+    }
+
+    public void removeBackgroundEffect() {
+        root.setEffect(null);
     }
 }

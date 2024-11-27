@@ -2,60 +2,64 @@ package Library.ui.BookInfoView;
 
 import Library.MainApplication;
 import Library.backend.bookModel.Book;
+import Library.ui.MainController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.scene.paint.Color;
+import javafx.stage.*;
 
 import java.io.IOException;
 
 public class BookInfoView {
     protected Stage bookInfostage;
+    protected Scene bookInfoScene;
+
+    private MainController mainController;
+
+    private BookInfoViewController bookInfoViewController;
 
     /**
      * Constructor
      */
     public BookInfoView() {
+
         Parent root;
         bookInfostage = new Stage();
         try {
-            root = FXMLLoader.load(MainApplication.class.getResource("fxml/BookInfoView.fxml"));
-            bookInfostage.setScene(new Scene(root));
+            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("fxml/BookInfoView.fxml"));
+            root = loader.load();
+            bookInfoViewController = loader.getController();
+            bookInfoViewController.setBookInfoView(this);
+            bookInfoScene = new Scene(root);
         }
         catch (IOException e) {
             e.printStackTrace();
         }
+        bookInfoScene.setFill(Color.TRANSPARENT);
 
+        bookInfostage.initStyle(StageStyle.TRANSPARENT);
+        bookInfostage.initModality(Modality.APPLICATION_MODAL);
+
+        bookInfostage.setScene(bookInfoScene);
+
+        bookInfostage.setX(282);
+        bookInfostage.setY(110);
     }
 
     public void display(Book selectedBook) {
         bookInfostage.setTitle(selectedBook.getTitle());
         bookInfostage.close();
+        mainController.setBackgroundEffect();
         bookInfostage.show();
     }
 
+    public void close() {
+        mainController.removeBackgroundEffect();
+        bookInfostage.close();
+    }
 
-    //    protected Stage bookInfoStage;
-//
-//    @Override
-//    public void initialize(URL location, ResourceBundle resources) {
-//        // Khởi tạo các thành phần của cửa sổ
-//        bookInfoStage = new Stage();
-//        bookInfoStage.initStyle(StageStyle.TRANSPARENT);
-//        bookInfoStage.initModality(Modality.APPLICATION_MODAL);
-//
-//        // Load giao diện từ file fxml
-//        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/BookInfoView.fxml"));
-//        try {
-//            bookInfoStage.setScene(new javafx.scene.Scene(fxmlLoader.load()));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public void display() {
-//        bookInfoStage.showAndWait();
-//    }
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
 }

@@ -68,7 +68,6 @@ public class SearchTabController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//        SearchResult.setCellFactory(lv -> new BookListCell());
         SearchResult.setCellFactory(lv -> new BookCardCell(LARGE));
         SearchResult.getItems().addAll(getSearchList(""));
     }

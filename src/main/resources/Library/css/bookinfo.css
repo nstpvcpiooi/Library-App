@@ -1,0 +1,13 @@
+#container {
+    -fx-background-color: white;
+    -fx-background-radius: 20px;
+    -fx-border-radius: 20px;
+    -fx-background-position: center;
+    -fx-position-shape: true;
+}
+
+#closeButton {
+    -fx-background-color: #f4f4f4;
+    -fx-background-radius: 10px;
+    -fx-cursor: hand;
+}
