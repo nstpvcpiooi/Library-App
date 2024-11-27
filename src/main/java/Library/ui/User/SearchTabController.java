@@ -1,14 +1,11 @@
 package Library.ui.User;
 
-import Library.MainApplication;
 import Library.backend.bookModel.Book;
-import Library.ui.BookCard.BookCardLargeController;
+import Library.ui.BookCard.BookCardCell;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
@@ -19,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import static Library.ui.BookCard.BookCardCell.BookCardType.LARGE;
 
 public class SearchTabController implements Initializable {
 
@@ -69,7 +68,8 @@ public class SearchTabController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        SearchResult.setCellFactory(lv -> new BookListCell());
+//        SearchResult.setCellFactory(lv -> new BookListCell());
+        SearchResult.setCellFactory(lv -> new BookCardCell(LARGE));
         SearchResult.getItems().addAll(getSearchList(""));
     }
 
@@ -119,32 +119,6 @@ public class SearchTabController implements Initializable {
 
         // RETURN
         return ls;
-    }
-
-    /**
-     * Cell cho ListView kết quả tìm kiếm (BookCardLarge)
-     */
-    private static class BookListCell extends ListCell<Book> {
-        @Override
-        protected void updateItem(Book book, boolean empty) {
-            super.updateItem(book, empty);
-            if (empty || book == null) {
-                setText(null);
-                setGraphic(null);
-            } else {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(MainApplication.class.getResource("fxml/BookCard/BookCard_large.fxml"));
-                try {
-                    HBox bookCard = loader.load();
-                    BookCardLargeController controller = loader.getController();
-                    controller.setData(book);
-                    setGraphic(bookCard);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
     }
 
     public UserMainController getMainController() {
