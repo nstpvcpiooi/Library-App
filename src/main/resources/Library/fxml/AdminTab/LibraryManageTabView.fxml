@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+
+<AnchorPane prefHeight="700.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.Admin.LibraryManageController">
+   <children>
+      <HBox id="SearchBar" fx:id="SearchBar" alignment="CENTER" layoutX="25.0" layoutY="40.0" prefHeight="54.0" prefWidth="826.0">
+         <children>
+            <TextField id="SearchText" fx:id="SearchText" onKeyReleased="#search" prefHeight="40.0" prefWidth="748.0" promptText="Tìm sách" />
+            <ImageView fitHeight="22.0" fitWidth="22.0" opacity="0.6" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../icon/search.png" />
+               </image>
+            </ImageView>
+         </children>
+      </HBox>
+      <ListView id="SearchResult" fx:id="SearchResult" layoutX="25.0" layoutY="118.0" prefHeight="585.0" prefWidth="896.0" />
+      <HBox id="AddButton" fx:id="AddButton" alignment="CENTER" layoutX="866.0" layoutY="40.0" onMouseClicked="#AddBook" prefHeight="54.0" prefWidth="54.0">
+         <children>
+            <ImageView fitHeight="31.0" fitWidth="26.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../icon/add-document.png" />
+               </image>
+            </ImageView>
+         </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </HBox>
+   </children>
+   <stylesheets>
+      <URL value="@../../css/searchtab.css" />
+      <URL value="@../../css/librarymange.css" />
+   </stylesheets>
+</AnchorPane>

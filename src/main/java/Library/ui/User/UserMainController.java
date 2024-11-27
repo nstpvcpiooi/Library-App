@@ -73,16 +73,12 @@ public class UserMainController implements Initializable {
         setCurrentTab((Pane) event.getSource());
 
         if (currentTab.equals(homeButton)) {
-            System.out.println("Home Button Clicked");
             setContentPane(homeTab);
         } else if (currentTab.equals(categoryButton)) {
-            System.out.println("History Button Clicked");
             setContentPane(categoryTab);
         } else if (currentTab.equals(searchButton)) {
-            System.out.println("Search Button Clicked");
             setContentPane(searchTab);
         } else if (currentTab.equals(profileButton)) {
-            System.out.println("Profile Button Clicked");
             setContentPane(profileTab);
         }
     }
@@ -106,7 +102,6 @@ public class UserMainController implements Initializable {
         currentTab.getStyleClass().add("MenuButtonPressed");
 
         // KHỞI TẠO HOME TAB
-        System.out.println("Home Tab Initialized");
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/UserTab/HomeTabView.fxml"));
             homeTab = fxmlLoader.load();
@@ -117,7 +112,6 @@ public class UserMainController implements Initializable {
         }
 
         // KHỞI TẠO SEARCH TAB
-        System.out.println("Search Tab Initialized");
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/UserTab/SearchTabView.fxml"));
             searchTab = fxmlLoader.load();
@@ -128,7 +122,6 @@ public class UserMainController implements Initializable {
         }
 
         // KHỞI TẠO CATEGORY TAB
-        System.out.println("Category Tab Initialized");
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/UserTab/CategoryTabView.fxml"));
             categoryTab = fxmlLoader.load();
@@ -139,7 +132,6 @@ public class UserMainController implements Initializable {
         }
 
         // KHỞI TẠO PROFILE TAB
-        System.out.println("Profile Tab Initialized");
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/UserTab/ProfileTabView.fxml"));
             profileTab = fxmlLoader.load();

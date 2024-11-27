@@ -12,38 +12,25 @@
    <children>
       <VBox prefHeight="700.0" prefWidth="250.0">
          <children>
-            <Pane onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
+            <Pane fx:id="LibraryManageButton" onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
                <VBox.margin>
                   <Insets top="200.0" />
                </VBox.margin>
                <children>
-                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Trang chủ" />
+                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Quản lý thư viện" />
                   <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="31.0" layoutY="15.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../icon/home.png" />
+                        <Image url="@../icon/books.png" />
                      </image>
                   </ImageView>
                </children>
             </Pane>
-            <Pane onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
+            <Pane fx:id="RequestManageButton" onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
                <children>
-                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Tìm kiếm" />
+                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Quản lý yêu cầu" />
                   <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="31.0" layoutY="15.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../icon/search.png" />
-                     </image>
-                  </ImageView>
-               </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </Pane>
-            <Pane onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
-               <children>
-                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Thể loại sách" />
-                  <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="31.0" layoutY="15.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../icon/apps.png" />
+                        <Image url="@../icon/list.png" />
                      </image>
                   </ImageView>
                </children>
@@ -51,9 +38,9 @@
                   <Insets />
                </VBox.margin>
             </Pane>
-            <Pane onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
+            <Pane fx:id="UserManageButton" onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
                <children>
-                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Hồ sơ của tôi" />
+                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Quản lý người dùng" />
                   <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="31.0" layoutY="15.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../icon/user.png" />
