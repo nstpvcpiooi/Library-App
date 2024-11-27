@@ -1,16 +1,12 @@
 package Library.ui.BookCard;
 
 import Library.backend.bookModel.Book;
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 
 /**
  * Controller cho một card sách nhỏ (hiển thị ảnh bìa, tiêu đề, tác giả).
  */
-public class BookCardSmallController extends BookCard {
+public class BookCardSmallController extends BookCardController {
 
     @Override
     public void setData(Book book) {

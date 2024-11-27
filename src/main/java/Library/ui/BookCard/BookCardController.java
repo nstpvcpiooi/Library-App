@@ -6,7 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
-public abstract class BookCard {
+public abstract class BookCardController {
     /**
      * Ô chứa thông tin sách (ảnh, tiêu đề, tác giả).
      */

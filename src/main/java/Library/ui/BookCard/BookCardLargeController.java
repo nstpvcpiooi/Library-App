@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 /**
  * Controller cho một card sách lớn (hiển thị ảnh bìa, tiêu đề, tác giả).
  */
-public class BookCardLargeController extends BookCard {
+public class BookCardLargeController extends BookCardController {
 
     @Override
     public void setData(Book book) {

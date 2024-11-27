@@ -1,12 +1,9 @@
 package Library.ui.User;
 
-import Library.MainApplication;
 import Library.backend.bookModel.Book;
-import Library.ui.BookCard.BookCardSmallController;
+import Library.ui.BookCard.BookCardCell;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -14,6 +11,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import static Library.ui.BookCard.BookCardCell.BookCardType.SMALL;
 
 /**
  * Controller cho home tab.
@@ -44,12 +43,19 @@ public class HomeTabController implements Initializable {
         // CLick/hover search tab button? chưa có
     }
 
+    @FXML
+    void SelectBook(MouseEvent event) {
+        Book selectedBook = RecommendationList.getSelectionModel().getSelectedItem();
+        getMainController().getBookInfoView().display(selectedBook);
+    }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         System.out.println("HomeTabController initialized");
 
-        RecommendationList.setCellFactory(lv -> new HomeTabController.BookListCell());
+//        RecommendationList.setCellFactory(lv -> new HomeTabController.BookListCell());
+        RecommendationList.setCellFactory(lv -> new BookCardCell(SMALL));
         RecommendationList.getItems().addAll(getRecommendations());
     }
 
@@ -80,31 +86,6 @@ public class HomeTabController implements Initializable {
 
         // RETURN
         return ls;
-    }
-
-    /**
-     * Cell cho ListView kết quả tìm kiếm (BookCardLarge)
-     */
-    private static class BookListCell extends ListCell<Book> {
-        @Override
-        protected void updateItem(Book book, boolean empty) {
-            super.updateItem(book, empty);
-            if (empty || book == null) {
-                setText(null);
-                setGraphic(null);
-            } else {
-                FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("fxml/BookCard/BookCard_small.fxml"));
-                try {
-                    HBox bookCard = loader.load();
-                    BookCardSmallController controller = loader.getController();
-                    controller.setData(book);
-                    setGraphic(bookCard);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
     }
 
     public UserMainController getMainController() {

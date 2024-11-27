@@ -35,7 +35,7 @@
             </Pane>
          </children>
       </VBox>
-      <ListView id="RecommendationList" fx:id="RecommendationList" layoutX="25.0" layoutY="336.0" orientation="HORIZONTAL" prefHeight="130.0" prefWidth="900.0" />
+      <ListView id="RecommendationList" fx:id="RecommendationList" layoutX="25.0" layoutY="336.0" onMouseClicked="#SelectBook" orientation="HORIZONTAL" prefHeight="130.0" prefWidth="900.0" />
       <Label layoutX="25.0" layoutY="297.0" prefHeight="17.0" prefWidth="271.0" text="Recommendation for you" textFill="#e89e5f">
          <font>
             <Font name="Barlow SemiBold" size="18.0" />
