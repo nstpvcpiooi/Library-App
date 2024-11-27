@@ -59,11 +59,6 @@ public class AdminMainController extends MainController {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // ĐẶT LIBRARYMANAGE LÀ TAB MẶC ĐỊNH
-        currentTab = LibraryManageButton;
-        currentTab.getStyleClass().clear();
-        currentTab.getStyleClass().add("MenuButtonPressed");
-
         // KHỞI TẠO LIBRARYMANAGE TAB
         try {
             FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("fxml/AdminTab/LibraryManageTabView.fxml"));
@@ -89,7 +84,14 @@ public class AdminMainController extends MainController {
             e.printStackTrace();
         }
 
+        // ĐẶT LIBRARYMANAGE LÀ TAB MẶC ĐỊNH
+        currentTab = LibraryManageButton;
+        currentTab.getStyleClass().clear();
+        currentTab.getStyleClass().add("MenuButtonPressed");
+
         ContentPane.getChildren().add(libraryManageTab);
+
+        super.initialize(location, resources);
     }
 
     public Pane getRequestManageButton() {

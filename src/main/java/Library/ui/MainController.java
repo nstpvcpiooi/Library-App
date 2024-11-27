@@ -1,5 +1,6 @@
 package Library.ui;
 
+import Library.ui.BookInfoView.BookInfoView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
@@ -9,6 +10,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public abstract class MainController implements Initializable {
+
+    protected BookInfoView bookInfoView;
+
     /**
      * Nút hiện tại đang được chọn.
      */
@@ -21,7 +25,10 @@ public abstract class MainController implements Initializable {
     protected AnchorPane ContentPane;
 
 
-    public abstract void initialize(URL location, ResourceBundle resources);
+    public void initialize(URL location, ResourceBundle resources) {
+        // KHỞI TẠO BOOK INFO VIEW
+        bookInfoView = new BookInfoView();
+    }
 
     /**
      * Thay đổi nội dung của ContentPane.
@@ -45,5 +52,9 @@ public abstract class MainController implements Initializable {
             }
             currentTab = b;
         }
+    }
+
+    public BookInfoView getBookInfoView() {
+        return bookInfoView;
     }
 }

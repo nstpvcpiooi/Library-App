@@ -1,6 +1,7 @@
 package Library.ui.User;
 
 import Library.MainApplication;
+import Library.ui.BookInfoView.BookInfoView;
 import Library.ui.MainController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -77,11 +78,6 @@ public class UserMainController extends MainController {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // ĐẶT HOME TAB LÀ TAB MẶC ĐỊNH KHI KHỞI ĐỘNG ỨNG DỤNG
-        currentTab = homeButton;
-        currentTab.getStyleClass().clear();
-        currentTab.getStyleClass().add("MenuButtonPressed");
-
         // KHỞI TẠO HOME TAB
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/UserTab/HomeTabView.fxml"));
@@ -122,7 +118,14 @@ public class UserMainController extends MainController {
             e.printStackTrace();
         }
 
+        // ĐẶT HOME TAB LÀ TAB MẶC ĐỊNH KHI KHỞI ĐỘNG ỨNG DỤNG
+        currentTab = homeButton;
+        currentTab.getStyleClass().clear();
+        currentTab.getStyleClass().add("MenuButtonPressed");
+
         ContentPane.getChildren().add(homeTab);
+
+        super.initialize(location, resources);
     }
 
 
