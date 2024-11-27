@@ -1,9 +1,9 @@
 package Library.ui.Admin;
 
 import Library.MainApplication;
+import Library.ui.MainController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -11,7 +11,7 @@ import javafx.scene.layout.Pane;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class AdminMainController implements Initializable {
+public class AdminMainController extends MainController {
 
     /**
      * Các nút điều hướng giữa các tab.
@@ -24,17 +24,6 @@ public class AdminMainController implements Initializable {
 
     @FXML
     private Pane UserManageButton;
-
-    /**
-     * Nút hiện tại đang được chọn.
-     */
-    private Pane currentTab;
-
-    /**
-     * Phần chứa nội dung của các tab. (Home, Search, History, Profile...)
-     */
-    @FXML
-    private AnchorPane ContentPane;
 
     /** LibraryManage Tab */
     public LibraryManageController libraryManageController;
@@ -67,29 +56,6 @@ public class AdminMainController implements Initializable {
         }
     }
 
-    /**
-     * Thay đổi nội dung của ContentPane.
-     */
-    public void setContentPane(AnchorPane contentPane) {
-        ContentPane.getChildren().clear();
-        ContentPane.getChildren().add(contentPane);
-    }
-
-    /**
-     * Đặt nút hiện tại đang được chọn.
-     */
-    public void setCurrentTab(Pane b) {
-        if (!b.equals(currentTab)) {
-            b.getStyleClass().clear();
-            b.getStyleClass().add("MenuButtonPressed");
-
-            if (currentTab != null) {
-                currentTab.getStyleClass().clear();
-                currentTab.getStyleClass().add("MenuButton");
-            }
-            currentTab = b;
-        }
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

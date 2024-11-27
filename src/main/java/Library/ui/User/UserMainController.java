@@ -1,9 +1,9 @@
 package Library.ui.User;
 
 import Library.MainApplication;
+import Library.ui.MainController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
  * Controller cho giao diện chính của ứng dụng.
  * (gồm các nút điều hướng và phần chứa nội dung chính của các tab)
  */
-public class UserMainController implements Initializable {
+public class UserMainController extends MainController {
 
     /**
      * Các nút điều hướng giữa các tab.
@@ -34,17 +34,6 @@ public class UserMainController implements Initializable {
 
     @FXML
     private Pane profileButton;
-
-    /**
-     * Nút hiện tại đang được chọn.
-     */
-    private Pane currentTab;
-
-    /**
-     * Phần chứa nội dung của các tab. (Home, Search, History, Profile...)
-     */
-    @FXML
-    private AnchorPane ContentPane;
 
     /** Home Tab */
     public HomeTabController homeTabController;
@@ -81,14 +70,6 @@ public class UserMainController implements Initializable {
         } else if (currentTab.equals(profileButton)) {
             setContentPane(profileTab);
         }
-    }
-
-    /**
-     * Thay đổi nội dung của ContentPane.
-     */
-    public void setContentPane(AnchorPane contentPane) {
-        ContentPane.getChildren().clear();
-        ContentPane.getChildren().add(contentPane);
     }
 
     /**
@@ -144,21 +125,6 @@ public class UserMainController implements Initializable {
         ContentPane.getChildren().add(homeTab);
     }
 
-    /**
-     * Đặt nút hiện tại đang được chọn.
-     */
-    public void setCurrentTab(Pane b) {
-        if (!b.equals(currentTab)) {
-            b.getStyleClass().clear();
-            b.getStyleClass().add("MenuButtonPressed");
-
-            if (currentTab != null) {
-                currentTab.getStyleClass().clear();
-                currentTab.getStyleClass().add("MenuButton");
-            }
-            currentTab = b;
-        }
-    }
 
     public Pane getHomeButton() {
         return homeButton;
