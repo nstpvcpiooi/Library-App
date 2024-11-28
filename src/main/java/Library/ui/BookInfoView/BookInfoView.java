@@ -49,7 +49,7 @@ public class BookInfoView {
 
     public void display(Book selectedBook) {
         mainController.setBackgroundEffect();
-
+        bookInfoViewController.setData(selectedBook);
         bookInfostage.close();
         bookInfostage.show();
     }
@@ -61,5 +61,9 @@ public class BookInfoView {
 
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
+    }
+
+    public MainController getMainController() {
+        return mainController;
     }
 }

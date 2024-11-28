@@ -28,6 +28,6 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <ListView id="SearchResult" fx:id="SearchResult" layoutX="25.0" layoutY="149.0" prefHeight="554.0" prefWidth="896.0" />
+      <ListView id="SearchResult" fx:id="SearchResult" layoutX="25.0" layoutY="149.0" onMouseClicked="#SelectBook" prefHeight="554.0" prefWidth="896.0" />
    </children>
 </AnchorPane>

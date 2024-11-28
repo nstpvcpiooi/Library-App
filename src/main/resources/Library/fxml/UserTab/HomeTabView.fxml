@@ -17,9 +17,9 @@
             <Image url="@../../image/peakpx.jpg" />
          </image>
       </ImageView>
-      <VBox id="welcome" fx:id="welcomeBox" alignment="CENTER" layoutX="73.0" layoutY="54.0" prefHeight="210.0" prefWidth="804.0" AnchorPane.leftAnchor="73.0" AnchorPane.rightAnchor="73.28571428571433" AnchorPane.topAnchor="54.0">
+      <VBox id="welcome" fx:id="welcomeBox" alignment="CENTER" layoutX="73.0" layoutY="94.0" prefHeight="210.0" prefWidth="804.0" AnchorPane.leftAnchor="73.0" AnchorPane.rightAnchor="73.28571428571422" AnchorPane.topAnchor="94.0">
          <children>
-            <Label id="welcomeText" text="WELCOME TO UET-LIBRARY" />
+            <Label id="welcomeText" text="THƯ VIỆN UET" />
             <Pane id="searchButton" fx:id="searchBar" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#SearchButtonClicked" prefHeight="45.0" prefWidth="467.0">
                <VBox.margin>
                   <Insets top="40.0" />
@@ -35,10 +35,10 @@
             </Pane>
          </children>
       </VBox>
-      <ListView id="RecommendationList" fx:id="RecommendationList" layoutX="25.0" layoutY="336.0" onMouseClicked="#SelectBook" orientation="HORIZONTAL" prefHeight="130.0" prefWidth="900.0" />
-      <Label layoutX="25.0" layoutY="297.0" prefHeight="17.0" prefWidth="271.0" text="Recommendation for you" textFill="#e89e5f">
+      <ListView id="RecommendationList" fx:id="RecommendationList" layoutX="25.0" layoutY="415.0" onMouseClicked="#SelectBook" orientation="HORIZONTAL" prefHeight="130.0" prefWidth="900.0" />
+      <Label layoutX="31.0" layoutY="376.0" prefHeight="17.0" prefWidth="271.0" text="GỢI Ý ĐỌC SÁCH" textFill="#e89e5f">
          <font>
-            <Font name="Barlow SemiBold" size="18.0" />
+            <Font name="Barlow ExtraBold" size="18.0" />
          </font>
       </Label>
    </children>

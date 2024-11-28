@@ -25,12 +25,6 @@ public class UserMainController extends MainController {
     private Pane homeButton;
 
     @FXML
-    private Pane categoryButton;
-
-    @FXML
-    private Pane settingsButton;
-
-    @FXML
     private Pane searchButton;
 
     @FXML
@@ -44,16 +38,10 @@ public class UserMainController extends MainController {
     public SearchTabController searchTabController;
     public AnchorPane searchTab;
 
-    /** Category Tab */
-    public CategoryTabController categoryTabController;
-    public AnchorPane categoryTab;
-
     /** Profile Tab */
     public ProfileTabController profileTabController;
     public AnchorPane profileTab;
 
-    /** Settings Tab */
-    // TODO: Khai báo controller và tab tương ứng cho SettingsTab
 
     /**
      * Xử lý sự kiện khi click vào các nút điều hướng -> hiển thị tab tương ứng (setContentPane).
@@ -64,8 +52,6 @@ public class UserMainController extends MainController {
 
         if (currentTab.equals(homeButton)) {
             setContentPane(homeTab);
-        } else if (currentTab.equals(categoryButton)) {
-            setContentPane(categoryTab);
         } else if (currentTab.equals(searchButton)) {
             setContentPane(searchTab);
         } else if (currentTab.equals(profileButton)) {
@@ -98,16 +84,6 @@ public class UserMainController extends MainController {
             e.printStackTrace();
         }
 
-        // KHỞI TẠO CATEGORY TAB
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/UserTab/CategoryTabView.fxml"));
-            categoryTab = fxmlLoader.load();
-            categoryTabController = fxmlLoader.getController();
-            categoryTabController.setMainController(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         // KHỞI TẠO PROFILE TAB
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/UserTab/ProfileTabView.fxml"));
@@ -131,10 +107,6 @@ public class UserMainController extends MainController {
 
     public Pane getHomeButton() {
         return homeButton;
-    }
-
-    public Pane getCategoryButton() {
-        return categoryButton;
     }
 
     public Pane getSearchButton() {
