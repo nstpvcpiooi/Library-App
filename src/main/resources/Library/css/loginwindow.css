@@ -28,3 +28,20 @@ VBox {
     -fx-font-size: 13;
     -fx-cursor: hand;
 }
+
+PasswordField, TextField {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-family: "Barlow";
+    -fx-font-size: 14;
+}
+
+.input {
+    -fx-border-color: #c0c0c0;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+}
+
+.text-input:focused {
+    -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
+}

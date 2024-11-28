@@ -3,6 +3,7 @@ package Library.ui.LogIn;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 
 public abstract class LogInTabController {
     @FXML
@@ -10,6 +11,9 @@ public abstract class LogInTabController {
 
     @FXML
     private Button submitButton;
+
+    @FXML
+    private PasswordField password;
 
     abstract void submit(ActionEvent event);
 
