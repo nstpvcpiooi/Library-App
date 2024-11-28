@@ -87,7 +87,7 @@ public class Review {
     }
 
     public static List<Review> findByMemberId(int memberID) {
-        return MysqlReviewDao.getInstance().getReviewsByMember(String.valueOf(memberID));
+        return MysqlReviewDao.getInstance().getReviewsByMember(memberID);
     }
 
     public static double getAverageRating(String bookID) {

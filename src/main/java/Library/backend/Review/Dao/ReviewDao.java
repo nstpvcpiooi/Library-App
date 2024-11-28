@@ -10,6 +10,6 @@ public interface ReviewDao {
     boolean deleteReview(String bookID, int memberID); // Delete a review based on bookID and memberID
     Review getReviewByBookAndMember(String bookID, int memberID); // Get a review by bookID and memberID
     List<Review> getReviewsForBook(String bookID); // Get all reviews for a specific book
-    List<Review> getReviewsByMember(String memberID); // Get all reviews by a specific member
+    List<Review> getReviewsByMember(int memberID); // Get all reviews by a specific member
     double getAverageRatingForBook(String bookID); // Get average rating for a book
 }
