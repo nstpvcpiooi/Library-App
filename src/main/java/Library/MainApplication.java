@@ -78,7 +78,7 @@ public class MainApplication extends Application {
         // THÔNG BÁO SAU KHI ĐĂNG NHẬP
 //        if (dict instanceof DtbDictionary) {
 //            WordOfTheDayWindow wordOfTheDayWindow = new WordOfTheDayWindow();
-//            wordOfTheDayWindow.display();
+//            wordOfTheDayWindow.displayInfo();
 //        }
     }
 

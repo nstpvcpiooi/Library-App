@@ -1,6 +1,7 @@
-package Library.ui.BookInfoView;
+package Library.ui.PopUpWindow;
 
 import Library.backend.bookModel.Book;
+import Library.ui.Admin.AdminMainController;
 import Library.ui.User.UserMainController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,7 +14,7 @@ import javafx.scene.layout.AnchorPane;
 /**
  * Controller cho cửa sổ hiển thị thông tin sách chi tiết
  */
-public class BookInfoViewController {
+public class BookInfoViewController extends PopUpController {
 
     @FXML
     private Label author;
@@ -42,28 +43,20 @@ public class BookInfoViewController {
     @FXML
     private Button ActionButton;
 
-    private BookInfoView bookInfoView;
+    private Book selectedBook;
 
-    @FXML
-    void close(ActionEvent event) {
-        bookInfoView.close();
-    }
 
     @FXML
     void Action(ActionEvent event) {
-
-    }
-
-    public BookInfoView getBookInfoView() {
-        return bookInfoView;
-    }
-
-    public void setBookInfoView(BookInfoView bookInfoView) {
-        this.bookInfoView = bookInfoView;
+        if (getPopUpWindow().getMainController() instanceof AdminMainController) {
+            getPopUpWindow().displayEdit(selectedBook);
+        }
     }
 
     public void setData(Book book) {
-// 1. LẤY ẢNH BÌA SÁCH
+        selectedBook = book;
+
+        // 1. LẤY ẢNH BÌA SÁCH
         try {
             // TODO KIỂM TRA ĐỊA CHỈ ẢNH BỊ LỖI?
             Image image = new Image(book.getCoverCode());
@@ -84,10 +77,13 @@ public class BookInfoViewController {
         category.setText(book.getCategory());
         publishyear.setText(String.valueOf(book.getPublishYear()));
 
-        if (getBookInfoView().getMainController() instanceof UserMainController) {
-            ActionButton.setText("Mượn sách");
+        if (getPopUpWindow().getMainController() instanceof UserMainController) {
+            ActionButton.setText("MƯỢN SÁCH");
+
+            // nếu sách đã được mượn thì hiển thị nút trả sách
+            // hàm kiểm tra sách đã mượn?
         } else {
-            ActionButton.setText("Chỉnh sửa");
+            ActionButton.setText("CHỈNH SỬA");
         }
 
     }

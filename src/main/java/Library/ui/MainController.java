@@ -1,6 +1,6 @@
 package Library.ui;
 
-import Library.ui.BookInfoView.BookInfoView;
+import Library.ui.PopUpWindow.PopUpWindow;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.effect.ColorAdjust;
@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
 
 public abstract class MainController implements Initializable {
 
-    protected BookInfoView bookInfoView;
+    protected PopUpWindow popUpWindow;
 
     /**
      * Nút hiện tại đang được chọn.
@@ -35,8 +35,8 @@ public abstract class MainController implements Initializable {
 
     public void initialize(URL location, ResourceBundle resources) {
         // KHỞI TẠO BOOK INFO VIEW
-        bookInfoView = new BookInfoView();
-        bookInfoView.setMainController(this);
+        popUpWindow = new PopUpWindow();
+        popUpWindow.setMainController(this);
     }
 
     /**
@@ -63,8 +63,8 @@ public abstract class MainController implements Initializable {
         }
     }
 
-    public BookInfoView getBookInfoView() {
-        return bookInfoView;
+    public PopUpWindow getPopUpWindow() {
+        return popUpWindow;
     }
 
     /** set background effect for root */

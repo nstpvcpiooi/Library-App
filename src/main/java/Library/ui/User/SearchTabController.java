@@ -70,7 +70,7 @@ public class SearchTabController implements Initializable {
     @FXML
     void SelectBook(MouseEvent event) {
         Book selectedBook = SearchResult.getSelectionModel().getSelectedItem();
-        getMainController().getBookInfoView().display(selectedBook);
+        getMainController().getPopUpWindow().displayInfo(selectedBook);
     }
 
     @Override

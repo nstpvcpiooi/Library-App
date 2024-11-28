@@ -24,10 +24,23 @@
     -fx-text-fill: #303030;
 }
 
-#ActionButton {
+#ActionButton, #SaveButton {
     -fx-background-color: #e89e5f;
     -fx-font-family: "Barlow ExtraBold";
     -fx-text-fill: white;
+    -fx-font-size: 16;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-cursor: hand;
+}
+
+#CancelButton {
+    -fx-background-color: #f4f4f4;
+    -fx-border-radius: 10px;
+    -fx-border-color: #c0c0c0;
+    -fx-border-width: 2px;
+    -fx-font-family: "Barlow ExtraBold";
+    -fx-text-fill: #6e6e6e;
     -fx-font-size: 16;
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;

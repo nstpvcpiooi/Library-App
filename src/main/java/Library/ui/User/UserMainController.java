@@ -1,7 +1,6 @@
 package Library.ui.User;
 
 import Library.MainApplication;
-import Library.ui.BookInfoView.BookInfoView;
 import Library.ui.MainController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

@@ -21,7 +21,7 @@
             </ImageView>
          </children>
       </HBox>
-      <ListView id="SearchResult" fx:id="SearchResult" layoutX="25.0" layoutY="118.0" prefHeight="585.0" prefWidth="896.0" />
+      <ListView id="SearchResult" fx:id="SearchResult" layoutX="25.0" layoutY="118.0" onMouseClicked="#SelectBook" prefHeight="585.0" prefWidth="896.0" />
       <HBox id="AddButton" fx:id="AddButton" alignment="CENTER" layoutX="866.0" layoutY="40.0" onMouseClicked="#AddBook" prefHeight="54.0" prefWidth="54.0">
          <children>
             <ImageView fitHeight="31.0" fitWidth="26.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">

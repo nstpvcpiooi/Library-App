@@ -30,7 +30,7 @@
                   <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Quản lý yêu cầu" />
                   <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="31.0" layoutY="15.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../icon/list.png" />
+                        <Image url="@../icon/apps.png" />
                      </image>
                   </ImageView>
                </children>

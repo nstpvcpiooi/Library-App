@@ -46,7 +46,7 @@ public class HomeTabController implements Initializable {
     @FXML
     void SelectBook(MouseEvent event) {
         Book selectedBook = RecommendationList.getSelectionModel().getSelectedItem();
-        getMainController().getBookInfoView().display(selectedBook);
+        getMainController().getPopUpWindow().displayInfo(selectedBook);
     }
 
 
