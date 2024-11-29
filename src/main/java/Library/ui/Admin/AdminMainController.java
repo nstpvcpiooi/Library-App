@@ -19,8 +19,6 @@ public class AdminMainController extends MainController {
     @FXML
     private Pane LibraryManageButton;
 
-    @FXML
-    private Pane RequestManageButton;
 
     @FXML
     private Pane UserManageButton;
@@ -29,16 +27,11 @@ public class AdminMainController extends MainController {
     public LibraryManageController libraryManageController;
     public AnchorPane libraryManageTab;
 
-    /** RequestManage Tab */
-    public RequestManageController requestManageController;
-    public AnchorPane requestManageTab;
 
     /** UserManage Tab */
     public UserManageController userManageController;
     public AnchorPane userManageTab;
 
-    /** Settings Tab */
-    // TODO: Khai báo controller và tab tương ứng cho SettingsTab
 
     /**
      * Xử lý sự kiện khi click vào các nút điều hướng -> hiển thị tab tương ứng (setContentPane).
@@ -49,8 +42,6 @@ public class AdminMainController extends MainController {
 
         if (currentTab.equals(LibraryManageButton)) {
             setContentPane(libraryManageTab);
-        } else if (currentTab.equals(RequestManageButton)) {
-            setContentPane(requestManageTab);
         } else if (currentTab.equals(UserManageButton)) {
             setContentPane(userManageTab);
         }
@@ -70,13 +61,6 @@ public class AdminMainController extends MainController {
             e.printStackTrace();
         }
 
-        // KHỞI TẠO REQUESTMANAGE TAB
-        try {
-
-            } catch (Exception e) {
-                e.printStackTrace();
-        }
-
         // KHỞI TẠO USERMANAGE TAB
         try {
 
@@ -92,10 +76,6 @@ public class AdminMainController extends MainController {
         ContentPane.getChildren().add(libraryManageTab);
 
         super.initialize(location, resources);
-    }
-
-    public Pane getRequestManageButton() {
-        return RequestManageButton;
     }
 
     public Pane getLibraryManageButton() {

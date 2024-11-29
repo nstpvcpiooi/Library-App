@@ -79,14 +79,12 @@ public class PopUpWindow {
         PopUpStage.setScene(bookInfoScene);
         mainController.setBackgroundEffect();
         bookInfoViewController.setData(selectedBook);
-        PopUpStage.close();
         PopUpStage.show();
     }
 
     public void displayAdd() {
         PopUpStage.setScene(bookAddScene);
         mainController.setBackgroundEffect();
-        PopUpStage.close();
         PopUpStage.show();
     }
 
@@ -94,7 +92,6 @@ public class PopUpWindow {
         PopUpStage.setScene(bookEditScene);
         mainController.setBackgroundEffect();
 //        bookEditViewController.setData(selectedBook);
-//        PopUpStage.close();
         PopUpStage.show();
     }
 
