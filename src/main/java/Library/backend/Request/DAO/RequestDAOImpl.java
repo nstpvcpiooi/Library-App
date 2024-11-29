@@ -1,6 +1,9 @@
+// src/main/java/Library/backend/Request/DAO/RequestDAOImpl.java
 package Library.backend.Request.DAO;
 
 import Library.backend.Request.Model.Request;
+import Library.backend.bookDao.BookDao;
+import Library.backend.bookDao.MysqlBookDao;
 import Library.backend.bookModel.Book;
 import Library.backend.database.JDBCUtil;
 
@@ -14,7 +17,7 @@ import java.util.List;
 
 public class RequestDAOImpl implements RequestDAO {
     private static RequestDAOImpl instance;
-
+    private BookDao bookDao = MysqlBookDao.getInstance();
     private RequestDAOImpl() {
         // Private constructor to prevent instantiation
     }
@@ -31,35 +34,9 @@ public class RequestDAOImpl implements RequestDAO {
     }
 
     @Override
-    public void updateBorrowTime(int requestID, LocalDateTime borrowTime) {
-        String query = "UPDATE Requests SET borrowDate = ? WHERE requestID = ?";
-        try (Connection connection = JDBCUtil.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setObject(1, borrowTime);
-            preparedStatement.setInt(2, requestID);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void updateReturnTime(int requestID, LocalDateTime returnTime) {
-        String query = "UPDATE Requests SET returnDate = ? WHERE requestID = ?";
-        try (Connection connection = JDBCUtil.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setObject(1, returnTime);
-            preparedStatement.setInt(2, requestID);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
     public void createBorrowRequest(Request request) {
-        String checkQuery = "SELECT COUNT(*) FROM Requests WHERE memberID = ? AND bookID = ?";
-        String insertQuery = "INSERT INTO Requests (memberID, bookID, borrowDate, returnDate) VALUES (?, ?, ?, ?)";
+        String checkQuery = "SELECT COUNT(*) FROM Requests WHERE memberID = ? AND bookID = ? AND (status = 'approved issue' OR status = 'pending issue' OR status = 'pending return')";
+        String insertQuery = "INSERT INTO Requests (memberID, bookID, issueDate, dueDate, returnDate, status, overdue) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement checkStatement = connection.prepareStatement(checkQuery);
@@ -76,8 +53,11 @@ public class RequestDAOImpl implements RequestDAO {
             // No duplicates, proceed with insert
             insertStatement.setInt(1, request.getMemberID());
             insertStatement.setString(2, request.getBookID());
-            insertStatement.setObject(3, request.getBorrowDate());
-            insertStatement.setObject(4, request.getReturnDate());
+            insertStatement.setObject(3, request.getIssueDate());
+            insertStatement.setObject(4, request.getDueDate());
+            insertStatement.setObject(5, request.getReturnDate());
+            insertStatement.setString(6, request.getStatus());
+            insertStatement.setBoolean(7, request.isOverdue());
 
             int rowsInserted = insertStatement.executeUpdate();
             if (rowsInserted > 0) {
@@ -90,24 +70,24 @@ public class RequestDAOImpl implements RequestDAO {
             e.printStackTrace();
         }
     }
-
     @Override
     public List<Request> getMemberBorrowHistory(int memberID) {
         List<Request> borrowHistory = new ArrayList<>();
         String query = "SELECT * FROM Requests WHERE memberID = ?";
-
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setInt(1, memberID);
             ResultSet resultSet = preparedStatement.executeQuery();
-
             while (resultSet.next()) {
                 Request request = new Request();
                 request.setRequestID(resultSet.getInt("requestID"));
                 request.setMemberID(resultSet.getInt("memberID"));
                 request.setBookID(resultSet.getString("bookID"));
-                request.setBorrowDate(resultSet.getObject("borrowDate", LocalDateTime.class));
+                request.setIssueDate(resultSet.getObject("issueDate", LocalDateTime.class));
+                request.setDueDate(resultSet.getObject("dueDate", LocalDateTime.class));
                 request.setReturnDate(resultSet.getObject("returnDate", LocalDateTime.class));
+                request.setStatus(resultSet.getString("status"));
+                request.setOverdue(resultSet.getBoolean("overdue"));
                 borrowHistory.add(request);
             }
         } catch (SQLException e) {
@@ -117,25 +97,145 @@ public class RequestDAOImpl implements RequestDAO {
     }
 
     @Override
-    public void borrowRequest(int memberID, Book book) {
-        if (book.getQuantity() > 0) {
-            LocalDateTime borrowDate = LocalDateTime.now();
-            LocalDateTime returnDate = borrowDate.plusDays(7);
-            createBorrowRequest(new Request(memberID, book.getBookID(), borrowDate, returnDate));
-            book.updateQuantity(book.getQuantity()-1);
-        } else {
-            throw new IllegalStateException("Cannot borrow book: Quantity is 0.");
+    public void updateRequest(Request request) {
+        String query = "UPDATE Requests SET issueDate = ?, dueDate = ?, returnDate = ?, status = ?, overdue = ? WHERE requestID = ?";
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setObject(1, request.getIssueDate());
+            preparedStatement.setObject(2, request.getDueDate());
+            preparedStatement.setObject(3, request.getReturnDate());
+            preparedStatement.setString(4, request.getStatus());
+            preparedStatement.setBoolean(5, request.isOverdue());
+            preparedStatement.setInt(6, request.getRequestID());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
-    public void returnBook(int memberID, Book book) {
-        List<Request> requests = getMemberBorrowHistory(memberID);
-        for (Request request : requests) {
-            if (request.getBookID().equals(book.getBookID()) && request.getReturnDate() == null) {
-                updateReturnTime(request.getRequestID(), LocalDateTime.now());
-                book.updateQuantity(book.getQuantity()+1); // Increase the quantity by 1
+    public Request getRequestById(int requestID) {
+        String query = "SELECT * FROM Requests WHERE requestID = ?";
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, requestID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                Request request = new Request();
+                request.setRequestID(resultSet.getInt("requestID"));
+                request.setMemberID(resultSet.getInt("memberID"));
+                request.setBookID(resultSet.getString("bookID"));
+                request.setIssueDate(resultSet.getObject("issueDate", LocalDateTime.class));
+                request.setDueDate(resultSet.getObject("dueDate", LocalDateTime.class));
+                request.setReturnDate(resultSet.getObject("returnDate", LocalDateTime.class));
+                request.setStatus(resultSet.getString("status"));
+                request.setOverdue(resultSet.getBoolean("overdue"));
+                return request;
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return null;
+    }
+
+    @Override
+    public void handleOverdueRequests() {
+        String query = "SELECT * FROM Requests WHERE dueDate < ? AND (status = 'pending issue' OR status = 'pending return' OR status = 'approved issue')";
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setObject(1, LocalDateTime.now());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Request request = new Request();
+                request.setRequestID(resultSet.getInt("requestID"));
+                request.setMemberID(resultSet.getInt("memberID"));
+                request.setBookID(resultSet.getString("bookID"));
+                request.setIssueDate(resultSet.getObject("issueDate", LocalDateTime.class));
+                request.setDueDate(resultSet.getObject("dueDate", LocalDateTime.class));
+                request.setReturnDate(resultSet.getObject("returnDate", LocalDateTime.class));
+                request.setStatus(resultSet.getString("status"));
+                request.setOverdue(resultSet.getBoolean("overdue"));
+
+                if ("pending issue".equals(request.getStatus())) {
+                    // Delete the request and return the book to the library
+                    bookDao.updateQuantity(request.getBookID(), 1);
+                    request.setOverdue(false);
+                    request.setStatus("approved return");
+                    updateRequest(request);
+                } else if ("pending return".equals(request.getStatus()) || "approved issue".equals(request.getStatus())) {
+                    // Mark the request as overdue
+                    request.setOverdue(true);
+                    updateRequest(request);
+                } else if ("approved return".equals(request.getStatus())) {
+                    // Delete the overdue and update the return date
+                    request.setOverdue(false);
+                    request.setReturnDate(LocalDateTime.now());
+                    updateRequest(request);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteRequest(int requestID) {
+        String query = "DELETE FROM Requests WHERE requestID = ?";
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, requestID);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    @Override
+    public List<Request> getAllRequests() {
+        List<Request> requests = new ArrayList<>();
+        String query = "SELECT * FROM Requests";
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                Request request = new Request();
+                request.setRequestID(resultSet.getInt("requestID"));
+                request.setMemberID(resultSet.getInt("memberID"));
+                request.setBookID(resultSet.getString("bookID"));
+                request.setIssueDate(resultSet.getObject("issueDate", LocalDateTime.class));
+                request.setDueDate(resultSet.getObject("dueDate", LocalDateTime.class));
+                request.setReturnDate(resultSet.getObject("returnDate", LocalDateTime.class));
+                request.setStatus(resultSet.getString("status"));
+                request.setOverdue(resultSet.getBoolean("overdue"));
+                requests.add(request);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return requests;
+    }
+
+    @Override
+    public List<Request> getRequestsByMemberID(int memberID) {
+        List<Request> requests = new ArrayList<>();
+        String query = "SELECT * FROM Requests WHERE memberID = ?";
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, memberID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Request request = new Request();
+                request.setRequestID(resultSet.getInt("requestID"));
+                request.setMemberID(resultSet.getInt("memberID"));
+                request.setBookID(resultSet.getString("bookID"));
+                request.setIssueDate(resultSet.getObject("issueDate", LocalDateTime.class));
+                request.setDueDate(resultSet.getObject("dueDate", LocalDateTime.class));
+                request.setReturnDate(resultSet.getObject("returnDate", LocalDateTime.class));
+                request.setStatus(resultSet.getString("status"));
+                request.setOverdue(resultSet.getBoolean("overdue"));
+                requests.add(request);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return requests;
     }
 }

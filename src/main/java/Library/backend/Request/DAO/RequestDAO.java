@@ -11,8 +11,9 @@ public interface RequestDAO {
 
     void createBorrowRequest(Request request);
     List<Request> getMemberBorrowHistory(int memberID);
-    void updateReturnTime(int requestID, LocalDateTime returnTime);
-    void updateBorrowTime(int requestID, LocalDateTime borrowTime);
-    void borrowRequest(int memberID, Book book);
-    void returnBook(int memberID, Book book);
+    void updateRequest(Request request);
+    Request getRequestById(int requestID);
+    void handleOverdueRequests();
+    List<Request> getAllRequests();
+    List<Request> getRequestsByMemberID(int memberID);
 }
