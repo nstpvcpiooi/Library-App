@@ -1,5 +1,6 @@
 package Library;
 
+import Library.backend.Request.OverdueRequestHandler;
 import Library.ui.LogIn.LogInViewController;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -103,6 +104,13 @@ public class MainApplication extends Application {
 
     public static void main(String[] args) {
         launch();
+        OverdueRequestHandler overdueRequestHandler = new OverdueRequestHandler();
+        overdueRequestHandler.start();
+
+        // Your application logic here
+
+        // Add a shutdown hook to stop the scheduler gracefully
+        Runtime.getRuntime().addShutdownHook(new Thread(overdueRequestHandler::stop));
     }
 
 }

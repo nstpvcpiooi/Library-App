@@ -1,3 +1,4 @@
+// src/main/java/Library/backend/Request/Model/Request.java
 package Library.backend.Request.Model;
 
 import java.time.LocalDateTime;
@@ -6,18 +7,25 @@ public class Request {
     private int requestID;
     private int memberID;
     private String bookID;
-    private LocalDateTime borrowDate;
+    private LocalDateTime issueDate;
+    private LocalDateTime dueDate;
     private LocalDateTime returnDate;
+    private String status;
+    private boolean overdue;
 
-    public Request(int memberID, String bookID, LocalDateTime borrowDate, LocalDateTime returnDate) {
+    public Request(int memberID, String bookID, LocalDateTime issueDate, LocalDateTime dueDate, LocalDateTime returnDate, String status, boolean overdue) {
         this.memberID = memberID;
         this.bookID = bookID;
-        this.borrowDate = borrowDate;
+        this.issueDate = issueDate;
+        this.dueDate = dueDate;
         this.returnDate = returnDate;
+        this.status = status;
+        this.overdue = overdue;
     }
 
     public Request() {}
 
+    // Getters and Setters
     public int getRequestID() {
         return requestID;
     }
@@ -42,12 +50,20 @@ public class Request {
         this.bookID = bookID;
     }
 
-    public LocalDateTime getBorrowDate() {
-        return borrowDate;
+    public LocalDateTime getIssueDate() {
+        return issueDate;
     }
 
-    public void setBorrowDate(LocalDateTime borrowDate) {
-        this.borrowDate = borrowDate;
+    public void setIssueDate(LocalDateTime issueDate) {
+        this.issueDate = issueDate;
+    }
+
+    public LocalDateTime getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDateTime dueDate) {
+        this.dueDate = dueDate;
     }
 
     public LocalDateTime getReturnDate() {
@@ -56,5 +72,21 @@ public class Request {
 
     public void setReturnDate(LocalDateTime returnDate) {
         this.returnDate = returnDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public boolean isOverdue() {
+        return overdue;
+    }
+
+    public void setOverdue(boolean overdue) {
+        this.overdue = overdue;
     }
 }
