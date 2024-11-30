@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Point3D?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="container" fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="@../../css/popup.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.PopUpWindow.CustomAddController">
+   <children>
+      <VBox alignment="TOP_CENTER" prefHeight="500.0" prefWidth="900.0">
+         <children>
+            <Label alignment="CENTER" text="Thêm sách mới" textFill="#000000ce">
+               <font>
+                  <Font name="Barlow SemiBold" size="24.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="30.0" />
+               </VBox.margin>
+            </Label>
+            <HBox alignment="CENTER" prefHeight="451.0" prefWidth="900.0" spacing="20.0">
+               <children>
+                  <ImageView id="cover" fx:id="cover" fitHeight="243.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                  <VBox alignment="CENTER" prefHeight="440.0" prefWidth="630.0" spacing="15.0">
+                     <children>
+                        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="43.0" prefWidth="620.0" styleClass="input">
+                           <children>
+                              <TextField fx:id="titleInput" prefHeight="46.0" prefWidth="622.0" promptText="Tên sách" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="43.0" prefWidth="620.0" styleClass="input">
+                           <children>
+                              <TextField fx:id="authorInput" prefHeight="46.0" prefWidth="622.0" promptText="Tác giả" />
+                           </children>
+                        </HBox>
+                        <HBox maxWidth="-Infinity" prefWidth="620.0" spacing="15.0">
+                           <children>
+                              <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="43.0" prefWidth="514.0" styleClass="input">
+                                 <children>
+                                    <TextField fx:id="categoryInput" prefHeight="46.0" prefWidth="622.0" promptText="Thể loại" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="43.0" prefWidth="283.0" styleClass="input">
+                                 <children>
+                                    <TextField fx:id="publishYearInput" prefHeight="46.0" prefWidth="622.0" promptText="Năm phát hành" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </HBox>
+                        <HBox maxWidth="-Infinity" prefWidth="620.0" spacing="15.0">
+                           <children>
+                              <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="43.0" prefWidth="163.0" styleClass="input">
+                                 <children>
+                                    <TextField fx:id="quantityInput" prefHeight="39.0" prefWidth="459.0" promptText="Số lượng" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="43.0" prefWidth="467.0" styleClass="input">
+                                 <children>
+                                    <TextField fx:id="isbnCodeInput" disable="true" editable="false" prefHeight="46.0" prefWidth="622.0" promptText="Mã ISBN (empty)" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <HBox alignment="CENTER" layoutY="501.0" prefHeight="99.0" prefWidth="900.0" spacing="20.0">
+         <children>
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#goBack" prefHeight="45.0" prefWidth="150.0" styleClass="WhiteButton" text="BACK" />
+            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#Save" prefHeight="45.0" prefWidth="150.0" styleClass="ColorButton" text="SAVE" />
+         </children>
+      </HBox>
+   </children>
+   <rotationAxis>
+      <Point3D />
+   </rotationAxis>
+</AnchorPane>

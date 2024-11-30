@@ -14,24 +14,24 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="container" fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="@../css/popup.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.PopUpWindow.BookAddViewController">
+<AnchorPane id="container" fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="@../../css/popup.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.PopUpWindow.BookAddViewController">
    <children>
       <Button id="closeButton" fx:id="closeButton" graphicTextGap="6.0" layoutX="847.0" layoutY="20.0" mnemonicParsing="false" onAction="#close" prefHeight="33.0" prefWidth="33.0">
          <graphic>
             <ImageView fitHeight="11.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../icon/cross.png" />
+                  <Image url="@../../icon/cross.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
       <VBox alignment="CENTER" layoutY="80.0" prefHeight="438.0" prefWidth="900.0">
          <children>
-            <Button id="AddButton" graphicTextGap="10.0" mnemonicParsing="false" prefHeight="99.0" prefWidth="345.0" text="Thêm sách mới (tùy chỉnh)">
+            <Button id="AddButton" fx:id="CustomAddButton" graphicTextGap="10.0" mnemonicParsing="false" onAction="#displayCustomAdd" prefHeight="99.0" prefWidth="345.0" text="Thêm sách mới (tùy chỉnh)">
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../icon/plus.png" />
+                        <Image url="@../../icon/plus.png" />
                      </image>
                      <effect>
                         <ColorAdjust brightness="1.0" />
@@ -55,10 +55,10 @@
                <children>
                   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="421.0" styleClass="input">
                      <children>
-                        <TextField prefHeight="55.0" prefWidth="408.0" promptText="Nhập mã ISBN" />
+                        <TextField fx:id="isbnCode" prefHeight="55.0" prefWidth="408.0" promptText="Nhập mã ISBN" />
                      </children>
                   </HBox>
-                  <Button id="okButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="78.0" text="OK" />
+                  <Button id="okButton" fx:id="okButton" mnemonicParsing="false" onAction="#displayAddIsbn" prefHeight="50.0" prefWidth="78.0" text="OK" />
                </children>
             </HBox>
          </children>

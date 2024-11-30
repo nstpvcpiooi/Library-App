@@ -12,31 +12,35 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="container" fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="@../css/popup.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.PopUpWindow.BookInfoViewController">
+<AnchorPane id="container" fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="@../../css/popup.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.PopUpWindow.BookInfoViewController">
    <children>
       <ImageView fitHeight="329.0" fitWidth="900.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../image/white%20background.png" />
+            <Image url="@../../image/whitebackground.png" />
          </image>
       </ImageView>
       <Button id="closeButton" fx:id="closeButton" graphicTextGap="6.0" layoutX="847.0" layoutY="20.0" mnemonicParsing="false" onAction="#close" prefHeight="33.0" prefWidth="33.0">
          <graphic>
             <ImageView fitHeight="11.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../icon/cross.png" />
+                  <Image url="@../../icon/cross.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
       <HBox alignment="CENTER" layoutY="69.0" prefHeight="508.0" prefWidth="900.0" spacing="20.0">
          <children>
-            <VBox prefHeight="508.0" prefWidth="180.0" spacing="25.0">
+            <VBox prefHeight="508.0" prefWidth="180.0" spacing="15.0">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
                <children>
-                  <ImageView id="cover" fx:id="cover" fitHeight="243.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                  <Button id="ActionButton" fx:id="ActionButton" mnemonicParsing="false" onAction="#Action" prefHeight="42.0" prefWidth="180.0" text="BUTTON" />
+                  <ImageView id="cover" fx:id="cover" fitHeight="243.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true">
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin></ImageView>
+                  <Button fx:id="ActionButton" mnemonicParsing="false" onAction="#Action" prefHeight="42.0" prefWidth="180.0" styleClass="ColorButton" stylesheets="@../../css/popup.css" text="BUTTON" />
+                  <Button fx:id="RemoveButton" mnemonicParsing="false" onAction="#Remove" prefHeight="42.0" prefWidth="180.0" styleClass="WhiteButton" text="XÓA" visible="false" />
                </children>
             </VBox>
             <VBox prefHeight="508.0" prefWidth="531.0" spacing="10.0">

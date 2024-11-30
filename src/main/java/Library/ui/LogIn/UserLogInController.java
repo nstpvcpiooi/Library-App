@@ -4,15 +4,13 @@ import Library.backend.Session.SessionManager;
 import Library.ui.Notification.Notification;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class UserLogInController extends LogInTabController {
     @FXML
     private TextField username;
-    @FXML
-    private TextField password;
 
     @FXML
     void submit(ActionEvent event) {
@@ -23,7 +21,7 @@ public class UserLogInController extends LogInTabController {
             SessionManager.getInstance().setLoggedInMember(memberDAO.login(username, password));
             logInViewController.setReturnType(LogInViewController.LogInType.USER);
 
-            Stage current = ((Stage) (((Button) event.getSource()).getScene().getWindow()));
+            Stage current = ((Stage) submitButton.getScene().getWindow());
             current.close();
         }
         else {
@@ -31,5 +29,18 @@ public class UserLogInController extends LogInTabController {
             Notification notification = new Notification("Lỗi!", "Đăng nhập thất bại!");
             notification.display();
         }
+    }
+
+    @FXML
+    void tab(KeyEvent event) {
+        if (event.getCode().toString().equals("TAB")) {
+            password.requestFocus();
+        }
+    }
+
+    @Override
+    void goBack(ActionEvent event) {
+        username.clear();
+        super.goBack(event);
     }
 }

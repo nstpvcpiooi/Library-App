@@ -16,7 +16,7 @@
          <children>
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="500.0">
                <children>
-                  <Button id="back" fx:id="backButton" graphicTextGap="5.0" mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="82.0" text="Back">
+                  <Button id="back" fx:id="backButton" focusTraversable="false" graphicTextGap="5.0" mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="82.0" text="Back">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
@@ -39,7 +39,7 @@
                               <Image url="@../../icon/user.png" />
                            </image>
                         </ImageView>
-                        <TextField fx:id="username" prefHeight="60.0" prefWidth="365.0" promptText="Nhập tên người dùng" />
+                        <TextField fx:id="username" onKeyPressed="#tab" prefHeight="60.0" prefWidth="365.0" promptText="Nhập tên người dùng" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="51.0" prefWidth="422.0" spacing="5.0" styleClass="input">
@@ -49,7 +49,7 @@
                               <Image url="@../../icon/lock.png" />
                            </image>
                         </ImageView>
-                        <PasswordField fx:id="password" prefHeight="57.0" prefWidth="365.0" promptText="Nhập mật khẩu" />
+                        <PasswordField fx:id="password" focusTraversable="false" onKeyPressed="#enter" prefHeight="57.0" prefWidth="365.0" promptText="Nhập mật khẩu" />
                      </children>
                   </HBox>
                   <Button id="submitButton" fx:id="submitButton" mnemonicParsing="false" onAction="#submit" prefHeight="46.0" prefWidth="206.0" text="ĐĂNG NHẬP" />

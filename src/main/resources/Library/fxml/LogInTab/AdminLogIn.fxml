@@ -15,7 +15,7 @@
          <children>
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="500.0">
                <children>
-                  <Button id="back" fx:id="backButton" graphicTextGap="5.0" mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="82.0" text="Back">
+                  <Button id="back" fx:id="backButton" focusTraversable="false" graphicTextGap="5.0" mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="82.0" text="Back">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
@@ -38,10 +38,10 @@
                               <Image url="@../../icon/lock.png" />
                            </image>
                         </ImageView>
-                        <PasswordField fx:id="password" prefHeight="57.0" prefWidth="365.0" promptText="Nhập mẩu khẩu cho admin" />
+                        <PasswordField fx:id="password" onKeyPressed="#enter" prefHeight="57.0" prefWidth="365.0" promptText="Nhập mẩu khẩu cho admin" />
                      </children>
                   </HBox>
-                  <Button id="submitButton" fx:id="submitButton" mnemonicParsing="false" onAction="#submit" prefHeight="46.0" prefWidth="206.0" text="ĐĂNG NHẬP" />
+                  <Button id="submitButton" fx:id="submitButton" focusTraversable="false" mnemonicParsing="false" onAction="#submit" prefHeight="46.0" prefWidth="206.0" text="ĐĂNG NHẬP" />
                </children>
             </VBox>
          </children>
