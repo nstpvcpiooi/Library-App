@@ -8,6 +8,7 @@ module libraryapp.libraryapp {
     requires com.google.zxing.javase;
     requires java.mail;
     requires jdk.compiler;
+    requires org.controlsfx.controls;
 
 
     opens Library to javafx.fxml;
