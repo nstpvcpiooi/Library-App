@@ -63,7 +63,10 @@ public class AdminMainController extends MainController {
 
         // KHỞI TẠO USERMANAGE TAB
         try {
-
+            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("fxml/AdminTab/UserManageTabView.fxml"));
+            userManageTab = loader.load();
+            userManageController = loader.getController();
+            userManageController.setMainController(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
