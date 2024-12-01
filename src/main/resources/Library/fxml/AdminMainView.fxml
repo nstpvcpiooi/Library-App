@@ -38,6 +38,16 @@
                   <Insets />
                </VBox.margin>
             </Pane>
+            <Pane fx:id="RequestManageButton" onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
+               <children>
+                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Quản lý trả sách" />
+                  <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="31.0" layoutY="15.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icon/list.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
          </children>
       </VBox>
       <AnchorPane id="ContentPane" fx:id="ContentPane" layoutX="250.0" prefHeight="700.0" prefWidth="950.0" />

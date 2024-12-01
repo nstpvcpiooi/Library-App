@@ -46,6 +46,26 @@
     -fx-cursor: hand;
 }
 
+#approveButton {
+    -fx-background-color: #33ac33;
+    -fx-border-width: 2px;
+    -fx-font-family: "Barlow ExtraBold";
+    -fx-text-fill: white;
+    -fx-font-size: 16;
+    -fx-background-radius: 10px;
+    -fx-cursor: hand;
+}
+
+#declineButton {
+    -fx-background-color: #ff4242;
+    -fx-border-width: 2px;
+    -fx-font-family: "Barlow ExtraBold";
+    -fx-text-fill: white;
+    -fx-font-size: 16;
+    -fx-background-radius: 10px;
+    -fx-cursor: hand;
+}
+
 TextField, PasswordField {
     -fx-background-color: transparent;
     -fx-border-color: transparent;

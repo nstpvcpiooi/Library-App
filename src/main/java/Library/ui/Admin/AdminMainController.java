@@ -19,6 +19,8 @@ public class AdminMainController extends MainController {
     @FXML
     private Pane LibraryManageButton;
 
+    @FXML
+    private Pane RequestManageButton;
 
     @FXML
     private Pane UserManageButton;
@@ -31,6 +33,10 @@ public class AdminMainController extends MainController {
     /** UserManage Tab */
     public UserManageController userManageController;
     public AnchorPane userManageTab;
+
+    /** RequestManage Tab */
+    public RequestManageController requestManageController;
+    public AnchorPane requestManageTab;
 
 
     /**
@@ -45,6 +51,8 @@ public class AdminMainController extends MainController {
         } else if (currentTab.equals(UserManageButton)) {
             setContentPane(userManageTab);
             userManageController.hideButtons();
+        } else if (currentTab.equals(RequestManageButton)) {
+            setContentPane(requestManageTab);
         }
     }
 
@@ -68,6 +76,16 @@ public class AdminMainController extends MainController {
             userManageTab = loader.load();
             userManageController = loader.getController();
             userManageController.setMainController(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // KHỞI TẠO REQUESTMANAGE TAB
+        try {
+            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("fxml/AdminTab/RequestManageTabView.fxml"));
+            requestManageTab = loader.load();
+            requestManageController = loader.getController();
+            requestManageController.setMainController(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
