@@ -67,7 +67,7 @@ public class RequestManageController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        hideButtons();
     }
 
     public void hideButtons() {

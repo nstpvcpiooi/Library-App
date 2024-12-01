@@ -43,9 +43,6 @@ public class UserMainController extends MainController {
     public SearchTabController searchTabController;
     public AnchorPane searchTab;
 
-//    /** Profile Tab */
-//    public ProfileTabController profileTabController;
-//    public AnchorPane profileTab;
 
     /** MyRequest Tab */
     public MyRequestTabController myRequestTabController;
@@ -104,16 +101,6 @@ public class UserMainController extends MainController {
             e.printStackTrace();
         }
 
-//        // KHỞI TẠO PROFILE TAB
-//        try {
-//            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/UserTab/ProfileTabView.fxml"));
-//            profileTab = fxmlLoader.load();
-//            profileTabController = fxmlLoader.getController();
-//            profileTabController.setMainController(this);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
         // KHỞI TẠO MYREQUEST TAB
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/UserTab/MyRequestTabView.fxml"));
@@ -145,9 +132,5 @@ public class UserMainController extends MainController {
 
     public Pane getSearchButton() {
         return searchButton;
-    }
-
-    public Pane getProfileButton() {
-        return profileButton;
     }
 }
