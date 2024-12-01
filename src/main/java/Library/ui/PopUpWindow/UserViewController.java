@@ -1,6 +1,7 @@
 package Library.ui.PopUpWindow;
 
 import Library.ui.Admin.demoUser;
+import Library.ui.Utils.Notification;
 import Library.ui.Utils.VisiblePasswordFieldSkin;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -37,7 +38,9 @@ public class UserViewController extends PopUpController implements Initializable
 
     @FXML
     void Save(ActionEvent event) {
-
+        getPopUpWindow().close();
+        Notification notification = new Notification("Cập nhật thông tin người dùng", "Đã cập nhật thông tin người dùng thành công");
+        notification.display();
     }
 
     public void setData(demoUser user) {

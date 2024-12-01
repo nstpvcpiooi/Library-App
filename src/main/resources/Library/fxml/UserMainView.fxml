@@ -5,12 +5,13 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.User.UserMainController">
    <children>
-      <VBox prefHeight="700.0" prefWidth="250.0">
+      <VBox id="sidepane" alignment="TOP_CENTER" prefHeight="700.0" prefWidth="250.0">
          <children>
             <Pane fx:id="homeButton" onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
                <VBox.margin>
@@ -51,16 +52,24 @@
                   <Insets />
                </VBox.margin>
             </Pane>
-            <Pane fx:id="profileButton" onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
+            <HBox id="profileButton" fx:id="profileButton" alignment="CENTER" maxWidth="-Infinity" onMouseClicked="#ButtonClick" prefHeight="82.0" prefWidth="222.0" spacing="10.0">
                <children>
-                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Hồ sơ của tôi" />
-                  <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="31.0" layoutY="15.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="53.0" fitWidth="57.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../icon/user.png" />
+                        <Image url="@../icon/profile-picture.png" />
                      </image>
                   </ImageView>
+                  <VBox alignment="CENTER_LEFT" prefHeight="63.0" prefWidth="121.0">
+                     <children>
+                        <Label contentDisplay="CENTER" graphicTextGap="0.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Hồ sơ của tôi" />
+                        <Label id="userName" fx:id="userName" contentDisplay="CENTER" graphicTextGap="0.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Hồ sơ của tôi" />
+                     </children>
+                  </VBox>
                </children>
-            </Pane>
+               <VBox.margin>
+                  <Insets top="250.0" />
+               </VBox.margin>
+            </HBox>
          </children>
       </VBox>
       <AnchorPane id="ContentPane" fx:id="ContentPane" layoutX="250.0" prefHeight="700.0" prefWidth="950.0" />
