@@ -94,3 +94,9 @@ TextField, PasswordField {
 .text-input:focused {
     -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
 }
+
+#QRpane {
+    -fx-border-radius: 10px;
+    -fx-border-color: gray;
+    -fx-border-width: 2px;
+}

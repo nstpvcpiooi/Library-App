@@ -42,6 +42,9 @@ public class BookInfoViewController extends PopUpController {
     private Label publishyear;
 
     @FXML
+    private ImageView ImageQR;
+
+    @FXML
     private Button ActionButton;
 
     private Book selectedBook;
@@ -112,6 +115,9 @@ public class BookInfoViewController extends PopUpController {
         isbn.setText(book.getIsbn());
         category.setText(book.getCategory());
         publishyear.setText(String.valueOf(book.getPublishYear()));
+
+        // TODO: HIỂN THỊ ẢNH QR
+        // ImageQR.setImage(?????????????));
 
         if (getPopUpWindow().getMainController() instanceof UserMainController) {
             // nếu sách đã được mượn thì hiển thị nút trả sách
