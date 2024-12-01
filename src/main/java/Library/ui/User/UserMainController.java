@@ -29,6 +29,9 @@ public class UserMainController extends MainController {
     @FXML
     private Pane profileButton;
 
+    @FXML
+    private Pane MyRequestButton;
+
     /** Home Tab */
     public HomeTabController homeTabController;
     public AnchorPane homeTab;
@@ -40,6 +43,10 @@ public class UserMainController extends MainController {
     /** Profile Tab */
     public ProfileTabController profileTabController;
     public AnchorPane profileTab;
+
+    /** MyRequest Tab */
+    public MyRequestTabController myRequestTabController;
+    public AnchorPane myRequestTab;
 
 
     /**
@@ -55,6 +62,8 @@ public class UserMainController extends MainController {
             setContentPane(searchTab);
         } else if (currentTab.equals(profileButton)) {
             setContentPane(profileTab);
+        } else if (currentTab.equals(MyRequestButton)) {
+            setContentPane(myRequestTab);
         }
     }
 
@@ -89,6 +98,16 @@ public class UserMainController extends MainController {
             profileTab = fxmlLoader.load();
             profileTabController = fxmlLoader.getController();
             profileTabController.setMainController(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // KHỞI TẠO MYREQUEST TAB
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/UserTab/MyRequestTabView.fxml"));
+            myRequestTab = fxmlLoader.load();
+            myRequestTabController = fxmlLoader.getController();
+            myRequestTabController.setMainController(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
