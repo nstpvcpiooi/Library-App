@@ -1,11 +1,14 @@
 package Library.ui.User;
 
 import Library.MainApplication;
+import Library.ui.Admin.demoUser;
 import Library.ui.MainController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 import java.net.URL;
@@ -27,7 +30,10 @@ public class UserMainController extends MainController {
     private Pane searchButton;
 
     @FXML
-    private Pane profileButton;
+    private HBox profileButton;
+
+    @FXML
+    private Pane MyRequestButton;
 
     /** Home Tab */
     public HomeTabController homeTabController;
@@ -37,24 +43,36 @@ public class UserMainController extends MainController {
     public SearchTabController searchTabController;
     public AnchorPane searchTab;
 
-    /** Profile Tab */
-    public ProfileTabController profileTabController;
-    public AnchorPane profileTab;
 
+    /** MyRequest Tab */
+    public MyRequestTabController myRequestTabController;
+    public AnchorPane myRequestTab;
+
+    @FXML
+    private Label userName;
 
     /**
      * Xử lý sự kiện khi click vào các nút điều hướng -> hiển thị tab tương ứng (setContentPane).
      */
     @FXML
     void ButtonClick(MouseEvent event) {
+        if (event.getSource().equals(profileButton)) {
+            // TODO: Hiển thị NGƯỜI DÙNG VỪA ĐĂNG NHẬP
+            demoUser user = new demoUser("usernam1", "password1",
+                    "email1@gmail.com", "0912345678", 1, "preference1");
+
+            getPopUpWindow().displayUser(user);
+            getPopUpWindow().getUserViewController().setTabTitle("THÔNG TIN CỦA BẠN");
+            return;
+        }
         setCurrentTab((Pane) event.getSource());
 
         if (currentTab.equals(homeButton)) {
             setContentPane(homeTab);
         } else if (currentTab.equals(searchButton)) {
             setContentPane(searchTab);
-        } else if (currentTab.equals(profileButton)) {
-            setContentPane(profileTab);
+        } else if (currentTab.equals(MyRequestButton)) {
+            setContentPane(myRequestTab);
         }
     }
 
@@ -83,12 +101,12 @@ public class UserMainController extends MainController {
             e.printStackTrace();
         }
 
-        // KHỞI TẠO PROFILE TAB
+        // KHỞI TẠO MYREQUEST TAB
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/UserTab/ProfileTabView.fxml"));
-            profileTab = fxmlLoader.load();
-            profileTabController = fxmlLoader.getController();
-            profileTabController.setMainController(this);
+            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/UserTab/MyRequestTabView.fxml"));
+            myRequestTab = fxmlLoader.load();
+            myRequestTabController = fxmlLoader.getController();
+            myRequestTabController.setMainController(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -100,6 +118,10 @@ public class UserMainController extends MainController {
 
         ContentPane.getChildren().add(homeTab);
 
+        // TODO: Hiển thị thông tin người dùng
+
+        userName.setText("Xin chào, ppmelon2004");
+
         super.initialize(location, resources);
     }
 
@@ -110,9 +132,5 @@ public class UserMainController extends MainController {
 
     public Pane getSearchButton() {
         return searchButton;
-    }
-
-    public Pane getProfileButton() {
-        return profileButton;
     }
 }

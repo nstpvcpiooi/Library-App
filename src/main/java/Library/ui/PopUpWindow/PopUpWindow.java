@@ -2,6 +2,7 @@ package Library.ui.PopUpWindow;
 
 import Library.MainApplication;
 import Library.backend.bookModel.Book;
+import Library.ui.Admin.demoUser;
 import Library.ui.MainController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,13 +18,32 @@ public class PopUpWindow {
     private MainController mainController;
 
     protected Scene bookInfoScene;
-    private BookInfoViewController bookInfoViewController;
+    protected BookInfoViewController bookInfoViewController;
 
     protected Scene bookAddScene;
-    private BookAddViewController bookAddViewController;
+
+    protected BookAddViewController bookAddViewController;
 
     protected Scene bookEditScene;
-    private BookEditViewController bookEditViewController;
+    protected BookEditViewController bookEditViewController;
+
+    protected Scene customAddScene;
+    protected CustomAddController customAddController;
+
+    protected Scene UserScene;
+    protected UserViewController userViewController;
+
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
+
+    public MainController getMainController() {
+        return mainController;
+    }
+
+    public UserViewController getUserViewController() {
+        return userViewController;
+    }
 
     /**
      * Constructor
@@ -38,7 +58,7 @@ public class PopUpWindow {
 
         // BookInfoView
         try {
-            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("fxml/BookInfoView.fxml"));
+            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("fxml/PopUpWindow/BookInfoView.fxml"));
             Parent root = loader.load();
             bookInfoViewController = loader.getController();
             bookInfoViewController.setPopUpWindow(this);
@@ -52,7 +72,7 @@ public class PopUpWindow {
 
         // BookAddView
         try {
-            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("fxml/BookAddView.fxml"));
+            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("fxml/PopUpWindow/BookAddView.fxml"));
             Parent root = loader.load();
             bookAddViewController = loader.getController();
             bookAddViewController.setPopUpWindow(this);
@@ -64,12 +84,36 @@ public class PopUpWindow {
 
         // BookEditView
         try {
-            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("fxml/BookEditView.fxml"));
+            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("fxml/PopUpWindow/BookEditView.fxml"));
             Parent root = loader.load();
             bookEditViewController = loader.getController();
             bookEditViewController.setPopUpWindow(this);
             bookEditScene = new Scene(root);
             bookEditScene.setFill(Color.TRANSPARENT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // CustomAdd
+        try {
+            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("fxml/PopUpWindow/CustomAdd.fxml"));
+            Parent root = loader.load();
+            customAddController = loader.getController();
+            customAddController.setPopUpWindow(this);
+            customAddScene = new Scene(root);
+            customAddScene.setFill(Color.TRANSPARENT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // UserView
+        try {
+            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("fxml/PopUpWindow/UserView.fxml"));
+            Parent root = loader.load();
+            userViewController = loader.getController();
+            userViewController.setPopUpWindow(this);
+            UserScene = new Scene(root);
+            UserScene.setFill(Color.TRANSPARENT);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -79,22 +123,31 @@ public class PopUpWindow {
         PopUpStage.setScene(bookInfoScene);
         mainController.setBackgroundEffect();
         bookInfoViewController.setData(selectedBook);
-        PopUpStage.close();
         PopUpStage.show();
     }
 
     public void displayAdd() {
         PopUpStage.setScene(bookAddScene);
         mainController.setBackgroundEffect();
-        PopUpStage.close();
         PopUpStage.show();
     }
 
     public void displayEdit(Book selectedBook) {
         PopUpStage.setScene(bookEditScene);
         mainController.setBackgroundEffect();
-//        bookEditViewController.setData(selectedBook);
-//        PopUpStage.close();
+        bookEditViewController.setData(selectedBook);
+        PopUpStage.show();
+    }
+
+    public void displayCustomAdd() {
+        PopUpStage.setScene(customAddScene);
+        customAddController.setData(null);
+        PopUpStage.show();
+    }
+
+    public void displayAddIsbn(Book book) {
+        PopUpStage.setScene(customAddScene);
+        customAddController.setData(book);
         PopUpStage.show();
     }
 
@@ -104,16 +157,23 @@ public class PopUpWindow {
         PopUpStage.show();
     }
 
+    public void backtoAdd() {
+        PopUpStage.setScene(bookAddScene);
+        mainController.setBackgroundEffect();
+        PopUpStage.show();
+    }
+
+    public void displayUser(demoUser user) {
+        PopUpStage.setScene(UserScene);
+        mainController.setBackgroundEffect();
+        userViewController.setData(user);
+        PopUpStage.show();
+    }
+
     public void close() {
         mainController.removeBackgroundEffect();
         PopUpStage.close();
     }
 
-    public void setMainController(MainController mainController) {
-        this.mainController = mainController;
-    }
 
-    public MainController getMainController() {
-        return mainController;
-    }
 }

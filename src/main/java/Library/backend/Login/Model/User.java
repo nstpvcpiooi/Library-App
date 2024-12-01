@@ -9,12 +9,17 @@ import Library.backend.Request.Model.Request;
 import Library.backend.Review.Dao.MysqlReviewDao;
 import Library.backend.Review.Dao.ReviewDao;
 import Library.backend.Review.model.Review;
+import Library.backend.bookDao.BookDao;
+import Library.backend.bookDao.MysqlBookDao;
 import Library.backend.bookModel.Book;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class User extends Member {
     private List<Recommendation> recommendations;
+    private BookDao bookDao = MysqlBookDao.getInstance();
     private RecommendationDao recommendationDAO = MysqlRecommendationDao.getInstance();
     private RequestDAO requestDAO = RequestDAOImpl.getInstance();
     private ReviewDao reviewDao = MysqlReviewDao.getInstance();
@@ -28,13 +33,53 @@ public class User extends Member {
         this.setOtp(member.getOtp());
         this.setDuty(0);
     }
+    public List<Request> getAllRequests() {
+        return requestDAO.getRequestsByMemberID(this.getMemberID());
+    }
+    public List<Book> getBorrowedBooks() {
+        List<Request> requests = requestDAO.getMemberBorrowHistory(this.getMemberID());
+        List<Book> borrowedBooks = new ArrayList<>();
+        for (Request request : requests) {
+            if ("approved issue".equals(request.getStatus())) {
+                Book book = Book.getBookById(request.getBookID());
+                borrowedBooks.add(book);
+            }
+        }
+        return borrowedBooks;
+    }
+    public void createIssueRequest(String bookID) {
 
-    public void borrowBook(Book book) {
-        requestDAO.borrowRequest(this.getMemberID(), book);
+        List<Request> requests = requestDAO.getMemberBorrowHistory(this.getMemberID());
+        for (Request request : requests) {
+            if (request.isOverdue() && "approved issue".equals(request.getStatus())) {
+                System.out.println("You have an overdue book. Please return it before issuing a new one.");
+                return;
+            }
+        }
+        Book book = Book.getBookById(bookID);
+        if(book.getQuantity()>0) {
+            LocalDateTime now = LocalDateTime.now();
+            Request request = new Request(this.getMemberID(), bookID, now, now.plusDays(7), null, "pending issue", false);
+            requestDAO.createBorrowRequest(request);
+            requestDAO.updateRequest(request);
+
+            // Decrement the book quantity
+            bookDao.updateQuantity(request.getBookID(), -1);
+        }
+        else {
+            System.out.println("Book is out of stock");
+        }
     }
 
-    public void returnBook(Book book) {
-        requestDAO.returnBook(this.getMemberID(), book);
+    public void createReturnRequest(String bookID) {
+        List<Request> requests = requestDAO.getMemberBorrowHistory(this.getMemberID());
+        for (Request request : requests) {
+            if (request.getBookID().equals(bookID) && ("approved issue".equals(request.getStatus()) || "pending issue".equals(request.getStatus()))) {
+                request.setStatus("pending return");
+                requestDAO.updateRequest(request);
+                break;
+            }
+        }
     }
 
     public List<Request> getRequests() {
@@ -52,8 +97,8 @@ public class User extends Member {
                 .build());
     }
 
-    public void reviewBook(Book book, int rating, String comment) {
-        Review existingReview = reviewDao.getReviewByBookAndMember(book.getBookID(), this.getMemberID());
+    public void reviewBook(String bookID, int rating, String comment) {
+        Review existingReview = reviewDao.getReviewByBookAndMember(bookID, this.getMemberID());
         if (existingReview != null) {
             existingReview.setRating(rating);
             existingReview.setComment(comment);
@@ -61,7 +106,7 @@ public class User extends Member {
             reviewDao.updateReview(existingReview);
         } else {
             Review newReview = new Review.Builder()
-                    .bookID(book.getBookID())
+                    .bookID(bookID)
                     .memberID(this.getMemberID())
                     .rating(rating)
                     .reviewTimestamp(java.time.LocalDate.now().toString())

@@ -2,6 +2,7 @@ package Library.ui.PopUpWindow;
 
 import Library.backend.bookModel.Book;
 import Library.ui.Admin.AdminMainController;
+import Library.ui.Utils.Notification;
 import Library.ui.User.UserMainController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,15 +42,53 @@ public class BookInfoViewController extends PopUpController {
     private Label publishyear;
 
     @FXML
+    private ImageView ImageQR;
+
+    @FXML
     private Button ActionButton;
 
     private Book selectedBook;
+
+    @FXML
+    private Button RemoveButton;
+
+    @FXML
+    void Remove(ActionEvent event) {
+        if (getPopUpWindow().getMainController() instanceof AdminMainController) {
+            //  TODO: XÓA SÁCH
+
+            getPopUpWindow().close();
+            Notification notification = new Notification("Chúc mừng!", "Bạn đã xóa sách thành công");
+            notification.display();
+
+        } else if (getPopUpWindow().getMainController() instanceof UserMainController) {
+            //  TODO: TRẢ SÁCH
+
+            ActionButton.setText("MƯỢN SÁCH");
+            ActionButton.getStyleClass().remove("BorrowedButton");
+            ActionButton.setDisable(false);
+            RemoveButton.setVisible(false);
+
+            Notification notification = new Notification("Chúc mừng!", "Bạn đã trả sách thành công");
+            notification.display();
+        }
+    }
 
 
     @FXML
     void Action(ActionEvent event) {
         if (getPopUpWindow().getMainController() instanceof AdminMainController) {
             getPopUpWindow().displayEdit(selectedBook);
+        } else if (getPopUpWindow().getMainController() instanceof UserMainController) {
+
+            // TODO: MƯỢN SÁCH
+
+            ActionButton.setText("ĐANG MƯỢN");
+            ActionButton.getStyleClass().add("BorrowedButton");
+            ActionButton.setDisable(true);
+
+            RemoveButton.setText("TRẢ SÁCH");
+            RemoveButton.setVisible(true);
         }
     }
 
@@ -77,13 +116,32 @@ public class BookInfoViewController extends PopUpController {
         category.setText(book.getCategory());
         publishyear.setText(String.valueOf(book.getPublishYear()));
 
-        if (getPopUpWindow().getMainController() instanceof UserMainController) {
-            ActionButton.setText("MƯỢN SÁCH");
+        // TODO: HIỂN THỊ ẢNH QR
+        // ImageQR.setImage(?????????????));
 
+        if (getPopUpWindow().getMainController() instanceof UserMainController) {
             // nếu sách đã được mượn thì hiển thị nút trả sách
             // hàm kiểm tra sách đã mượn?
+
+            // if (!book.isBorrowed()) { ????????
+            ActionButton.setText("MƯỢN SÁCH");
+
+            ActionButton.getStyleClass().remove("BorrowedButton");
+            ActionButton.setDisable(false);
+            RemoveButton.setVisible(false);
+
+            // } else {
+            //     ActionButton.setText("ĐANG MƯỢN");
+            //     ActionButton.getStyleClass().add("BorrowedButton");
+            //     ActionButton.setDisable(true);
+            //     RemoveButton.setText("TRẢ SÁCH");
+            //     RemoveButton.setVisible(true);
+            // }
+
         } else {
             ActionButton.setText("CHỈNH SỬA");
+            RemoveButton.setText("XÓA SÁCH");
+            RemoveButton.setVisible(true);
         }
 
     }

@@ -1,0 +1,134 @@
+.table-view{
+    -fx-background-color: transparent;
+    -fx-font-family: "Barlow Medium";
+    -fx-font-size: 14px;
+}
+
+.table-view:focused{
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background{
+    -fx-background-color: #e89e5f;
+    -fx-padding: 6px 0px 6px 0px;
+}
+
+.table-view .column-header-background .label{
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-family: "Barlow SemiBold";
+    -fx-font-size: 16px;
+}
+
+.table-cell{
+    -fx-border-color: transparent;
+}
+
+.table-row-cell {
+    -fx-cell-size: 50px;
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+
+.table-row-cell:even:selected, .table-row-cell:odd:selected {
+    -fx-background-color: #ffdec6;
+}
+
+.table-row-cell:focused, .table-cell:focused{
+    -fx-text-fill: #3d3d3d;
+}
+
+.table-row-cell:empty{
+    -fx-background-color:white;
+}
+
+.table-column{
+    -fx-alignment: CENTER-LEFT;
+}
+
+.table-row-cell:odd{
+    -fx-background-color: white;
+}
+.table-row-cell:even:hover, .table-row-cell:odd:hover{
+    -fx-background-color: #ffdec6;
+}
+
+.table-row-cell:even:empty, .table-row-cell:odd:empty{
+    -fx-background-color: white;
+}
+
+.table-row-cell:selected,
+.table-row-cell:selected .table-cell,
+.table-view .table-cell {
+    -fx-text-fill: #3d3d3d;
+
+}
+
+.ColorButton {
+    -fx-background-color: #e89e5f;
+    -fx-font-family: "Barlow ExtraBold";
+    -fx-text-fill: white;
+    -fx-font-size: 16;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-cursor: hand;
+}
+
+.WhiteButton {
+    -fx-background-color: #f4f4f4;
+    -fx-border-radius: 10px;
+    -fx-border-color: #c0c0c0;
+    -fx-border-width: 2px;
+    -fx-font-family: "Barlow ExtraBold";
+    -fx-text-fill: #6e6e6e;
+    -fx-font-size: 16;
+    -fx-background-radius: 10px;
+    -fx-cursor: hand;
+}
+
+
+/* ------------------------------------------------ */
+
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 9;
+}
+
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow {
+    visibility: hidden;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color : #f4d2ba;
+    -fx-background-insets : 2.0, 0.0, 0.0;
+    -fx-background-radius : 2.0em;
+}
+
+/*ẩn horizontal scroll bar*/
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-padding: 0;
+}
+
+.scroll-bar:horizontal .increment-arrow,
+.scroll-bar:horizontal .decrement-arrow {
+    visibility: hidden;
+}
+
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:horizontal .track {
+    -fx-background-color: transparent;
+}
+
+.table-view .virtual-flow .corner {
+    -fx-background-color: transparent;
+}

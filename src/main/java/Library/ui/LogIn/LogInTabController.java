@@ -1,23 +1,48 @@
 package Library.ui.LogIn;
 
+import Library.backend.Login.DAO.MemberDAO;
+import Library.backend.Login.DAO.MemberDAOImpl;
+import Library.ui.Utils.VisiblePasswordFieldSkin;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
+import javafx.scene.input.KeyEvent;
 
-public abstract class LogInTabController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public abstract class LogInTabController implements Initializable {
     @FXML
     private Button backButton;
 
     @FXML
-    private Button submitButton;
+    protected Button submitButton;
 
     @FXML
-    private PasswordField password;
+    protected PasswordField password;
+
+    public MemberDAO memberDAO = MemberDAOImpl.getInstance();
+
+    protected LogInViewController logInViewController;
 
     abstract void submit(ActionEvent event);
 
-    protected LogInViewController logInViewController;
+    @FXML
+    void goBack(ActionEvent event) {
+        logInViewController.setContainer(logInViewController.selectRolesView);
+        logInViewController.setReturnType(LogInViewController.LogInType.GUEST);
+        password.clear();
+        passwordFieldSkin.setDefault();
+    }
+
+    @FXML
+    void enter(KeyEvent event) {
+        if (event.getCode().toString().equals("ENTER")) {
+            submit(new ActionEvent());
+        }
+    }
 
     public LogInViewController getLogInViewController() {
         return logInViewController;
@@ -27,9 +52,11 @@ public abstract class LogInTabController {
         this.logInViewController = logInViewController;
     }
 
-    @FXML
-    void goBack(ActionEvent event) {
-        logInViewController.setContainer(logInViewController.selectRolesView);
-//        logInViewController.setReturnType(LogInViewController.LogInType.GUEST);
+    VisiblePasswordFieldSkin passwordFieldSkin;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        passwordFieldSkin = new VisiblePasswordFieldSkin(password);
+        password.setSkin(passwordFieldSkin);
     }
 }

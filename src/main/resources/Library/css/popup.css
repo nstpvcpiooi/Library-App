@@ -24,7 +24,7 @@
     -fx-text-fill: #303030;
 }
 
-#ActionButton, #SaveButton {
+#SaveButton, #AddButton, #okButton, .ColorButton {
     -fx-background-color: #e89e5f;
     -fx-font-family: "Barlow ExtraBold";
     -fx-text-fill: white;
@@ -34,7 +34,7 @@
     -fx-cursor: hand;
 }
 
-#CancelButton {
+#CancelButton, .WhiteButton {
     -fx-background-color: #f4f4f4;
     -fx-border-radius: 10px;
     -fx-border-color: #c0c0c0;
@@ -43,6 +43,60 @@
     -fx-text-fill: #6e6e6e;
     -fx-font-size: 16;
     -fx-background-radius: 10px;
-    -fx-border-radius: 10px;
     -fx-cursor: hand;
+}
+
+#approveButton {
+    -fx-background-color: #33ac33;
+    -fx-border-width: 2px;
+    -fx-font-family: "Barlow ExtraBold";
+    -fx-text-fill: white;
+    -fx-font-size: 16;
+    -fx-background-radius: 10px;
+    -fx-cursor: hand;
+}
+
+#declineButton {
+    -fx-background-color: #ff4242;
+    -fx-border-width: 2px;
+    -fx-font-family: "Barlow ExtraBold";
+    -fx-text-fill: white;
+    -fx-font-size: 16;
+    -fx-background-radius: 10px;
+    -fx-cursor: hand;
+}
+
+TextField, PasswordField {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-family: "Barlow";
+    -fx-font-size: 16;
+}
+
+.input {
+    -fx-border-color: #c0c0c0;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+}
+
+
+.BorrowedButton {
+    -fx-background-color: #d1ffd1;
+    -fx-font-family: "Barlow ExtraBold";
+    -fx-text-fill: green;
+    -fx-font-size: 16;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-cursor: not-allowed;
+}
+
+
+.text-input:focused {
+    -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
+}
+
+#QRpane {
+    -fx-border-radius: 10px;
+    -fx-border-color: gray;
+    -fx-border-width: 2px;
 }
