@@ -121,12 +121,12 @@ public class MysqlReviewDao implements ReviewDao {
     }
 
     @Override
-    public List<Review> getReviewsByMember(String memberID) {
+    public List<Review> getReviewsByMember(int memberID) {
         List<Review> reviews = new ArrayList<>();
         String query = "SELECT * FROM Reviews WHERE memberID = ?";
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, Integer.parseInt(memberID));
+            statement.setInt(1, memberID);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Review review = new Review.Builder()
