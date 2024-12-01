@@ -46,7 +46,7 @@
     -fx-cursor: hand;
 }
 
-TextField {
+TextField, PasswordField {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-font-family: "Barlow";

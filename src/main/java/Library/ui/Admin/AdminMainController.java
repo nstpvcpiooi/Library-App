@@ -44,6 +44,7 @@ public class AdminMainController extends MainController {
             setContentPane(libraryManageTab);
         } else if (currentTab.equals(UserManageButton)) {
             setContentPane(userManageTab);
+            userManageController.hideButtons();
         }
     }
 

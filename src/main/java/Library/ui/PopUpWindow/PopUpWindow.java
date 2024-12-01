@@ -2,6 +2,7 @@ package Library.ui.PopUpWindow;
 
 import Library.MainApplication;
 import Library.backend.bookModel.Book;
+import Library.ui.Admin.demoUser;
 import Library.ui.MainController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -29,6 +30,9 @@ public class PopUpWindow {
     protected Scene customAddScene;
     protected CustomAddController customAddController;
 
+    protected Scene UserScene;
+    protected UserViewController userViewController;
+
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
     }
@@ -37,8 +41,8 @@ public class PopUpWindow {
         return mainController;
     }
 
-    public BookAddViewController getBookAddViewController() {
-        return bookAddViewController;
+    public UserViewController getUserViewController() {
+        return userViewController;
     }
 
     /**
@@ -101,6 +105,18 @@ public class PopUpWindow {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // UserView
+        try {
+            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("fxml/PopUpWindow/UserView.fxml"));
+            Parent root = loader.load();
+            userViewController = loader.getController();
+            userViewController.setPopUpWindow(this);
+            UserScene = new Scene(root);
+            UserScene.setFill(Color.TRANSPARENT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void displayInfo(Book selectedBook) {
@@ -144,6 +160,13 @@ public class PopUpWindow {
     public void backtoAdd() {
         PopUpStage.setScene(bookAddScene);
         mainController.setBackgroundEffect();
+        PopUpStage.show();
+    }
+
+    public void displayUser(demoUser user) {
+        PopUpStage.setScene(UserScene);
+        mainController.setBackgroundEffect();
+        userViewController.setData(user);
         PopUpStage.show();
     }
 
