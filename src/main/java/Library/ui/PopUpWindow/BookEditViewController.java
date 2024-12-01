@@ -1,7 +1,7 @@
 package Library.ui.PopUpWindow;
 
 import Library.backend.bookModel.Book;
-import Library.ui.Notification.Notification;
+import Library.ui.Utils.Notification;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

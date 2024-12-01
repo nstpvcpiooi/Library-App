@@ -1,6 +1,6 @@
 package Library.ui.Admin;
 
-import Library.ui.Notification.Notification;
+import Library.ui.Utils.Notification;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

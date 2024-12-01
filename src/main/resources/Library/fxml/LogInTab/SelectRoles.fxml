@@ -19,8 +19,8 @@
                   <Insets bottom="30.0" />
                </VBox.margin>
             </Label>
-            <Button fx:id="AdminButton" focusTraversable="false" mnemonicParsing="false" onAction="#ButtonClicked" prefHeight="50.0" prefWidth="300.0" text="Tôi là Quản trị viên" textFill="#000000cf" />
-            <Button fx:id="UserButton" focusTraversable="false" mnemonicParsing="false" onAction="#ButtonClicked" prefHeight="50.0" prefWidth="300.0" text="Tôi là Người mượn sách" textFill="#000000cf" />
+            <Button fx:id="AdminButton" focusTraversable="false" mnemonicParsing="false" onAction="#ButtonClicked" prefHeight="50.0" prefWidth="300.0" styleClass="LogInButton" text="Tôi là Quản trị viên" textFill="#000000cf" />
+            <Button fx:id="UserButton" focusTraversable="false" mnemonicParsing="false" onAction="#ButtonClicked" prefHeight="50.0" prefWidth="300.0" styleClass="LogInButton" text="Tôi là Người mượn sách" textFill="#000000cf" />
          </children>
       </VBox>
    </children>

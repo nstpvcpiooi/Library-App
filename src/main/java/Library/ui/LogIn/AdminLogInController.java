@@ -1,10 +1,13 @@
 package Library.ui.LogIn;
 
 import Library.backend.Session.SessionManager;
-import Library.ui.Notification.Notification;
+import Library.ui.Utils.Notification;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class AdminLogInController extends LogInTabController {
 
@@ -24,5 +27,4 @@ public class AdminLogInController extends LogInTabController {
             notification.display();
         }
     }
-
 }

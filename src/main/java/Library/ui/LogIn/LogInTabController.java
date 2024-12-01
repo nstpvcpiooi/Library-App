@@ -2,13 +2,18 @@ package Library.ui.LogIn;
 
 import Library.backend.Login.DAO.MemberDAO;
 import Library.backend.Login.DAO.MemberDAOImpl;
+import Library.ui.Utils.VisiblePasswordFieldSkin;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.input.KeyEvent;
 
-public abstract class LogInTabController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public abstract class LogInTabController implements Initializable {
     @FXML
     private Button backButton;
 
@@ -29,6 +34,7 @@ public abstract class LogInTabController {
         logInViewController.setContainer(logInViewController.selectRolesView);
         logInViewController.setReturnType(LogInViewController.LogInType.GUEST);
         password.clear();
+        passwordFieldSkin.setDefault();
     }
 
     @FXML
@@ -44,5 +50,13 @@ public abstract class LogInTabController {
 
     public void setLogInViewController(LogInViewController logInViewController) {
         this.logInViewController = logInViewController;
+    }
+
+    VisiblePasswordFieldSkin passwordFieldSkin;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        passwordFieldSkin = new VisiblePasswordFieldSkin(password);
+        password.setSkin(passwordFieldSkin);
     }
 }

@@ -1,14 +1,16 @@
 package Library.ui.PopUpWindow;
 
 import Library.ui.Admin.demoUser;
+import Library.ui.Utils.VisiblePasswordFieldSkin;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
 
-public class UserViewController extends PopUpController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class UserViewController extends PopUpController implements Initializable {
     @FXML
     private Button cancelButton;
 
@@ -39,7 +41,15 @@ public class UserViewController extends PopUpController {
     }
 
     public void setData(demoUser user) {
+        passwordFieldSkin.setDefault();
+        verifypasswordFieldSkin.setDefault();
+
         if (user == null) {
+            username.setText("");
+            password.setText("");
+            verifypassword.setText("");
+            email.setText("");
+            phone.setText("");
             return;
         }
         username.setText(user.getUserName());
@@ -47,9 +57,22 @@ public class UserViewController extends PopUpController {
         verifypassword.setText(user.getPassword());
         email.setText(user.getEmail());
         phone.setText(user.getPhone());
+
+
     }
 
     public void setTabTitle(String title) {
         tabTitle.setText(title);
+    }
+
+    VisiblePasswordFieldSkin passwordFieldSkin;
+    VisiblePasswordFieldSkin verifypasswordFieldSkin;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        passwordFieldSkin = new VisiblePasswordFieldSkin(password);
+        verifypasswordFieldSkin = new VisiblePasswordFieldSkin(verifypassword);
+        password.setSkin(passwordFieldSkin);
+        verifypassword.setSkin(verifypasswordFieldSkin);
     }
 }

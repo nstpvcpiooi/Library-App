@@ -2,7 +2,7 @@ package Library.ui.PopUpWindow;
 
 import Library.backend.bookModel.Book;
 import Library.ui.Admin.AdminMainController;
-import Library.ui.Notification.Notification;
+import Library.ui.Utils.Notification;
 import Library.ui.User.UserMainController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

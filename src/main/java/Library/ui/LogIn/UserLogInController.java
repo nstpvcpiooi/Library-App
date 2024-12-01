@@ -1,7 +1,7 @@
 package Library.ui.LogIn;
 
 import Library.backend.Session.SessionManager;
-import Library.ui.Notification.Notification;
+import Library.ui.Utils.Notification;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
