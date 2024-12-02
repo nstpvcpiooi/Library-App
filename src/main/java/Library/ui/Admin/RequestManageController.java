@@ -12,6 +12,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class RequestManageController implements Initializable {
+    @FXML
+    private TableView<?> table;
 
     @FXML
     private TableColumn<?, ?> BookID;
@@ -26,19 +28,22 @@ public class RequestManageController implements Initializable {
     private TableColumn<?, ?> ReturnDate;
 
     @FXML
-    private Button approveButton;
-
-    @FXML
-    private Button declineButton;
-
-    @FXML
     private TableColumn<?, ?> memberID;
 
     @FXML
     private TableColumn<?, ?> requestID;
 
     @FXML
-    private TableView<?> table;
+    private TableColumn<?, ?> Status;
+
+    @FXML
+    private TableColumn<?, ?> Overdue;
+
+    @FXML
+    private Button approveButton;
+
+    @FXML
+    private Button declineButton;
 
     private AdminMainController MainController;
 
