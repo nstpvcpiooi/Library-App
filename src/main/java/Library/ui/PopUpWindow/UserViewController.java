@@ -81,7 +81,7 @@ public class UserViewController extends PopUpController implements Initializable
         
     }
 
-    public void setData(User user) {
+    public void setData(Member user) {
         passwordFieldSkin.setDefault();
         verifypasswordFieldSkin.setDefault();
 

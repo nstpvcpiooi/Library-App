@@ -141,6 +141,42 @@ public class MysqlBookDao implements BookDao {
     }
 
     @Override
+    public List<Book> searchBooksValue(String value) {
+        List<Book> books = new ArrayList<>();
+        try {
+            Connection con = JDBCUtil.getConnection();
+
+            // Tìm kiếm trên tất cả các cột trong một truy vấn
+            String sql = "SELECT * FROM Books WHERE title LIKE ? OR author LIKE ? OR category LIKE ? OR isbn LIKE ?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            String searchValue = "%" + value + "%";
+            pst.setString(1, searchValue);
+            pst.setString(2, searchValue);
+            pst.setString(3, searchValue);
+            pst.setString(4, searchValue);
+
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                books.add(new Book(
+                        rs.getString("bookID"),
+                        rs.getString("title"),
+                        rs.getString("author"),
+                        rs.getInt("publishYear"),
+                        rs.getString("category"),
+                        rs.getString("isbn"),
+                        rs.getString("coverCode"),
+                        rs.getInt("quantity")
+                ));
+            }
+
+            JDBCUtil.closeConnection(con);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return books;
+    }
+
+    @Override
     public Book fetchBookInfoFromAPI(String isbn) {
         // ko viết trong lớp này
         return null;

@@ -11,7 +11,9 @@ public interface BookDao {
 
     void updateBook(Book book);
 
-    List<Book> searchBooks(String criteria, String value);
+    List<Book> searchBooks(String criteria,String value);
+
+    List<Book> searchBooksValue(String value);
 
     Book fetchBookInfoFromAPI(String isbn);
 
@@ -20,4 +22,5 @@ public interface BookDao {
     void generateQrCodeForBook(String bookID);
 
     String fetchBookDescriptionFromAPI(Book book);
+
 }

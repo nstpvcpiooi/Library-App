@@ -22,4 +22,8 @@ public class SessionManager {
     public void setLoggedInMember(Member loggedInMember) {
         this.loggedInMember = loggedInMember;
     }
+
+    public void clearSession() {
+        this.loggedInMember = null;
+    }
 }

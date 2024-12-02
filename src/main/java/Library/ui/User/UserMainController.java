@@ -4,7 +4,6 @@ import Library.MainApplication;
 import Library.backend.Login.Model.Member;
 import Library.backend.Login.Model.User;
 import Library.backend.Session.SessionManager;
-import Library.ui.Admin.demoUser;
 import Library.ui.MainController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,7 +21,7 @@ import java.util.ResourceBundle;
  * (gồm các nút điều hướng và phần chứa nội dung chính của các tab)
  */
 public class UserMainController extends MainController {
-
+    private Member currentUser;
     /**
      * Các nút điều hướng giữa các tab.
      */
@@ -60,11 +59,14 @@ public class UserMainController extends MainController {
     @FXML
     void ButtonClick(MouseEvent event) {
         if (event.getSource().equals(profileButton)) {
+            currentUser = SessionManager.getInstance().getLoggedInMember();
             // TODO: Hiển thị NGƯỜI DÙNG VỪA ĐĂNG NHẬP
-            Member member = SessionManager.getInstance().getLoggedInMember();
-            User user = new User(member);
-            getPopUpWindow().displayUser(user);
-            getPopUpWindow().getUserViewController().setTabTitle("THÔNG TIN CỦA BẠN");
+            if (currentUser != null) {
+                getPopUpWindow().displayUser(currentUser);
+                getPopUpWindow().getUserViewController().setTabTitle("THÔNG TIN CỦA BẠN");
+            } else {
+                System.err.println("Không tìm thấy thông tin người dùng!");
+            }
             return;
         }
         setCurrentTab((Pane) event.getSource());
@@ -83,6 +85,8 @@ public class UserMainController extends MainController {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        currentUser = SessionManager.getInstance().getLoggedInMember();
+        System.out.println("Logged-in Member: " + currentUser);
         // KHỞI TẠO HOME TAB
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/UserTab/HomeTabView.fxml"));
@@ -121,8 +125,11 @@ public class UserMainController extends MainController {
         ContentPane.getChildren().add(homeTab);
 
         // TODO: Hiển thị thông tin người dùng
-
-        userName.setText("Xin chào, " + SessionManager.getInstance().getLoggedInMember().getUserName());
+        if (currentUser != null) {
+            userName.setText("Xin chào, " + currentUser.getUserName());
+        } else {
+            userName.setText("Xin chào, khách!");
+        }
 
         super.initialize(location, resources);
     }

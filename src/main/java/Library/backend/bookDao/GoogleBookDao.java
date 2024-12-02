@@ -66,6 +66,11 @@ public class GoogleBookDao implements BookDao {
         return List.of();
     }
 
+    @Override
+    public List<Book> searchBooksValue(String value) {
+        return List.of();
+    }
+
 
     @Override
     public Book fetchBookInfoFromAPI(String isbn) {
@@ -259,7 +264,7 @@ public class GoogleBookDao implements BookDao {
                     // Kiểm tra nếu file ảnh mã QR đã tồn tại
                     if (qrCodeFile.exists()) {
                         System.out.println("Mã QR đã tồn tại tại: " + filePath);
-                        return; // Dừng lại nếu đã có file mã QR
+                        return; // Dừng lại nếu đã có file mã QR`
                     }
 
                     // Tạo mã QR với link preview
