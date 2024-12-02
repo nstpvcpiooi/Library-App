@@ -24,6 +24,8 @@ public class User extends Member {
     private RequestDAO requestDAO = RequestDAOImpl.getInstance();
     private ReviewDao reviewDao = MysqlReviewDao.getInstance();
 
+    public User() {
+    }
     public User(Member member) {
         this.setMemberID(member.getMemberID());
         this.setUserName(member.getUserName());

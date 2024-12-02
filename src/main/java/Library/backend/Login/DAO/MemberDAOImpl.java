@@ -2,6 +2,7 @@ package Library.backend.Login.DAO;
 
 
 import Library.backend.Login.Model.Member;
+import Library.backend.Login.Model.User;
 import Library.backend.database.JDBCUtil;
 import Library.backend.util.EmailUtil;
 
@@ -282,29 +283,27 @@ public class MemberDAOImpl implements MemberDAO {
         return getMemberByUserNameAndPassword(userName, password);
     }
     @Override
-    public List<Member> DisplayMembers() {
-        List<Member> members = new ArrayList<>();
-        String query = "SELECT * FROM Members";
+    public List<User> DisplayMembers() {
+        List<User> users = new ArrayList<>();
+        String query = "SELECT * FROM Members WHERE duty = 0";
 
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
-                Member member = new Member();
-                member.setMemberID(resultSet.getInt("memberID"));
-                member.setUserName(resultSet.getString("userName"));
-                member.setPassword(resultSet.getString("password"));
-                member.setEmail(resultSet.getString("email"));
-                member.setPhone(resultSet.getString("phone"));
-                member.setOtp(resultSet.getString("otp"));
-                member.setDuty(resultSet.getInt("duty"));
-                members.add(member);
+                User user = new User();
+                user.setMemberID(resultSet.getInt("memberID"));
+                user.setUserName(resultSet.getString("userName"));
+                user.setPassword(resultSet.getString("password"));
+                user.setEmail(resultSet.getString("email"));
+                user.setPhone(resultSet.getString("phone"));
+                users.add(user);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return members;
+        return users;
     }
 
 }
