@@ -1,5 +1,9 @@
 package Library.ui.User;
 
+import Library.backend.Login.Model.Member;
+import Library.backend.Recommendation.Dao.MysqlRecommendationDao;
+import Library.backend.Recommendation.Dao.RecommendationDao;
+import Library.backend.Session.SessionManager;
 import Library.backend.bookModel.Book;
 import Library.ui.BookCard.BookCardCell;
 import javafx.fxml.FXML;
@@ -31,6 +35,8 @@ public class HomeTabController implements Initializable {
     @FXML
     private VBox welcomeBox;
 
+    RecommendationDao recommendationDao = MysqlRecommendationDao.getInstance();
+
     private UserMainController userMainController;
 
     /** Khi click vào nút tìm kiếm, chuyển sang tab tìm kiếm */
@@ -60,30 +66,11 @@ public class HomeTabController implements Initializable {
 
     // TODO Lấy reccomendation từ back-end
     private List<Book> getRecommendations() {
-        List<Book> ls = new ArrayList<>();
 
-        // TODO HERE
-        ls.add(new Book("", "RICH DAD & POOR DAD", "Robert T.Kiyosaki",
-                1997, "Business", "978-3-16-148410-0",
-                "image/img.png", 1));
-        ls.add(new Book("", "THE RICHEST MAN IN BABYLON", "George Samuel Clason",
-                1926, "Business", "978-3-16-148410-0",
-                "image/img.png", 1));
-        ls.add(new Book("", "THE 7 HABITS OF HIGHLY EFFECTIVE PEOPLE", "Stephen R.Covey",
-                1989, "Business", "978-3-16-148410-0",
-                "image/img.png", 1));
-        ls.add(new Book("", "THINK AND GROW RICH", "Napoleon Hill",
-                1937, "Business", "978-3-16-148410-0",
-                "image/img.png", 1));
-        ls.add(new Book("", "RICH DAD & POOR DAD", "Robert T.Kiyosaki",
-                1997, "Business", "978-3-16-148410-0",
-                "image/img.png", 1));
-        ls.add(new Book("", "I LOVE YOU", "Robert T.Kiyosaki",
-                1997, "Business", "978-3-16-148410-0",
-                "image/img.png", 1));
+        SessionManager sessionManager = SessionManager.getInstance();
+        Member member = sessionManager.getLoggedInMember();
+        return recommendationDao.getCombinedRecommendations(member.getMemberID());
 
-        // RETURN
-        return ls;
     }
 
     public UserMainController getMainController() {

@@ -6,6 +6,8 @@ import Library.backend.bookDao.BookDao;
 import Library.backend.bookDao.MysqlBookDao;
 import Library.backend.bookModel.Book;
 import Library.backend.database.JDBCUtil;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -189,9 +191,9 @@ public class RequestDAOImpl implements RequestDAO {
         }
     }
     @Override
-    public List<Request> getAllRequests() {
-        List<Request> requests = new ArrayList<>();
-        String query = "SELECT * FROM Requests";
+    public ObservableList<Request> getAllRequests() {
+        ObservableList<Request> requests = FXCollections.observableArrayList();
+        String query = "SELECT * FROM Requests ORDER BY CASE WHEN status = 'pending issue' THEN 1 WHEN status = 'pending return' THEN 2 ELSE 3 END, overdue DESC";
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -238,4 +240,63 @@ public class RequestDAOImpl implements RequestDAO {
         }
         return requests;
     }
+    @Override
+    public Request getRequestByMemberIDAndBookID(int memberID, String bookID) {
+        String query = "SELECT * FROM Requests WHERE memberID = ? AND bookID = ? ORDER BY requestID DESC LIMIT 1";
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, memberID);
+            preparedStatement.setString(2, bookID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                Request request = new Request();
+                request.setRequestID(resultSet.getInt("requestID"));
+                request.setMemberID(resultSet.getInt("memberID"));
+                request.setBookID(resultSet.getString("bookID"));
+                request.setIssueDate(resultSet.getObject("issueDate", LocalDateTime.class));
+                request.setDueDate(resultSet.getObject("dueDate", LocalDateTime.class));
+                request.setReturnDate(resultSet.getObject("returnDate", LocalDateTime.class));
+                request.setStatus(resultSet.getString("status"));
+                request.setOverdue(resultSet.getBoolean("overdue"));
+                return request;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    return null;
+    }
+    @Override
+    public boolean handleDuplicateRequest(int memberID, String bookID) {
+        String query = "SELECT COUNT(*) FROM Requests WHERE memberID = ? AND bookID = ? AND (status = 'approved issue' OR status = 'pending issue' OR status = 'pending return')";
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, memberID);
+            preparedStatement.setString(2, bookID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next() && resultSet.getInt(1) > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    @Override
+    public List<Book> getBooksByMemberID(int memberID) {
+        List<Book> books = new ArrayList<>();
+        String query = "SELECT bookID FROM Requests WHERE memberID = ? group by bookID";
+        try (Connection connection = JDBCUtil.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, memberID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Book book = Book.getBookById(resultSet.getString("bookID"));
+                books.add(book);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return books;
+    }
+
 }

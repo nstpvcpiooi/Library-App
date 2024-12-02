@@ -1,8 +1,8 @@
+// src/main/java/Library/ui/Admin/UserManageController.java
 package Library.ui.Admin;
 
 import Library.backend.Login.Model.User;
 import Library.backend.Login.DAO.MemberDAOImpl;
-import Library.ui.PopUpWindow.UserViewController;
 import Library.ui.Utils.Notification;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 
 public class UserManageController implements Initializable {
     @FXML
-    public TableView<User> table;
+    private TableView<User> table;
 
     @FXML
     private TableColumn<User, String> Email;
@@ -43,9 +43,13 @@ public class UserManageController implements Initializable {
     @FXML
     private Button removeButton;
 
-    public ObservableList<User> UserList;
+    private ObservableList<User> UserList;
 
     private AdminMainController MainController;
+
+    private static UserManageController instance;
+
+
 
     public void setMainController(AdminMainController adminMainController) {
         this.MainController = adminMainController;
@@ -57,16 +61,13 @@ public class UserManageController implements Initializable {
 
     @FXML
     void add(ActionEvent event) {
-
         getMainController().getPopUpWindow().getUserViewController().setTabTitle("THÊM USER MỚI");
         getMainController().getPopUpWindow().displayUser(null);
     }
 
     @FXML
     void edit(ActionEvent event) {
-
         User selectedItem = table.getSelectionModel().getSelectedItem();
-
         getMainController().getPopUpWindow().getUserViewController().setTabTitle("CHỈNH SỬA USER");
         getMainController().getPopUpWindow().displayUser(selectedItem);
     }
@@ -106,7 +107,6 @@ public class UserManageController implements Initializable {
         Phone.setCellValueFactory(new PropertyValueFactory<User, String>("phone"));
         ID.setCellValueFactory(new PropertyValueFactory<User, Integer>("memberID"));
         table.setItems(UserList);
-
     }
 
     public void hideButtons() {

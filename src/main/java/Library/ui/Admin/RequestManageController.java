@@ -1,11 +1,17 @@
 package Library.ui.Admin;
 
+import Library.backend.Request.DAO.RequestDAOImpl;
+import Library.backend.Request.Model.Request;
+import Library.ui.Utils.Notification;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
@@ -13,49 +19,67 @@ import java.util.ResourceBundle;
 
 public class RequestManageController implements Initializable {
     @FXML
-    private TableView<?> table;
+    private TableView<Request> table;
 
     @FXML
-    private TableColumn<?, ?> BookID;
+    private TableColumn<Request, Integer> BookID;
 
     @FXML
-    private TableColumn<?, ?> DueDate;
+    private TableColumn<Request, String> DueDate;
 
     @FXML
-    private TableColumn<?, ?> IssueDate;
+    private TableColumn<Request, String> IssueDate;
 
     @FXML
-    private TableColumn<?, ?> ReturnDate;
+    private TableColumn<Request, String> ReturnDate;
 
     @FXML
-    private TableColumn<?, ?> memberID;
+    private TableColumn<Request, Integer> memberID;
 
     @FXML
-    private TableColumn<?, ?> requestID;
+    private TableColumn<Request, Integer> requestID;
 
     @FXML
-    private TableColumn<?, ?> Status;
+    private TableColumn<Request, String> Status;
 
     @FXML
-    private TableColumn<?, ?> Overdue;
+    private TableColumn<Request, Boolean> Overdue;
 
     @FXML
     private Button approveButton;
 
-    @FXML
-    private Button declineButton;
+
 
     private AdminMainController MainController;
 
     @FXML
     void approve(ActionEvent event) {
-
+        Request selectedRequest = table.getSelectionModel().getSelectedItem();
+        if (selectedRequest != null) {
+            if (selectedRequest.getStatus().equals("approved issue")) {
+                Notification notification = new Notification("Error", "Request already approved");
+                notification.display();
+                return;
+            }
+            else if (selectedRequest.getStatus().equals("pending return")) {
+                selectedRequest.setStatus("approved return");
+            } else if (selectedRequest.getStatus().equals("pending issue")) {
+                selectedRequest.setStatus("approved issue");
+            }
+            else {
+                Notification notification = new Notification("Error", "Request already approved");
+                notification.display();
+                return;
+            }
+            RequestDAOImpl.getInstance().updateRequest(selectedRequest);
+            Notification notification = new Notification("Success", "Request approved successfully");
+            notification.display();
+            RequestDAOImpl.getInstance().updateRequest(selectedRequest);
+            refreshData();
+        }
     }
 
-    @FXML
-    void decline(ActionEvent event) {
 
-    }
 
     @FXML
     void selectItem(MouseEvent event) {
@@ -69,19 +93,29 @@ public class RequestManageController implements Initializable {
     public AdminMainController getMainController() {
         return MainController;
     }
+    public void hideButtons() {
+        approveButton.setVisible(false);
 
+    }
+    public void showButtons() {
+        approveButton.setVisible(true);
+
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         hideButtons();
+        refreshData();
+        requestID.setCellValueFactory(new PropertyValueFactory<Request, Integer>("requestID"));
+        memberID.setCellValueFactory(new PropertyValueFactory<Request, Integer>("memberID"));
+        BookID.setCellValueFactory(new PropertyValueFactory<Request, Integer>("bookID"));
+        IssueDate.setCellValueFactory(new PropertyValueFactory<Request, String>("issueDate"));
+        DueDate.setCellValueFactory(new PropertyValueFactory<Request, String>("dueDate"));
+        ReturnDate.setCellValueFactory(new PropertyValueFactory<Request, String>("returnDate"));
+        Status.setCellValueFactory(new PropertyValueFactory<Request, String>("status"));
+        Overdue.setCellValueFactory(new PropertyValueFactory<Request, Boolean>("overdue"));
     }
-
-    public void hideButtons() {
-        approveButton.setVisible(false);
-        declineButton.setVisible(false);
-    }
-
-    public void showButtons() {
-        approveButton.setVisible(true);
-        declineButton.setVisible(true);
+    void refreshData() {
+        ObservableList<Request> requests = FXCollections.observableArrayList(RequestDAOImpl.getInstance().getAllRequests());
+        table.setItems(requests);
     }
 }
