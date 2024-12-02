@@ -56,7 +56,7 @@ public class BookInfoViewController extends PopUpController {
     void Remove(ActionEvent event) {
         if (getPopUpWindow().getMainController() instanceof AdminMainController) {
             //  TODO: XÓA SÁCH
-
+            selectedBook.deleteBook();
             getPopUpWindow().close();
             Notification notification = new Notification("Chúc mừng!", "Bạn đã xóa sách thành công");
             notification.display();

@@ -43,6 +43,7 @@ public class LibraryManageController implements Initializable {
     @FXML
     void search(KeyEvent event) {
         String query = SearchText.getText();
+
         SearchResult.getItems().clear();
         SearchResult.getItems().addAll(getSearchList(query));
     }
@@ -54,9 +55,12 @@ public class LibraryManageController implements Initializable {
      * @return danh sách kết quả tìm kiếm
      */
     private List<Book> getSearchList(String query) {
+        if(query.isEmpty()) {
+            return Book.searchBooks("category","Psychology");
+        }
         List<Book> ls = new ArrayList<>();
 
-        // TODO HERE
+       /* // TODO HERE
             ls.add(new Book("", "RICH DAD & POOR DAD", "Robert T.Kiyosaki",
                     1997, "Business", "978-3-16-148410-0",
                     "image/img.png", 1));
@@ -80,12 +84,12 @@ public class LibraryManageController implements Initializable {
                     "image/img.png", 1));
             ls.add(new Book("", "SALT, FAT, ACID, HEAT", "Samin Nosrat",
                     2017, "Cooking", "978-3-16-148410-8",
-                    "image/img.png", 1));
+                    "image/img.png", 1));*/
 
-        if (query.equals("Business")) {
+
+        ls = Book.searchBooks("title", query);
+        if (ls != null) {
             return Collections.singletonList(ls.get(0));
-        } else if (query.isEmpty()) {
-            return ls;
         } else {
             return Collections.emptyList();
         }

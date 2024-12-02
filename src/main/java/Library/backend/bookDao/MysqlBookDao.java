@@ -34,11 +34,15 @@ public class MysqlBookDao implements BookDao {
     @Override
     public void addBook(Book t) {
         try {
+            // Kết nối với cơ sở dữ liệu
             Connection con = JDBCUtil.getConnection();
 
+            // Câu lệnh SQL INSERT
             String sql = "INSERT INTO Books (bookID, title, author, publishYear, category, isbn, coverCode, quantity) " +
-                    "VALUES (?,?,?,?,?,?,?,?,?);";
+                    "VALUES (?,?,?,?,?,?,?,?);";
             PreparedStatement pst = con.prepareStatement(sql);
+
+            // Gán giá trị cho các tham số
             pst.setString(1, t.getBookID());
             pst.setString(2, t.getTitle());
             pst.setString(3, t.getAuthor());
@@ -46,12 +50,14 @@ public class MysqlBookDao implements BookDao {
             pst.setString(5, t.getCategory());
             pst.setString(6, t.getIsbn());
             pst.setString(7, t.getCoverCode());
-            pst.setInt(9, t.getQuantity());  // Thêm giá trị quantity
+            pst.setInt(8, t.getQuantity()); // Tham số thứ 8 (quantity)
 
             // Thực thi câu lệnh INSERT
             pst.executeUpdate();
 
+            // Đóng kết nối
             JDBCUtil.closeConnection(con);
+            System.out.println("Sách đã được thêm thành công: " + t.getTitle());
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -283,15 +285,19 @@ public class GoogleBookDao implements BookDao {
 
     public List<Book> fetchAllBooksFromAPI() {
         List<Book> allBooks = new ArrayList<>();
-        String searchTerm = "Self-Help"; // Chủ đề tìm kiếm, có thể thay đổi
-
+        String searchTerm = "Romance"; // Chủ đề tìm kiếm, có thể thay đổi
         int startIndex = 0;
         final int maxResults = 40; // Số lượng sách tối đa mỗi lần
+        final int maxAllowedResults = 1000; // Giới hạn tối đa của Google Books API
 
         try {
-            while (true) {
-                // Tạo URL để gọi API Google Books với truy vấn tìm kiếm
-                URL url = new URL("https://www.googleapis.com/books/v1/volumes?q=" + searchTerm + "&startIndex=" + startIndex + "&maxResults=" + maxResults);
+            while (startIndex < maxAllowedResults) { // Ngăn vượt giới hạn API
+                // Mã hóa từ khóa tìm kiếm để tránh lỗi URL
+                String encodedSearchTerm = URLEncoder.encode(searchTerm, StandardCharsets.UTF_8.toString());
+                // Tạo URL để gọi API Google Books
+                URL url = new URL("https://www.googleapis.com/books/v1/volumes?q=" + encodedSearchTerm + "&startIndex=" + startIndex + "&maxResults=" + maxResults);
+                System.out.println("Đang gửi yêu cầu đến: " + url);
+
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
 
@@ -307,12 +313,16 @@ public class GoogleBookDao implements BookDao {
                     }
                     in.close();
 
+                    // Log phản hồi JSON
+                    System.out.println("Phản hồi JSON: " + response.toString());
+
                     // Chuyển đổi chuỗi JSON thành đối tượng JSON
                     JSONObject jsonResponse = new JSONObject(response.toString());
 
                     // Kiểm tra tổng số mục trả về
                     int totalItems = jsonResponse.optInt("totalItems", 0);
-                    if (totalItems == 0) {
+                    if (totalItems == 0 || startIndex >= totalItems) {
+                        System.out.println("Không còn sách nào để lấy.");
                         break; // Không còn sách nào
                     }
 
@@ -333,7 +343,20 @@ public class GoogleBookDao implements BookDao {
                         String author = bookInfo.has("authors") ? bookInfo.getJSONArray("authors").optString(0, "Unknown Author") : "Unknown Author";
                         String publishYear = bookInfo.optString("publishedDate", "Unknown Year");
                         String category = bookInfo.has("categories") ? bookInfo.getJSONArray("categories").optString(0, "Unknown Category") : "Unknown Category";
-                        String isbn13 = bookInfo.has("industryIdentifiers") ? bookInfo.getJSONArray("industryIdentifiers").getJSONObject(0).getString("identifier") : "Unknown ISBN";
+
+                        // Xử lý ISBN-13
+                        String isbn13 = "Unknown ISBN";
+                        if (bookInfo.has("industryIdentifiers")) {
+                            JSONArray identifiers = bookInfo.getJSONArray("industryIdentifiers");
+                            for (int j = 0; j < identifiers.length(); j++) {
+                                JSONObject identifier = identifiers.getJSONObject(j);
+                                if ("ISBN_13".equals(identifier.optString("type"))) {
+                                    isbn13 = identifier.optString("identifier", "Unknown ISBN");
+                                    break;
+                                }
+                            }
+                        }
+
                         String coverCode = bookInfo.has("imageLinks") ? bookInfo.getJSONObject("imageLinks").optString("thumbnail", "") : "";
 
                         // Phân tích năm từ chuỗi ngày tháng
@@ -343,12 +366,11 @@ public class GoogleBookDao implements BookDao {
                                 year = Integer.parseInt(publishYear.split("-")[0]); // Lấy phần năm
                             } catch (NumberFormatException e) {
                                 System.out.println("Lỗi phân tích năm: " + publishYear);
-                                year = 0; // Gán giá trị mặc định nếu không phân tích được
                             }
                         }
 
                         // Tạo đối tượng Book và thêm vào danh sách
-                        allBooks.add(new Book(bookID, title, author, year, category, isbn13, coverCode, 100)); // 1: trạng thái có sẵn
+                        allBooks.add(new Book(bookID, title, author, year, category, isbn13, coverCode, 100)); // 100: trạng thái có sẵn
                     }
 
                     // Tăng chỉ số để lấy sách tiếp theo
@@ -359,11 +381,13 @@ public class GoogleBookDao implements BookDao {
                 }
             }
         } catch (Exception e) {
+            System.err.println("Lỗi khi gọi API Google Books:");
             e.printStackTrace();
         }
 
         return allBooks;
     }
+
 
 
 }

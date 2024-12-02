@@ -18,7 +18,7 @@ public class BookCardLargeController extends BookCardController {
 
         } catch (Exception e) {
             System.out.println("Error loading image from " + book.getCoverCode());
-            cover.setImage(new Image("D:/My Code/lib2024-1117/src/main/resources/Library/image/default-cover.png"));
+            cover.setImage(new Image("C:/JUnit/Library-App/src/main/resources/Library/image/default-cover.png"));
 
             // demo với link ảnh trên web
 //            cover.setImage (new Image("https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg"));

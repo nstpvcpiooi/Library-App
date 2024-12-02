@@ -128,4 +128,15 @@ public class Book {
     public static List<Book> fetchAllBooksFromAPI() {
         return GoogleBookDao.getInstance().fetchAllBooksFromAPI();
     }
+
+    public static void main(String[] args) {
+        List<Book> L = Book.fetchAllBooksFromAPI();
+        int i=0;
+        for(Book b : L){
+            b.addBook();
+            if(i==30)break;
+            i++;
+        }
+
+    }
 }

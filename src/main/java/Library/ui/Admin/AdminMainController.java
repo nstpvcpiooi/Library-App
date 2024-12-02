@@ -1,12 +1,20 @@
 package Library.ui.Admin;
 
 import Library.MainApplication;
+import Library.ui.LogIn.AdminLogInController;
+import Library.ui.LogIn.LogInTabController;
+import Library.ui.LogIn.SelectRolesController;
 import Library.ui.MainController;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -16,6 +24,7 @@ public class AdminMainController extends MainController {
     /**
      * Các nút điều hướng giữa các tab.
      */
+
     @FXML
     private Pane LibraryManageButton;
 
@@ -24,6 +33,10 @@ public class AdminMainController extends MainController {
 
     @FXML
     private Pane UserManageButton;
+
+
+    /** ADMIN LOG IN*/
+    public AdminLogInController adminLogInController;
 
     /** LibraryManage Tab */
     public LibraryManageController libraryManageController;
@@ -37,6 +50,7 @@ public class AdminMainController extends MainController {
     /** RequestManage Tab */
     public RequestManageController requestManageController;
     public AnchorPane requestManageTab;
+
 
 
     /**
@@ -107,4 +121,5 @@ public class AdminMainController extends MainController {
     public Pane getUserManageButton() {
         return UserManageButton;
     }
+
 }
