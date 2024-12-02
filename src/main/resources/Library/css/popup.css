@@ -99,4 +99,6 @@ TextField, PasswordField {
     -fx-border-radius: 10px;
     -fx-border-color: gray;
     -fx-border-width: 2px;
+    -fx-background-radius: 10px;
+    -fx-background-color: white;
 }

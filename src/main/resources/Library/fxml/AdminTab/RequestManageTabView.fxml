@@ -20,12 +20,14 @@
       </Label>
       <TableView fx:id="table" layoutX="42.0" layoutY="89.0" onMouseClicked="#selectItem" prefHeight="533.0" prefWidth="865.0">
          <columns>
-            <TableColumn fx:id="requestID" prefWidth="120.0" text="RequestID" />
-            <TableColumn fx:id="memberID" minWidth="0.0" prefWidth="149.71421813964844" text="MemberID" />
-            <TableColumn fx:id="BookID" prefWidth="142.857177734375" text="BookID" />
-            <TableColumn fx:id="IssueDate" prefWidth="153.71420288085938" text="Issue date" />
-            <TableColumn fx:id="DueDate" prefWidth="144.5714111328125" text="Due date" />
-            <TableColumn fx:id="ReturnDate" prefWidth="153.71432931082586" text="Return date" />
+            <TableColumn fx:id="requestID" prefWidth="100.0" text="RequestID" />
+            <TableColumn fx:id="memberID" minWidth="0.0" prefWidth="100.0" text="MemberID" />
+            <TableColumn fx:id="BookID" prefWidth="100.0" text="BookID" />
+            <TableColumn fx:id="IssueDate" prefWidth="130.0" text="Issue date" />
+            <TableColumn fx:id="DueDate" prefWidth="130.0" text="Due date" />
+            <TableColumn fx:id="ReturnDate" prefWidth="130.0" text="Return date" />
+            <TableColumn fx:id="Overdue" prefWidth="89.7142333984375" text="Overdue" />
+            <TableColumn fx:id="Status" prefWidth="83.42850167410711" text="Status" />
          </columns>
       </TableView>
       <HBox alignment="CENTER_RIGHT" layoutX="41.0" layoutY="622.0" prefHeight="66.0" prefWidth="865.0" spacing="15.0">
