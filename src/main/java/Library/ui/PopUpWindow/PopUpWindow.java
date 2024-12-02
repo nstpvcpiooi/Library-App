@@ -1,6 +1,7 @@
 package Library.ui.PopUpWindow;
 
 import Library.MainApplication;
+import Library.backend.Login.Model.User;
 import Library.backend.bookModel.Book;
 import Library.ui.Admin.demoUser;
 import Library.ui.MainController;
@@ -163,7 +164,7 @@ public class PopUpWindow {
         PopUpStage.show();
     }
 
-    public void displayUser(demoUser user) {
+    public void displayUser(User user) {
         PopUpStage.setScene(UserScene);
         mainController.setBackgroundEffect();
         userViewController.setData(user);

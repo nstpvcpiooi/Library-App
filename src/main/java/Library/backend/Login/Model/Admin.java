@@ -53,7 +53,7 @@ public class Admin extends Member {
         // Implementation for searching members
         return memberDao.searchMembers(criteria, value);
     }
-    public List<Member> DisplayMembers() {
+    public List<User> DisplayMembers() {
         // Implementation for displaying all members
         return memberDao.DisplayMembers();
     }

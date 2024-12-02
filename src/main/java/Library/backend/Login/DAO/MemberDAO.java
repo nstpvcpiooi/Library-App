@@ -2,6 +2,7 @@ package Library.backend.Login.DAO;
 
 
 import Library.backend.Login.Model.Member;
+import Library.backend.Login.Model.User;
 
 import java.util.List;
 
@@ -18,6 +19,6 @@ public interface MemberDAO {
     boolean checkOTP(String email, String input);
     boolean changePass(String email, String newPassword);
     Member login(String userName, String password);
-    List<Member> DisplayMembers();
+    List<User> DisplayMembers();
 
 }

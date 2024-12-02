@@ -1,6 +1,9 @@
 package Library.ui.User;
 
 import Library.MainApplication;
+import Library.backend.Login.Model.Member;
+import Library.backend.Login.Model.User;
+import Library.backend.Session.SessionManager;
 import Library.ui.Admin.demoUser;
 import Library.ui.MainController;
 import javafx.fxml.FXML;
@@ -58,9 +61,8 @@ public class UserMainController extends MainController {
     void ButtonClick(MouseEvent event) {
         if (event.getSource().equals(profileButton)) {
             // TODO: Hiển thị NGƯỜI DÙNG VỪA ĐĂNG NHẬP
-            demoUser user = new demoUser("usernam1", "password1",
-                    "email1@gmail.com", "0912345678", "id1", "preference1");
-
+            Member member = SessionManager.getInstance().getLoggedInMember();
+            User user = new User(member);
             getPopUpWindow().displayUser(user);
             getPopUpWindow().getUserViewController().setTabTitle("THÔNG TIN CỦA BẠN");
             return;
@@ -120,7 +122,7 @@ public class UserMainController extends MainController {
 
         // TODO: Hiển thị thông tin người dùng
 
-        userName.setText("Xin chào, ppmelon2004");
+        userName.setText("Xin chào, " + SessionManager.getInstance().getLoggedInMember().getUserName());
 
         super.initialize(location, resources);
     }
