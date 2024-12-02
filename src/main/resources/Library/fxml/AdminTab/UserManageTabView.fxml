@@ -19,12 +19,10 @@
       </Label>
       <TableView fx:id="table" layoutX="42.0" layoutY="89.0" onMouseClicked="#selectItem" prefHeight="533.0" prefWidth="865.0">
          <columns>
-            <TableColumn fx:id="UserName" prefWidth="120.0" text="Username" />
-            <TableColumn fx:id="Password" minWidth="0.0" prefWidth="120.0" text="Password" />
-            <TableColumn fx:id="Email" prefWidth="220.0" text="Email" />
-            <TableColumn fx:id="Phone" prefWidth="160.0" text="Phone" />
-            <TableColumn fx:id="Preference" prefWidth="151.9998779296875" text="Preference" />
-            <TableColumn fx:id="Duty" prefWidth="92.57147216796875" text="Duty" />
+            <TableColumn fx:id="ID" minWidth="0.0" prefWidth="120.0" sortable="false" text="ID" />
+            <TableColumn fx:id="UserName" prefWidth="230.85719299316406" sortable="false" text="Username" />
+            <TableColumn fx:id="Email" prefWidth="340.5713806152344" sortable="false" text="Email" />
+            <TableColumn fx:id="Phone" prefWidth="173.1429443359375" sortable="false" text="Phone" />
          </columns>
       </TableView>
       <Button fx:id="addButton" alignment="CENTER" graphicTextGap="7.0" layoutX="815.0" layoutY="40.0" mnemonicParsing="false" onAction="#add" prefHeight="36.0" prefWidth="91.0" styleClass="WhiteButton" text="USER">

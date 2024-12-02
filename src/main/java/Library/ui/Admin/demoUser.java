@@ -6,6 +6,16 @@ public class demoUser {
     private String password;
     private String email;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    private String id;
+
     public String getPhone() {
         return phone;
     }
@@ -58,12 +68,12 @@ public class demoUser {
     private int duty;
     private String preference;
 
-    public demoUser(String userName, String password, String email, String phone, int duty, String preference) {
+    public demoUser(String userName, String password, String email, String phone, String id, String preference) {
         this.userName = userName;
         this.password = password;
         this.email = email;
         this.phone = phone;
-        this.duty = duty;
+        this.id = id;
         this.preference = preference;
     }
 

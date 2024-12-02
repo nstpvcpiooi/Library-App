@@ -19,19 +19,13 @@ public class UserManageController implements Initializable {
     private TableView<demoUser> table;
 
     @FXML
-    private TableColumn<demoUser, Integer> Duty;
-
-    @FXML
     private TableColumn<demoUser, String> Email;
-
-    @FXML
-    private TableColumn<demoUser, String> Password;
 
     @FXML
     private TableColumn<demoUser, String> Phone;
 
     @FXML
-    private TableColumn<demoUser, String> Preference;
+    private TableColumn<demoUser, String> ID;
 
     @FXML
     private TableColumn<demoUser, String> UserName;
@@ -65,8 +59,8 @@ public class UserManageController implements Initializable {
 
     @FXML
     void edit(ActionEvent event) {
-        getMainController().getPopUpWindow().getUserViewController().setTabTitle("CHỈNH SỬA USER");
         demoUser selectedItem = table.getSelectionModel().getSelectedItem();
+        getMainController().getPopUpWindow().getUserViewController().setTabTitle("CHỈNH SỬA USER");
         getMainController().getPopUpWindow().displayUser(selectedItem);
     }
 
@@ -97,21 +91,19 @@ public class UserManageController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         hideButtons();
         UserList = FXCollections.observableArrayList(
-                new demoUser("usernam1", "password1", "email1@gmail.com", "0912345678", 1, "preference1"),
-                new demoUser("usernam2", "password2", "email2@gmail.com", "0912345678", 2, "preference2"),
-                new demoUser("usernam3", "password3", "email3@gmail.com", "0912345678", 3, "preference3"),
-                new demoUser("usernam4", "password4", "email4@gmail.com", "0912345678", 4, "preference4"),
-                new demoUser("usernam5", "password5", "email5@gmail.com", "0912345678", 5, "preference5"),
-                new demoUser("usernam6", "password6", "email6@gmail.com", "0912345678", 6, "preference6"),
-                new demoUser("usernam7", "password7", "email7@gmail.com", "0912345678", 7, "preference7"),
-                new demoUser("usernam8", "password8", "email8@gmail.com", "0912345678", 8, "preference8")
+                new demoUser("usernam1", "password1", "email1@gmail.com", "0912345678", "id1", "preference1"),
+                new demoUser("usernam2", "password2", "email2@gmail.com", "0912345678", "id1", "preference2"),
+                new demoUser("usernam3", "password3", "email3@gmail.com", "0912345678", "id1", "preference3"),
+                new demoUser("usernam4", "password4", "email4@gmail.com", "0912345678","id1", "preference4"),
+                new demoUser("usernam5", "password5", "email5@gmail.com", "0912345678", "id1", "preference5"),
+                new demoUser("usernam6", "password6", "email6@gmail.com", "0912345678", "id1", "preference6"),
+                new demoUser("usernam7", "password7", "email7@gmail.com", "0912345678", "id1", "preference7"),
+                new demoUser("usernam8", "password8", "email8@gmail.com", "0912345678", "id1", "preference8")
         );
         UserName.setCellValueFactory(new PropertyValueFactory<demoUser, String>("userName"));
-        Password.setCellValueFactory(new PropertyValueFactory<demoUser, String>("password"));
         Email.setCellValueFactory(new PropertyValueFactory<demoUser, String>("email"));
         Phone.setCellValueFactory(new PropertyValueFactory<demoUser, String>("phone"));
-        Duty.setCellValueFactory(new PropertyValueFactory<demoUser, Integer>("duty"));
-        Preference.setCellValueFactory(new PropertyValueFactory<demoUser, String>("preference"));
+        ID.setCellValueFactory(new PropertyValueFactory<demoUser, String>("id"));
         table.setItems(UserList);
     }
 
@@ -128,6 +120,11 @@ public class UserManageController implements Initializable {
 
     @FXML
     void selectItem(MouseEvent event) {
-        showButtons();
+        demoUser selectedItem = table.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            showButtons();
+        } else {
+            hideButtons();
+        }
     }
 }

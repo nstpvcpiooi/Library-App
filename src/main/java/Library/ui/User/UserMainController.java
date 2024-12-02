@@ -59,7 +59,7 @@ public class UserMainController extends MainController {
         if (event.getSource().equals(profileButton)) {
             // TODO: Hiển thị NGƯỜI DÙNG VỪA ĐĂNG NHẬP
             demoUser user = new demoUser("usernam1", "password1",
-                    "email1@gmail.com", "0912345678", 1, "preference1");
+                    "email1@gmail.com", "0912345678", "id1", "preference1");
 
             getPopUpWindow().displayUser(user);
             getPopUpWindow().getUserViewController().setTabTitle("THÔNG TIN CỦA BẠN");

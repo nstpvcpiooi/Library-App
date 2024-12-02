@@ -25,4 +25,6 @@ module libraryapp.libraryapp {
     opens Library.ui.Admin to javafx.fxml;
     exports Library.ui.PopUpWindow;
     opens Library.ui.PopUpWindow to javafx.fxml;
+    exports Library.backend.Login.Model;
+    opens Library.backend.Login.Model to javafx.fxml;
 }
