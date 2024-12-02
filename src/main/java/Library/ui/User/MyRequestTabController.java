@@ -1,5 +1,8 @@
 package Library.ui.User;
 
+import Library.backend.Request.DAO.RequestDAOImpl;
+import Library.backend.Request.Model.Request;
+import Library.backend.Session.SessionManager;
 import Library.backend.bookModel.Book;
 import Library.ui.BookCard.BookCardCell;
 import javafx.fxml.FXML;
@@ -27,16 +30,9 @@ public class MyRequestTabController implements Initializable {
     }
 
     private List<Book> getBorrowedBooks() {
-        List<Book> ls = new ArrayList<>();
 
-        ls.add(new Book("", "STEVE JOBS", "Walter Isaacson",
-                2011, "Technology", "978-3-16-148410-3",
-                "image/img.png", 1));
-        ls.add(new Book("", "SAPIENS", "Yuval Noah Harari",
-                2011, "History", "978-3-16-148410-4",
-                "image/img.png", 1));
 
-        return ls;
+        return RequestDAOImpl.getInstance().getBooksByMemberID(SessionManager.getInstance().getLoggedInMember().getMemberID());
     }
 
     @Override

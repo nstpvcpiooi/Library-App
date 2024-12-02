@@ -13,7 +13,10 @@ public interface RequestDAO {
     List<Request> getMemberBorrowHistory(int memberID);
     void updateRequest(Request request);
     Request getRequestById(int requestID);
+    Request getRequestByMemberIDAndBookID(int memberID, String bookID);
     void handleOverdueRequests();
     List<Request> getAllRequests();
     List<Request> getRequestsByMemberID(int memberID);
+    boolean handleDuplicateRequest(int memberID, String bookID);
+    List<Book> getBooksByMemberID(int memberID);
 }

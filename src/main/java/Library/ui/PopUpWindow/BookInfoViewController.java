@@ -1,5 +1,11 @@
 package Library.ui.PopUpWindow;
 
+import Library.backend.Login.Model.User;
+import Library.backend.Request.DAO.RequestDAOImpl;
+import Library.backend.Request.Model.Request;
+import Library.backend.Session.SessionManager;
+import Library.backend.bookDao.BookDao;
+import Library.backend.bookDao.MysqlBookDao;
 import Library.backend.bookModel.Book;
 import Library.ui.Admin.AdminMainController;
 import Library.ui.Utils.Notification;
@@ -11,6 +17,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+
+import java.util.Scanner;
 
 import static Library.ui.MainController.DEFAULT_COVER;
 
@@ -66,32 +74,60 @@ public class BookInfoViewController extends PopUpController {
 
         } else if (getPopUpWindow().getMainController() instanceof UserMainController) {
             //  TODO: TRẢ SÁCH
+            SessionManager sessionManager = SessionManager.getInstance();
+            User user = new User(sessionManager.getLoggedInMember());
+            user.createReturnRequest(selectedBook.getBookID());
+            Request request = RequestDAOImpl.getInstance().getRequestByMemberIDAndBookID(user.getMemberID(), selectedBook.getBookID());
+            RequestDAOImpl.getInstance().updateRequest(request);
+            //request = RequestDAOImpl.getInstance().getRequestByMemberIDAndBookID(user.getMemberID(), selectedBook.getBookID());
+            if (request.getStatus().equals("approved return")) {
+                ActionButton.setText("MƯỢN SÁCH");
 
-            ActionButton.setText("MƯỢN SÁCH");
-            ActionButton.getStyleClass().remove("BorrowedButton");
-            ActionButton.setDisable(false);
-            RemoveButton.setVisible(false);
+                ActionButton.getStyleClass().remove("BorrowedButton");
+                ActionButton.setDisable(false);
+                RemoveButton.setVisible(false);
+                Notification notification = new Notification("Chúc mừng!", "Bạn đã trả sách thành công");
+                notification.display();
+            }
+            else {
+                ActionButton.setText("ĐÃ MƯỢN");
+                ActionButton.getStyleClass().add("BorrowedButton");
+                ActionButton.setDisable(true);
+                RemoveButton.setText("ĐANG TRẢ");
+                RemoveButton.setVisible(true);
+                RemoveButton.setDisable(true);
+                RemoveButton.getStyleClass().add("BorrowedButton");
+            }
 
-            Notification notification = new Notification("Chúc mừng!", "Bạn đã trả sách thành công");
-            notification.display();
+
+
+
+
         }
     }
 
 
     @FXML
-    void Action(ActionEvent event) {
+    void Action(ActionEvent event)  {
         if (getPopUpWindow().getMainController() instanceof AdminMainController) {
             getPopUpWindow().displayEdit(selectedBook);
         } else if (getPopUpWindow().getMainController() instanceof UserMainController) {
 
             // TODO: MƯỢN SÁCH
-
-            ActionButton.setText("ĐANG MƯỢN");
-            ActionButton.getStyleClass().add("BorrowedButton");
-            ActionButton.setDisable(true);
-
-            RemoveButton.setText("TRẢ SÁCH");
-            RemoveButton.setVisible(true);
+            SessionManager sessionManager = SessionManager.getInstance();
+            User user = new User(sessionManager.getLoggedInMember());
+            if (selectedBook.getQuantity()>0) {
+                user.createIssueRequest(selectedBook.getBookID());
+                ActionButton.setText("ĐANG DUYỆT");
+                ActionButton.getStyleClass().add("BorrowedButton");
+                ActionButton.setDisable(true);
+                RemoveButton.setText("TRẢ SÁCH");
+                RemoveButton.setVisible(true);
+            }
+            else {
+                ActionButton.setText("HẾT SÁCH");
+                ActionButton.setDisable(true);
+            }
         }
     }
 
@@ -127,11 +163,43 @@ public class BookInfoViewController extends PopUpController {
             // hàm kiểm tra sách đã mượn?
 
             // if (!book.isBorrowed()) { ????????
-            ActionButton.setText("MƯỢN SÁCH");
+            SessionManager sessionManager = SessionManager.getInstance();
+            User user = new User(sessionManager.getLoggedInMember());
+            Request request = RequestDAOImpl.getInstance().getRequestByMemberIDAndBookID(user.getMemberID(), book.getBookID());
+            if (request == null) {
+                ActionButton.setText("MƯỢN SÁCH");
+                ActionButton.getStyleClass().remove("BorrowedButton");
+                ActionButton.setDisable(false);
+                RemoveButton.setVisible(false);
+            } else if (request.getStatus().equals("approved issue")) {
+                ActionButton.setText("ĐÃ MƯỢN");
+                ActionButton.getStyleClass().add("BorrowedButton");
+                ActionButton.setDisable(true);
+                RemoveButton.setText("TRẢ SÁCH");
+                RemoveButton.setVisible(true);
+            } else if (request.getStatus().equals("pending issue")) {
+                ActionButton.setText("ĐANG DUYỆT");
+                ActionButton.getStyleClass().add("BorrowedButton");
+                ActionButton.setDisable(true);
+                RemoveButton.setText("TRẢ SÁCH");
+                RemoveButton.setVisible(true);
+            }
+            else if (request.getStatus().equals("pending return")) {
+                ActionButton.setText("ĐÃ MƯỢN");
+                ActionButton.getStyleClass().add("BorrowedButton");
+                ActionButton.setDisable(true);
+                RemoveButton.setText("ĐANG TRẢ");
+                RemoveButton.setVisible(true);
+                RemoveButton.setDisable(true);
+                RemoveButton.getStyleClass().add("BorrowedButton");
+            }
+            else {
+                ActionButton.setText("MƯỢN SÁCH");
+                ActionButton.getStyleClass().remove("BorrowedButton");
+                ActionButton.setDisable(false);
+                RemoveButton.setVisible(false);
+            }
 
-            ActionButton.getStyleClass().remove("BorrowedButton");
-            ActionButton.setDisable(false);
-            RemoveButton.setVisible(false);
 
             // } else {
             //     ActionButton.setText("ĐANG MƯỢN");

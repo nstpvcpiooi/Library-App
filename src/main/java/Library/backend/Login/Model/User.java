@@ -49,7 +49,7 @@ public class User extends Member {
         }
         return borrowedBooks;
     }
-    public void createIssueRequest(String bookID) {
+    public void createIssueRequest(String bookID)  {
 
         List<Request> requests = requestDAO.getMemberBorrowHistory(this.getMemberID());
         for (Request request : requests) {
@@ -76,9 +76,16 @@ public class User extends Member {
     public void createReturnRequest(String bookID) {
         List<Request> requests = requestDAO.getMemberBorrowHistory(this.getMemberID());
         for (Request request : requests) {
-            if (request.getBookID().equals(bookID) && ("approved issue".equals(request.getStatus()) || "pending issue".equals(request.getStatus()))) {
+            if (request.getBookID().equals(bookID) && ("approved issue".equals(request.getStatus()))) {
                 request.setStatus("pending return");
                 requestDAO.updateRequest(request);
+                break;
+            }
+            if (request.getBookID().equals(bookID) && ("pending issue".equals(request.getStatus()))) {
+                request.setStatus("approved return");request.setReturnDate(LocalDateTime.now());
+                requestDAO.updateRequest(request);
+                bookDao.updateQuantity(request.getBookID(), 1);
+
                 break;
             }
         }

@@ -10,7 +10,8 @@ module libraryapp.libraryapp {
     requires jdk.compiler;
     requires org.controlsfx.controls;
 
-
+    exports Library.backend.Request.Model;
+    opens Library.backend.Request.Model to javafx.fxml;
     opens Library to javafx.fxml;
     exports Library;
     exports Library.ui;

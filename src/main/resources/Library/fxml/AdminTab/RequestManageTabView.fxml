@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="950.0" stylesheets="@../../css/table-view.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.Admin.RequestManageController">
+<AnchorPane prefHeight="700.0" prefWidth="950.0" stylesheets="@../../css/table-view.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.Admin.RequestManageController">
    <children>
       <Label layoutX="42.0" layoutY="42.0" text="QUẢN LÝ TRẢ SÁCH" textFill="#e89e5f">
          <font>
@@ -20,30 +20,18 @@
       </Label>
       <TableView fx:id="table" layoutX="42.0" layoutY="89.0" onMouseClicked="#selectItem" prefHeight="533.0" prefWidth="865.0">
          <columns>
-            <TableColumn fx:id="requestID" prefWidth="100.0" text="RequestID" />
-            <TableColumn fx:id="memberID" minWidth="0.0" prefWidth="100.0" text="MemberID" />
-            <TableColumn fx:id="BookID" prefWidth="100.0" text="BookID" />
-            <TableColumn fx:id="IssueDate" prefWidth="130.0" text="Issue date" />
-            <TableColumn fx:id="DueDate" prefWidth="130.0" text="Due date" />
-            <TableColumn fx:id="ReturnDate" prefWidth="130.0" text="Return date" />
-            <TableColumn fx:id="Overdue" prefWidth="89.7142333984375" text="Overdue" />
-            <TableColumn fx:id="Status" prefWidth="83.42850167410711" text="Status" />
+            <TableColumn fx:id="requestID" prefWidth="70.0" text="RequestID" />
+            <TableColumn fx:id="memberID" minWidth="0.0" prefWidth="75.0" text="MemberID" />
+            <TableColumn fx:id="BookID" prefWidth="74.0" text="BookID" />
+            <TableColumn fx:id="IssueDate" prefWidth="115.0" text="Issue date" />
+            <TableColumn fx:id="DueDate" prefWidth="126.0" text="Due date" />
+            <TableColumn fx:id="ReturnDate" prefWidth="135.0" text="Return date" />
+            <TableColumn fx:id="Overdue" prefWidth="79.0" text="Overdue" />
+            <TableColumn fx:id="Status" prefWidth="190.0" text="Status" />
          </columns>
       </TableView>
       <HBox alignment="CENTER_RIGHT" layoutX="41.0" layoutY="622.0" prefHeight="66.0" prefWidth="865.0" spacing="15.0">
          <children>
-            <Button id="declineButton" fx:id="declineButton" alignment="CENTER" graphicTextGap="7.0" mnemonicParsing="false" onAction="#decline" opacity="0.9" prefHeight="36.0" prefWidth="150.0" stylesheets="@../../css/popup.css" text="TỪ CHỐI">
-               <graphic>
-                  <ImageView fitHeight="13.0" fitWidth="13.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../icon/cross.png" />
-                     </image>
-                     <effect>
-                        <ColorAdjust brightness="1.0" />
-                     </effect>
-                  </ImageView>
-               </graphic>
-            </Button>
             <Button fx:id="approveButton" alignment="CENTER" graphicTextGap="7.0" mnemonicParsing="false" onAction="#approve" opacity="0.9" prefHeight="36.0" prefWidth="150.0" stylesheets="@../../css/popup.css" text="CHẤP NHẬN">
                <graphic>
                   <ImageView fitHeight="14.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
