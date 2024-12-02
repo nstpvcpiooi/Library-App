@@ -12,6 +12,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
+import static Library.ui.MainController.DEFAULT_COVER;
+
 /**
  * Controller cho cửa sổ hiển thị thông tin sách chi tiết
  */
@@ -57,6 +59,7 @@ public class BookInfoViewController extends PopUpController {
         if (getPopUpWindow().getMainController() instanceof AdminMainController) {
             //  TODO: XÓA SÁCH
             selectedBook.deleteBook();
+            ((AdminMainController) getPopUpWindow().getMainController()).libraryManageController.removeBook(selectedBook);
             getPopUpWindow().close();
             Notification notification = new Notification("Chúc mừng!", "Bạn đã xóa sách thành công");
             notification.display();
@@ -103,7 +106,7 @@ public class BookInfoViewController extends PopUpController {
 
         } catch (Exception e) {
             System.out.println("Error loading image from " + book.getCoverCode());
-            cover.setImage(new Image("D:/My Code/lib2024-1117/src/main/resources/Library/image/default-cover.png"));
+            cover.setImage(DEFAULT_COVER);
 
             // demo với link ảnh trên web
 //            cover.setImage (new Image("https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg"));

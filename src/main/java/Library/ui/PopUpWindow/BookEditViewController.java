@@ -9,6 +9,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import static Library.ui.MainController.DEFAULT_COVER;
+
 public class BookEditViewController extends PopUpController {
     @FXML
     private Button CancelButton;
@@ -66,7 +68,7 @@ public class BookEditViewController extends PopUpController {
             Image image = new Image(selectedBook.getCoverCode());
             cover.setImage(image);
         } catch (Exception e) {
-            cover.setImage(new Image("D:/My Code/lib2024-1117/src/main/resources/Library/image/default-cover.png"));
+            cover.setImage(DEFAULT_COVER);
         }
     }
 }

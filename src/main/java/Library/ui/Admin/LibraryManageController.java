@@ -57,6 +57,7 @@ public class LibraryManageController implements Initializable {
     private List<Book> getSearchList(String query) {
         if(query.isEmpty()) {
             return Book.searchBooks("category","Psychology");
+//            return Book.searchBooks("category", "Literary Criticism");
         }
         List<Book> ls = new ArrayList<>();
 
@@ -90,9 +91,15 @@ public class LibraryManageController implements Initializable {
         ls = Book.searchBooks("title", query);
         if (ls != null) {
             return Collections.singletonList(ls.get(0));
+//            return ls.subList(0, Math.min(ls.size(), 4));
         } else {
             return Collections.emptyList();
         }
+
+    }
+
+    public void removeBook(Book book) {
+        SearchResult.getItems().remove(book);
     }
 
     @FXML

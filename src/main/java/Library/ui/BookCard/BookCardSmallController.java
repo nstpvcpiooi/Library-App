@@ -3,6 +3,8 @@ package Library.ui.BookCard;
 import Library.backend.bookModel.Book;
 import javafx.scene.image.Image;
 
+import static Library.ui.MainController.DEFAULT_COVER;
+
 /**
  * Controller cho một card sách nhỏ (hiển thị ảnh bìa, tiêu đề, tác giả).
  */
@@ -19,7 +21,7 @@ public class BookCardSmallController extends BookCardController {
 
         } catch (Exception e) {
             System.out.println("Error loading image from " + book.getCoverCode());
-            cover.setImage(new Image("D:/My Code/lib2024-1117/src/main/resources/Library/image/default-cover.png"));
+            cover.setImage(DEFAULT_COVER);
 
             // demo với link ảnh trên web
 //            cover.setImage (new Image("https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg"));
