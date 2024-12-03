@@ -64,24 +64,58 @@ public class CustomAddController extends PopUpController {
      */
     @FXML
     void Save(ActionEvent event) {
-
-        // TODO: KIỂM TRA THÔNG TIN NHẬP VÀO CÓ HỢP LỆ KHÔNG
+        // Biến để kiểm tra trạng thái đầu vào
         boolean success = true;
+        Book b = null;
 
-        // NẾU THÔNG TIN NHẬP VÀO HỢP LỆ THÌ THÊM SÁCH VÀO DATABASE
-        if (success) {
-            // TODO: THÊM SÁCH VÀO DATABASE
+        try {
+            // Kiểm tra và lấy dữ liệu đầu vào
+            int publishYear = Integer.parseInt(publishYearInput.getText());
+            if (publishYear < 0) {
+                success = false;
+                showNotification("Lỗi!", "Năm xuất bản phải là số không âm.");
+            }
 
+            int quantity = Integer.parseInt(quantityInput.getText());
+            if (quantity < 0) {
+                success = false;
+                showNotification("Lỗi!", "Số lượng phải là số không âm.");
+            }
+
+            // Nếu thành công, tạo đối tượng sách
+            if (success) {
+                b = new Book(
+                        "",
+                        titleInput.getText(),
+                        authorInput.getText(),
+                        publishYear,
+                        categoryInput.getText(),
+                        "",
+                        "",
+                        quantity
+                );
+            }
+
+        } catch (NumberFormatException e) {
+            success = false;
+            showNotification("Lỗi!", "Vui lòng đảm bảo các trường số phải nhập đúng định dạng số nguyên.");
+        }
+
+        // Xử lý lưu sách vào database hoặc thông báo lỗi
+        if (success && b != null) {
+            // TODO: Thêm sách vào cơ sở dữ liệu
+            b.addBook();
             getPopUpWindow().close();
+            showNotification("Chúc mừng!", "Bạn đã thêm sách vào thư viện thành công.");
+        } else {
+            showNotification("Lỗi!", "Không thể thêm sách vào thư viện. Vui lòng kiểm tra lại thông tin.");
+        }
+    }
 
-            Notification notification = new Notification("Chúc mừng!", "Bạn đã thêm sách vào thư viện thành công");
-            notification.display();
-        }
-        // NẾU THÔNG TIN NHẬP VÀO KHÔNG HỢP LỆ
-        else {
-            Notification notification = new Notification("Lỗi!", "Không thể thêm sách vào thư viện");
-            notification.display();
-        }
+    // Hàm hiển thị thông báo
+    private void showNotification(String title, String message) {
+        Notification notification = new Notification(title, message);
+        notification.display();
     }
 
     /**
