@@ -128,4 +128,13 @@ public class User extends Member {
     public List<Review> getAllReview() {
         return reviewDao.getReviewsByMember(this.getMemberID());
     }
+    public boolean hasOverdueBook() {
+        List<Request> requests = requestDAO.getMemberBorrowHistory(this.getMemberID());
+        for (Request request : requests) {
+            if (request.isOverdue() && ("approved issue".equals(request.getStatus()) || "pending return".equals(request.getStatus()))) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

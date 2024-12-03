@@ -1,5 +1,6 @@
 package Library.ui.Admin;
 
+import Library.backend.Login.Model.Admin;
 import Library.backend.Request.DAO.RequestDAOImpl;
 import Library.backend.Request.Model.Request;
 import Library.ui.Utils.Notification;
@@ -56,25 +57,26 @@ public class RequestManageController implements Initializable {
     void approve(ActionEvent event) {
         Request selectedRequest = table.getSelectionModel().getSelectedItem();
         if (selectedRequest != null) {
+
             if (selectedRequest.getStatus().equals("approved issue")) {
                 Notification notification = new Notification("Error", "Request already approved");
                 notification.display();
                 return;
             }
             else if (selectedRequest.getStatus().equals("pending return")) {
-                selectedRequest.setStatus("approved return");
+                Admin admin = new Admin();
+                admin.approveReturnRequest(selectedRequest.getRequestID());
             } else if (selectedRequest.getStatus().equals("pending issue")) {
-                selectedRequest.setStatus("approved issue");
+                Admin admin = new Admin();
+                admin.approveIssueRequest(selectedRequest.getRequestID());
             }
             else {
                 Notification notification = new Notification("Error", "Request already approved");
                 notification.display();
                 return;
             }
-            RequestDAOImpl.getInstance().updateRequest(selectedRequest);
             Notification notification = new Notification("Success", "Request approved successfully");
             notification.display();
-            RequestDAOImpl.getInstance().updateRequest(selectedRequest);
             refreshData();
         }
     }
@@ -88,6 +90,7 @@ public class RequestManageController implements Initializable {
 
     public void setMainController(AdminMainController adminMainController) {
         this.MainController = adminMainController;
+        refreshData();
     }
 
     public AdminMainController getMainController() {

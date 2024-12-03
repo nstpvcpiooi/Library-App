@@ -117,6 +117,12 @@ public class BookInfoViewController extends PopUpController {
             SessionManager sessionManager = SessionManager.getInstance();
             User user = new User(sessionManager.getLoggedInMember());
             if (selectedBook.getQuantity()>0) {
+                if (user.hasOverdueBook())
+                {
+                    Notification notification = new Notification("Lỗi!", "Bạn đang mượn sách quá hạn. Vui lòng trả sách trước khi mượn sách mới");
+                    notification.display();
+                    return;
+                }
                 user.createIssueRequest(selectedBook.getBookID());
                 ActionButton.setText("ĐANG DUYỆT");
                 ActionButton.getStyleClass().add("BorrowedButton");
@@ -176,7 +182,9 @@ public class BookInfoViewController extends PopUpController {
                 ActionButton.getStyleClass().add("BorrowedButton");
                 ActionButton.setDisable(true);
                 RemoveButton.setText("TRẢ SÁCH");
+                RemoveButton.getStyleClass().remove("BorrowedButton");
                 RemoveButton.setVisible(true);
+                RemoveButton.setDisable(false);
             } else if (request.getStatus().equals("pending issue")) {
                 ActionButton.setText("ĐANG DUYỆT");
                 ActionButton.getStyleClass().add("BorrowedButton");

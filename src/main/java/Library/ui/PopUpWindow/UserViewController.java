@@ -5,6 +5,7 @@ import Library.backend.Login.DAO.MemberDAO;
 import Library.backend.Login.DAO.MemberDAOImpl;
 import Library.backend.Login.Model.Member;
 import Library.backend.Login.Model.User;
+import Library.backend.Session.SessionManager;
 import Library.ui.Admin.UserManageController;
 import Library.ui.Utils.Notification;
 import Library.ui.Utils.VisiblePasswordFieldSkin;
@@ -73,11 +74,13 @@ public class UserViewController extends PopUpController implements Initializable
             member.setPhone(phone.getText());
             memberDAO.updateMember(member);
             System.out.println("Updated user: " + member);
+            SessionManager.getInstance().setLoggedInMember(member);
         }
         getPopUpWindow().close();
         Notification notification = new Notification("Cập nhật thông tin người dùng", "Đã cập nhật thông tin người dùng thành công");
         notification.display();
         // Refresh the data in UserManageController
+        ;
         
     }
 

@@ -100,6 +100,7 @@ public class RequestDAOImpl implements RequestDAO {
 
     @Override
     public void updateRequest(Request request) {
+        System.out.println(request.getRequestID());
         String query = "UPDATE Requests SET issueDate = ?, dueDate = ?, returnDate = ?, status = ?, overdue = ? WHERE requestID = ?";
         try (Connection connection = JDBCUtil.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -109,6 +110,7 @@ public class RequestDAOImpl implements RequestDAO {
             preparedStatement.setString(4, request.getStatus());
             preparedStatement.setBoolean(5, request.isOverdue());
             preparedStatement.setInt(6, request.getRequestID());
+            System.out.println(preparedStatement);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

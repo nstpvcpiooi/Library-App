@@ -19,6 +19,8 @@ public class Admin extends Member {
     private BookDao bookDao = MysqlBookDao.getInstance();
     private MemberDAO memberDao = MemberDAOImpl.getInstance();
     private ReviewDao ReviewDao = MysqlReviewDao.getInstance();
+    public Admin() {
+    }
     public Admin(Member member) {
         this.setMemberID(member.getMemberID());
         this.setUserName(member.getUserName());
@@ -79,12 +81,15 @@ public class Admin extends Member {
 
     public void approveReturnRequest(int requestID) {
         Request request = requestDAO.getRequestById(requestID);
-        if (request != null && "pending return".equals(request.getStatus())) {
+        if (request != null && ("pending return".equals(request.getStatus())) || ("approved issue".equals(request.getStatus()))) {
             request.setStatus("approved return");
             request.setReturnDate(LocalDateTime.now());
             request.setOverdue(false);
+            System.out.println(request.getReturnDate());
+            System.out.println(request.getStatus());
             requestDAO.updateRequest(request);
-
+            System.out.println(request.getRequestID());
+            System.out.println(request.getBookID());
             // Increment the book quantity
             bookDao.updateQuantity(request.getBookID(), 1);
         }
