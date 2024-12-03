@@ -60,6 +60,7 @@ public class UserMainController extends MainController {
     void ButtonClick(MouseEvent event) {
         if (event.getSource().equals(profileButton)) {
             currentUser = SessionManager.getInstance().getLoggedInMember();
+            System.out.println("Logged-in Member: " + currentUser);
             // TODO: Hiển thị NGƯỜI DÙNG VỪA ĐĂNG NHẬP
             if (currentUser != null) {
                 getPopUpWindow().displayUser(currentUser);

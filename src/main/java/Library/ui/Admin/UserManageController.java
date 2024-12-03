@@ -52,11 +52,14 @@ public class UserManageController implements Initializable {
 
 
     public void setMainController(AdminMainController adminMainController) {
+        refreshData();
         this.MainController = adminMainController;
     }
 
     public AdminMainController getMainController() {
+        refreshData();
         return MainController;
+
     }
 
     @FXML
@@ -96,7 +99,13 @@ public class UserManageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         hideButtons();
-        refreshData();
+        List<User> users = MemberDAOImpl.getInstance().DisplayMembers();
+        UserList = FXCollections.observableArrayList(users);
+        UserName.setCellValueFactory(new PropertyValueFactory<User, String>("userName"));
+        Email.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
+        Phone.setCellValueFactory(new PropertyValueFactory<User, String>("phone"));
+        ID.setCellValueFactory(new PropertyValueFactory<User, Integer>("memberID"));
+        table.setItems(UserList);
     }
 
     public void refreshData() {
@@ -113,15 +122,18 @@ public class UserManageController implements Initializable {
         editButton.setVisible(false);
         removeButton.setVisible(false);
         table.getSelectionModel().clearSelection();
+
     }
 
     public void showButtons() {
         editButton.setVisible(true);
         removeButton.setVisible(true);
+
     }
 
     @FXML
     void selectItem(MouseEvent event) {
+
         User selectedItem = table.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             showButtons();
