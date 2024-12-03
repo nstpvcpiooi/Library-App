@@ -4,9 +4,8 @@ package Library.ui.PopUpWindow;
 import Library.backend.Login.DAO.MemberDAO;
 import Library.backend.Login.DAO.MemberDAOImpl;
 import Library.backend.Login.Model.Member;
-import Library.backend.Login.Model.User;
 import Library.backend.Session.SessionManager;
-import Library.ui.Admin.UserManageController;
+import Library.ui.Admin.AdminMainController;
 import Library.ui.Utils.Notification;
 import Library.ui.Utils.VisiblePasswordFieldSkin;
 import javafx.event.ActionEvent;
@@ -64,6 +63,8 @@ public class UserViewController extends PopUpController implements Initializable
             member.setEmail(email.getText());
             member.setPhone(phone.getText());
             memberDAO.createMember(member);
+
+            ((AdminMainController) getPopUpWindow().getMainController()).userManageController.updateUSerList();
         } else {
             MemberDAO memberDAO = MemberDAOImpl.getInstance();
             Member member = new Member();

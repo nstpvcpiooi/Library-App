@@ -109,13 +109,16 @@ public class UserManageController implements Initializable {
     }
 
     public void refreshData() {
-        List<User> users = MemberDAOImpl.getInstance().DisplayMembers();
-        UserList = FXCollections.observableArrayList(users);
+//        List<User> users = MemberDAOImpl.getInstance().DisplayMembers();
+//        UserList = FXCollections.observableArrayList(users);
+
         UserName.setCellValueFactory(new PropertyValueFactory<User, String>("userName"));
         Email.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
         Phone.setCellValueFactory(new PropertyValueFactory<User, String>("phone"));
         ID.setCellValueFactory(new PropertyValueFactory<User, Integer>("memberID"));
-        table.setItems(UserList);
+//        table.setItems(UserList);
+
+        updateUSerList();
     }
 
     public void hideButtons() {
@@ -140,5 +143,10 @@ public class UserManageController implements Initializable {
         } else {
             hideButtons();
         }
+    }
+
+    public void updateUSerList() {
+        UserList = FXCollections.observableArrayList(MemberDAOImpl.getInstance().DisplayMembers());
+        table.setItems(UserList);
     }
 }
