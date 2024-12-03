@@ -1,5 +1,9 @@
 package Library.ui.BookCard;
 
+import Library.backend.Request.DAO.RequestDAO;
+import Library.backend.Request.DAO.RequestDAOImpl;
+import Library.backend.Request.Model.Request;
+import Library.backend.Session.SessionManager;
 import Library.backend.bookModel.Book;
 import javafx.scene.image.Image;
 
@@ -16,6 +20,7 @@ public class BookCardLargeController extends BookCardController {
         try {
             // TODO KIỂM TRA ĐỊA CHỈ ẢNH BỊ LỖI?
             Image image = new Image(book.getCoverCode());
+            System.out.println("Loading image from " + book.getCoverCode());
             cover.setImage(image);
 
         } catch (Exception e) {
@@ -31,6 +36,26 @@ public class BookCardLargeController extends BookCardController {
 
         // 3. LẤY TÊN TÁC GIẢ
         author.setText(book.getAuthor());
+        // if request exists and returnDate is null, show due date
+        // (because it is not returned yet so we can show due date)
+        // add highlight to the card if overdue
+        if (RequestDAOImpl.getInstance().getRequestByMemberIDAndBookID(SessionManager.getInstance().getLoggedInMember().getMemberID(), book.getBookID()) != null) {
+            Request request = RequestDAOImpl.getInstance().
+                    getRequestByMemberIDAndBookID(SessionManager.
+                            getInstance().getLoggedInMember().
+                            getMemberID(), book.getBookID());
+            if (request.getReturnDate() == null)
+            {
+
+                System.out.println(request.getDueDate());
+            }
+
+
+
+
+        }
+
+
     }
 }
 
