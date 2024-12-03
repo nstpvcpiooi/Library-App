@@ -133,13 +133,18 @@ public class Book {
     }
 
     public static void main(String[] args) {
-        List<Book> L = Book.fetchAllBooksFromAPI();
+      /*  List<Book> L = Book.fetchAllBooksFromAPI();
         int i=0;
         for(Book b : L){
             b.addBook();
             if(i==30)break;
             i++;
         }
+*/
+        Book b=Book.getBookById("-90ewuAkZUsC");
+        b.generateQrCodeForBook();
+
+
 
     }
 }

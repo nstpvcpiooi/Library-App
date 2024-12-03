@@ -68,9 +68,9 @@ public class JDBCUtil {
         try {
             // đăng ký mysql driver vơi drivermanager
             DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-            String url = "jdbc:mysql://localhost:3306/library-app";
+            String url = "jdbc:mySQL://localhost:3306/library";
             String username = "root";
-            String password = "Absentminded2505@?123";
+            String password = "";
             c = DriverManager.getConnection(url, username, password);
         } catch (SQLException e) {
             // TODO Auto-generated catch block
