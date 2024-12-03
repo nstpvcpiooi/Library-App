@@ -18,28 +18,61 @@ import java.util.ResourceBundle;
 
 import static Library.ui.BookCard.BookCardCell.BookCardType.LARGE;
 
+/**
+ * Controller cho giao diện quản lý thư viện của admin
+ */
 public class LibraryManageController implements Initializable {
 
+    /**
+     * Nút thêm sách
+     */
     @FXML
     private HBox AddButton;
 
+    /**
+     * Ô tìm kiếm
+     */
     @FXML
     private HBox SearchBar;
 
+    /**
+     * Danh sách kết quả tìm kiếm
+     */
     @FXML
     private ListView<Book> SearchResult;
 
+    /**
+     * Ô nhập từ khóa tìm kiếm (chứa từ khóa tìm kiếm)
+     */
     @FXML
     private TextField SearchText;
 
+    /**
+     * Controller chính của admin (đã được khởi tạo trong AdminMainController)
+     */
     private AdminMainController MainController;
 
-
+    /**
+     * Hàm xử lý sự kiện khi nhấn vào nút thêm sách (AddButton)
+     * @param event sự kiện chuột
+     *
+     * Khi nhấn vào nút thêm sách, hiển thị cửa sổ thêm sách (displayAdd)
+     *
+     * Có hai cách thêm sách: thêm sách tùy chỉnh và thêm sách bằng mã ISBN
+     *
+     * TODO: Chức năng thêm sách trong CustomAddController
+     */
     @FXML
     void AddBook(MouseEvent event) {
         getMainController().getPopUpWindow().displayAdd();
     }
 
+    /**
+     * Hàm xử lý sự kiện khi nhập từ khóa tìm kiếm (SearchText)
+     * @param event sự kiện phím
+     *
+     * Khi nhập từ khóa tìm kiếm, hiển thị danh sách kết quả tìm kiếm (getSearchList)
+     */
     @FXML
     void search(KeyEvent event) {
         String query = SearchText.getText();
@@ -61,33 +94,6 @@ public class LibraryManageController implements Initializable {
         }
         List<Book> ls = new ArrayList<>();
 
-       /* // TODO HERE
-            ls.add(new Book("", "RICH DAD & POOR DAD", "Robert T.Kiyosaki",
-                    1997, "Business", "978-3-16-148410-0",
-                    "image/img.png", 1));
-            ls.add(new Book("", "A BRIEF HISTORY OF TIME", "Stephen Hawking",
-                    1988, "Science", "978-3-16-148410-1",
-                    "image/img.png", 1));
-            ls.add(new Book("", "THE GREAT GATSBY", "F. Scott Fitzgerald",
-                    1925, "Literature", "978-3-16-148410-2",
-                    "image/img.png", 1));
-            ls.add(new Book("", "STEVE JOBS", "Walter Isaacson",
-                    2011, "Technology", "978-3-16-148410-3",
-                    "image/img.png", 1));
-            ls.add(new Book("", "SAPIENS", "Yuval Noah Harari",
-                    2011, "History", "978-3-16-148410-4",
-                    "image/img.png", 1));
-            ls.add(new Book("", "THE ALCHEMIST", "Paulo Coelho",
-                    1988, "Novel", "978-3-16-148410-5",
-                    "image/img.png", 1));
-            ls.add(new Book("", "THE POWER OF HABIT", "Charles Duhigg",
-                    2012, "Health", "978-3-16-148410-7",
-                    "image/img.png", 1));
-            ls.add(new Book("", "SALT, FAT, ACID, HEAT", "Samin Nosrat",
-                    2017, "Cooking", "978-3-16-148410-8",
-                    "image/img.png", 1));*/
-
-
         ls = Book.searchBooks("title", query);
         if (ls != null) {
             return Collections.singletonList(ls.get(0));
@@ -98,19 +104,34 @@ public class LibraryManageController implements Initializable {
 
     }
 
+    /**
+     * Sau khi xóa sách, xoá sách khỏi danh sách kết quả tìm kiếm
+     */
     public void removeBook(Book book) {
         SearchResult.getItems().remove(book);
     }
 
+    /**
+     * Hàm xử lý sự kiện khi chọn một sách trong danh sách kết quả tìm kiếm (SearchResult)
+     * @param event sự kiện chuột
+     *
+     * Khi chọn một sách, hiển thị thông tin chi tiết của sách (displayInfo)
+     */
     @FXML
     void SelectBook(MouseEvent event) {
         Book selectedBook = SearchResult.getSelectionModel().getSelectedItem();
         getMainController().getPopUpWindow().displayInfo(selectedBook);
     }
 
+    /**
+     * Khởi tạo giao diện quản lý thư viện
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // Khởi tạo book card cell
         SearchResult.setCellFactory(lv -> new BookCardCell(LARGE));
+
+        // Hiển thị sách trong tab Library Manage khi mới mở ứng dụng
         SearchResult.getItems().addAll(getSearchList(""));
     }
 

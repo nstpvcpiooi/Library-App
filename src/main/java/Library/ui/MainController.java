@@ -12,6 +12,11 @@ import javafx.scene.layout.Pane;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+
+/**
+ * MainController là lớp cơ sở cho các AdminMainController và UserMainController.
+ * MainController là controller chính cho giao diện người dùng hoặc admin.
+ */
 public abstract class MainController implements Initializable {
 
     public static final Image DEFAULT_COVER = new Image(MainApplication.class.getResource("image/default-cover.png").toString());

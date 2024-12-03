@@ -2,23 +2,19 @@ package Library.ui.Admin;
 
 import Library.MainApplication;
 import Library.ui.LogIn.AdminLogInController;
-import Library.ui.LogIn.LogInTabController;
-import Library.ui.LogIn.SelectRolesController;
 import Library.ui.MainController;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controller cho giao diện chính của ứng dụng dành cho admin. (AdminMainView)
+ * (gồm các nút điều hướng và phần chứa nội dung chính của các tab)
+ */
 public class AdminMainController extends MainController {
 
     /**
@@ -67,6 +63,7 @@ public class AdminMainController extends MainController {
             userManageController.hideButtons();
         } else if (currentTab.equals(RequestManageButton)) {
             setContentPane(requestManageTab);
+            requestManageController.hideButtons();
         }
     }
 

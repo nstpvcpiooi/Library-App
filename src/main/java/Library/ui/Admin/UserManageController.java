@@ -18,10 +18,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * Controller cho giao diện quản lý người dùng của admin
+ */
 public class UserManageController implements Initializable {
+
+    /**
+     * Bảng hiển thị danh sách người dùng
+     */
     @FXML
     private TableView<User> table;
 
+    /**
+     * Cột hiển thị mã người dùng, tên người dùng, email, số điện thoại
+     */
     @FXML
     private TableColumn<User, String> Email;
 
@@ -34,6 +44,9 @@ public class UserManageController implements Initializable {
     @FXML
     private TableColumn<User, String> UserName;
 
+    /**
+     * Nút thêm, sửa, xóa người dùng
+     */
     @FXML
     private Button addButton;
 
@@ -43,13 +56,17 @@ public class UserManageController implements Initializable {
     @FXML
     private Button removeButton;
 
+    /**
+     * Danh sách người dùng
+     */
     private ObservableList<User> UserList;
 
+    /**
+     * Controller chính của admin
+     */
     private AdminMainController MainController;
 
     private static UserManageController instance;
-
-
 
     public void setMainController(AdminMainController adminMainController) {
         refreshData();

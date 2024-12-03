@@ -20,13 +20,20 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        // CỬA SỔ ĐĂNG NHẬP
+
+        /**
+         * 1. Hiển thị cửa sổ đăng nhập
+         * 2. Dựa vào loại đăng nhập để hiển thị cửa sổ chính (ADMIN hoặc USER)
+         */
         ShowLogInWindow();
 
         stage.getIcons().add(new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("icon/icon-512.png"))));
         stage.setResizable(false); // không cho phóng to, thu nhỏ cửa sổ
 
-        // CỬA SỔ CHÍNH
+        /**
+         * Nếu là USER thì hiển thị cửa sổ UserMainView
+         * Nếu là ADMIN thì hiển thị cửa sổ AdminMainView
+         */
         if (logInType == LogInViewController.LogInType.USER) {
             ShowUserWindow(stage);
         } else if (logInType == LogInViewController.LogInType.ADMIN) {

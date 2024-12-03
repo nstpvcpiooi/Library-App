@@ -17,7 +17,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Controller cho giao diện chính của ứng dụng.
+ * Controller cho giao diện chính của ứng dụng dành cho người dùng. (UserMainView)
  * (gồm các nút điều hướng và phần chứa nội dung chính của các tab)
  */
 public class UserMainController extends MainController {

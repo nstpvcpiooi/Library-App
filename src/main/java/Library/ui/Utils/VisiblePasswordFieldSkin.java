@@ -14,13 +14,20 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 
+/**
+ * TextFieldSkin cho PasswordField, cho phép hiển thị hoặc ẩn mật khẩu.
+ * (Hiển thị mật khẩu dưới dạng ký tự thường thay vì dấu chấm)
+ */
 public class VisiblePasswordFieldSkin extends TextFieldSkin {
 
+    // Button để hiển thị hoặc ẩn mật khẩu
     private final Button actionButton = new Button("View");
     private final SVGPath actionIcon = new SVGPath();
 
+    // Ký tự thay thế cho mật khẩu
     public static final char BULLET = '●';
 
+    // Trạng thái hiện tại của mật khẩu (đang ẩn hay đang hiển thị)
     private boolean mask = true;
 
     public VisiblePasswordFieldSkin(PasswordField textField) {
