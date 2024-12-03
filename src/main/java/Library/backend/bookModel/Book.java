@@ -39,6 +39,8 @@ public class Book {
         MysqlBookDao.getInstance().deleteBook(this.bookID);
     }
 
+
+
     // Cập nhật tài liệu
     public void updateBook(String newTitle, String newAuthor, int newPublishYear, String newCategory, String newIsbn,
                            String newCoverCode, int newQuantity) {
@@ -124,6 +126,10 @@ public class Book {
 
     public int getQuantity() {
         return quantity; // Getter cho quantity
+    }
+
+    public void setCoverCode(String s){
+        this.coverCode=s;
     }
 
 
