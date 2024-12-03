@@ -20,14 +20,14 @@
       </Label>
       <TableView fx:id="table" layoutX="42.0" layoutY="89.0" onMouseClicked="#selectItem" prefHeight="533.0" prefWidth="865.0">
          <columns>
-            <TableColumn fx:id="requestID" prefWidth="70.0" text="RequestID" />
-            <TableColumn fx:id="memberID" minWidth="0.0" prefWidth="75.0" text="MemberID" />
-            <TableColumn fx:id="BookID" prefWidth="74.0" text="BookID" />
-            <TableColumn fx:id="IssueDate" prefWidth="115.0" text="Issue date" />
-            <TableColumn fx:id="DueDate" prefWidth="126.0" text="Due date" />
-            <TableColumn fx:id="ReturnDate" prefWidth="135.0" text="Return date" />
-            <TableColumn fx:id="Overdue" prefWidth="79.0" text="Overdue" />
-            <TableColumn fx:id="Status" prefWidth="190.0" text="Status" />
+            <TableColumn fx:id="requestID" prefWidth="37.0" text="STT" />
+            <TableColumn fx:id="memberID" minWidth="0.0" prefWidth="44.0" text="ID" />
+            <TableColumn fx:id="BookID" prefWidth="218.0" text="Tên Sách" />
+            <TableColumn fx:id="IssueDate" prefWidth="112.0" text="Mượn" />
+            <TableColumn fx:id="DueDate" prefWidth="98.0" text="Hạn" />
+            <TableColumn fx:id="ReturnDate" prefWidth="101.0" text="Trả" />
+            <TableColumn fx:id="Overdue" prefWidth="79.0" text="Quá hạn" />
+            <TableColumn fx:id="Status" prefWidth="175.0" text="Trạng thái" />
          </columns>
       </TableView>
       <HBox alignment="CENTER_RIGHT" layoutX="41.0" layoutY="622.0" prefHeight="66.0" prefWidth="865.0" spacing="15.0">

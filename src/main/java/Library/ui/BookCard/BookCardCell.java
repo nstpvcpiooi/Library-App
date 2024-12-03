@@ -57,8 +57,10 @@ public class BookCardCell extends ListCell<Book> {
 
                     // Update the UI on the JavaFX Application Thread
                     Platform.runLater(() -> {
-                        controller.cover.setImage(image);
-                        setGraphic(bookCard);
+                        if (getItem() == book) {
+                            controller.cover.setImage(image);
+                            setGraphic(bookCard);
+                        }
                     });
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -4,6 +4,7 @@ import Library.backend.Login.Model.Admin;
 import Library.backend.Request.DAO.RequestDAOImpl;
 import Library.backend.Request.Model.Request;
 import Library.ui.Utils.Notification;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,6 +17,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 /**
@@ -33,7 +39,7 @@ public class RequestManageController implements Initializable {
      * Cột hiển thị mã sách, mã người mượn, ngày mượn, ngày hết hạn, ngày trả, mã yêu cầu, trạng thái, quá hạn...
      */
     @FXML
-    private TableColumn<Request, Integer> BookID;
+    private TableColumn<Request, String> BookID;
 
     @FXML
     private TableColumn<Request, String> DueDate;
@@ -112,8 +118,10 @@ public class RequestManageController implements Initializable {
         if (selectedRequest != null) {
             if (selectedRequest.getStatus().equals("pending issue") || selectedRequest.getStatus().equals("pending return")) {
                 showButtons();
+                System.out.println("SHOW");
             } else {
                 hideButtons();
+                System.out.println("HIDE");
             }
         }
 
@@ -136,6 +144,28 @@ public class RequestManageController implements Initializable {
 
     }
 
+    private String normalizeDate(String dateString) {
+        if (dateString == null) {
+            return null;
+        }
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd"); // Adjust this format based on your input date format
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yy");
+
+        try {
+            Date date = inputFormat.parse(dateString);
+            return outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    private String formatDate(LocalDateTime dateTime) {
+        if (dateTime == null) {
+            return null;
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return dateTime.format(formatter);
+    }
     /**
      * Khởi tạo giao diện quản lý yêu cầu
      */
@@ -145,10 +175,19 @@ public class RequestManageController implements Initializable {
         refreshData();
         requestID.setCellValueFactory(new PropertyValueFactory<Request, Integer>("requestID"));
         memberID.setCellValueFactory(new PropertyValueFactory<Request, Integer>("memberID"));
-        BookID.setCellValueFactory(new PropertyValueFactory<Request, Integer>("bookID"));
-        IssueDate.setCellValueFactory(new PropertyValueFactory<Request, String>("issueDate"));
-        DueDate.setCellValueFactory(new PropertyValueFactory<Request, String>("dueDate"));
-        ReturnDate.setCellValueFactory(new PropertyValueFactory<Request, String>("returnDate"));
+        BookID.setCellValueFactory(new PropertyValueFactory<Request, String>("title"));
+        IssueDate.setCellValueFactory(cellData -> {
+            String normalizedDate = normalizeDate(formatDate(cellData.getValue().getIssueDate()));
+            return new SimpleStringProperty(normalizedDate);
+        });
+        DueDate.setCellValueFactory(cellData -> {
+            String normalizedDate = normalizeDate(formatDate(cellData.getValue().getDueDate()));
+            return new SimpleStringProperty(normalizedDate);
+        });
+        ReturnDate.setCellValueFactory(cellData -> {
+            String normalizedDate = normalizeDate(formatDate(cellData.getValue().getReturnDate()));
+            return new SimpleStringProperty(normalizedDate);
+        });
         Status.setCellValueFactory(new PropertyValueFactory<Request, String>("status"));
         Overdue.setCellValueFactory(new PropertyValueFactory<Request, Boolean>("overdue"));
     }
@@ -163,7 +202,7 @@ public class RequestManageController implements Initializable {
 
     public void setMainController(AdminMainController adminMainController) {
         this.MainController = adminMainController;
-        refreshData();
+
     }
 
     public AdminMainController getMainController() {
