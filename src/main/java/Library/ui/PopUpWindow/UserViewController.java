@@ -6,6 +6,7 @@ import Library.backend.Login.DAO.MemberDAOImpl;
 import Library.backend.Login.Model.Member;
 import Library.backend.Session.SessionManager;
 import Library.ui.Admin.AdminMainController;
+import Library.ui.MainController;
 import Library.ui.Utils.Notification;
 import Library.ui.Utils.VisiblePasswordFieldSkin;
 import javafx.event.ActionEvent;
@@ -85,6 +86,9 @@ public class UserViewController extends PopUpController implements Initializable
                 if (isDuplicateUsernameOrEmail(memberDAO, memberToUpdate)) return;
 
                 if (memberDAO.updateMember(memberToUpdate)) {
+                    if (SessionManager.getInstance().getLoggedInMember().getMemberID() == currentMemberID) {
+                        SessionManager.getInstance().setLoggedInMember(memberToUpdate);
+                    }
                     showNotification("Thành công!", "Thông tin người dùng đã được cập nhật.");
                 } else {
                     showNotification("Lỗi!", "Không thể cập nhật thông tin người dùng.");
@@ -92,8 +96,14 @@ public class UserViewController extends PopUpController implements Initializable
             }
 
             // Cập nhật danh sách người dùng trên giao diện
-            AdminMainController adminMainController = (AdminMainController) getPopUpWindow().getMainController();
-            adminMainController.userManageController.updateUSerList();
+            MainController mainController = getPopUpWindow().getMainController();
+            if (mainController instanceof AdminMainController) {
+                AdminMainController adminMainController = (AdminMainController) mainController;
+                adminMainController.userManageController.updateUSerList();
+            } else {
+                showNotification("Lỗi!", "Không thể cập nhật danh sách vì không phải AdminMainController.");
+            }
+
             getPopUpWindow().close();
 
         } catch (Exception e) {
@@ -101,6 +111,7 @@ public class UserViewController extends PopUpController implements Initializable
             showNotification("Lỗi!", "Đã xảy ra lỗi trong quá trình xử lý.");
         }
     }
+
 
     public void setData(Member user) {
         passwordFieldSkin.setDefault();

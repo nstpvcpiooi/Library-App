@@ -87,44 +87,9 @@ public class SearchTabController implements Initializable {
      */
     private List<Book> getSearchList(String query) {
         if (query == null || query.trim().isEmpty()) {
-            return Collections.emptyList(); // Không tìm kiếm nếu không có từ khóa
+            return Book.searchBooksValue("");
         }
-
-        // Tìm kiếm trên tất cả tiêu chí
         return Book.searchBooksValue(query);
-//        // TODO HERE
-//        if (query.equals("Business")) {
-//            ls.add(new Book("", "RICH DAD & POOR DAD", "Robert T.Kiyosaki",
-//                    1997, "Business", "978-3-16-148410-0",
-//                    "image/img.png", 1));
-//        } else if (query.equals("Science")) {
-//            ls.add(new Book("", "A BRIEF HISTORY OF TIME", "Stephen Hawking",
-//                    1988, "Science", "978-3-16-148410-1",
-//                    "image/img.png", 1));
-//        } else if (query.equals("Literature")) {
-//            ls.add(new Book("", "THE GREAT GATSBY", "F. Scott Fitzgerald",
-//                    1925, "Literature", "978-3-16-148410-2",
-//                    "image/img.png", 1));
-//        } else if (query.equals("Technology")) {
-//            ls.add(new Book("", "STEVE JOBS", "Walter Isaacson",
-//                    2011, "Technology", "978-3-16-148410-3",
-//                    "image/img.png", 1));
-//            ls.add(new Book("", "SAPIENS", "Yuval Noah Harari",
-//                    2011, "History", "978-3-16-148410-4",
-//                    "image/img.png", 1));
-//            ls.add(new Book("", "THE ALCHEMIST", "Paulo Coelho",
-//                    1988, "Novel", "978-3-16-148410-5",
-//                    "image/img.png", 1));
-//            ls.add(new Book("", "THE POWER OF HABIT", "Charles Duhigg",
-//                    2012, "Health", "978-3-16-148410-7",
-//                    "image/img.png", 1));
-//            ls.add(new Book("", "SALT, FAT, ACID, HEAT", "Samin Nosrat",
-//                    2017, "Cooking", "978-3-16-148410-8",
-//                    "image/img.png", 1));
-//        }
-//
-//        // RETURN
-//        return ls;
     }
 
     public UserMainController getMainController() {

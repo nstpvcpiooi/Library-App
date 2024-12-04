@@ -21,6 +21,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -179,7 +184,7 @@ public class BookInfoViewController extends PopUpController {
                 publishyear.setText(String.valueOf(book.getPublishYear()));
                 quantity.setText(String.valueOf(book.getQuantity()));
                 description.setText(book.fetchBookDescriptionFromAPI());
-                if (request != null) {
+                if (getPopUpWindow().getMainController() instanceof UserMainController) {
                     updateUserControls(request);
                 } else {
                     updateAdminControls();
@@ -205,7 +210,7 @@ public class BookInfoViewController extends PopUpController {
                     RemoveButton.getStyleClass().remove("BorrowedButton");
                     RemoveButton.setVisible(true);
                     RemoveButton.setDisable(false);
-                    showOverdue("Hạn trả: " + request.getDueDate());
+                    showOverdue("Hạn trả: " + normalizeDate(formatDate(request.getDueDate())));
                     break;
                 case "pending issue":
                     ActionButton.setText("ĐANG DUYỆT");
@@ -292,6 +297,29 @@ public class BookInfoViewController extends PopUpController {
                     System.out.println("Load cover và QR Code");
                 })
         );
+    }
+
+    private String normalizeDate(String dateString) {
+        if (dateString == null) {
+            return null;
+        }
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd"); // Adjust this format based on your input date format
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yy");
+
+        try {
+            Date date = inputFormat.parse(dateString);
+            return outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    private String formatDate(LocalDateTime dateTime) {
+        if (dateTime == null) {
+            return null;
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return dateTime.format(formatter);
     }
 
     protected void showOverdue(String... text) {

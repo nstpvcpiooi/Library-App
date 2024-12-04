@@ -74,6 +74,9 @@ public class GoogleBookDao implements BookDao {
         return List.of();
     }
 
+    @Override
+    public List<Book> advancedSearchBooks(String value, int limit, int offset) {return List.of();}
+
 
     @Override
     public Book fetchBookInfoFromAPI(String isbn) {
@@ -121,7 +124,6 @@ public class GoogleBookDao implements BookDao {
                     String category = bookInfo.has("categories") ? bookInfo.optJSONArray("categories").optString(0, "Unknown Category") : "Unknown Category";
                     String isbn13 = bookInfo.has("industryIdentifiers") ? bookInfo.getJSONArray("industryIdentifiers").getJSONObject(0).getString("identifier") : isbn;
                     String coverCode = bookInfo.has("imageLinks") ? bookInfo.getJSONObject("imageLinks").optString("thumbnail", "") : "";
-
                     // Tạo đối tượng Book và trả về
                     return new Book(bookID, title, author, publishYear, category, isbn13, coverCode, 1); // 1: trạng thái có sẵn
                 } else {
