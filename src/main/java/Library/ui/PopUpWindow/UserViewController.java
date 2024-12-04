@@ -46,16 +46,6 @@ public class UserViewController extends PopUpController implements Initializable
     @FXML
     void Save(ActionEvent event) throws InstantiationException, IllegalAccessException {
         if (tabTitle.getText().equals("THÊM USER MỚI")) {
-            if (username.getText().isEmpty() || password.getText().isEmpty() || verifypassword.getText().isEmpty() || email.getText().isEmpty() || phone.getText().isEmpty()) {
-                Notification notification = new Notification("Lỗi", "Vui lòng điền đầy đủ thông tin");
-                notification.display();
-                return;
-            }
-            if (!password.getText().equals(verifypassword.getText())) {
-                Notification notification = new Notification("Lỗi", "Mật khẩu không khớp");
-                notification.display();
-                return;
-            }
             MemberDAO memberDAO = MemberDAOImpl.getInstance();
             Member member = new Member();
             member.setUserName(username.getText());
@@ -74,6 +64,10 @@ public class UserViewController extends PopUpController implements Initializable
             member.setEmail(email.getText());
             member.setPhone(phone.getText());
             memberDAO.updateMember(member);
+
+            AdminMainController adminMainController = (AdminMainController) getPopUpWindow().getMainController();
+            adminMainController.userManageController.updateUSerList();
+
             System.out.println("Updated user: " + member);
             SessionManager.getInstance().setLoggedInMember(member);
         }
@@ -82,7 +76,7 @@ public class UserViewController extends PopUpController implements Initializable
         notification.display();
         // Refresh the data in UserManageController
         ;
-        
+
     }
 
     public void setData(Member user) {
