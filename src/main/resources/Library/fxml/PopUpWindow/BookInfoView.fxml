@@ -97,6 +97,20 @@
                         </Label>
                      </children>
                   </HBox>
+                  <HBox>
+                     <children>
+                        <Label contentDisplay="TOP" prefHeight="21.0" prefWidth="120.0" styleClass="InfoLabel" text="SỐ LƯỢNG SÁCH" textAlignment="RIGHT">
+                           <font>
+                              <Font name="Barlow ExtraBold" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="quantity" contentDisplay="TOP" prefHeight="18.0" prefWidth="320.0" styleClass="InfoLabel" text="quantity" textAlignment="RIGHT">
+                           <font>
+                              <Font name="Barlow Medium" size="13.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
                   <Separator prefWidth="200.0">
                      <VBox.margin>
                         <Insets top="10.0" />

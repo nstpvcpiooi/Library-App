@@ -20,6 +20,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
 import static Library.ui.MainController.DEFAULT_COVER;
+import static java.lang.String.valueOf;
 
 /**
  * Controller cho cửa sổ hiển thị thông tin sách chi tiết
@@ -52,6 +53,9 @@ public class BookInfoViewController extends PopUpController {
 
     @FXML
     private Label description;
+
+    @FXML
+    private Label quantity;
 
     @FXML
     private ImageView ImageQR;
@@ -162,10 +166,13 @@ public class BookInfoViewController extends PopUpController {
         author.setText(book.getAuthor());
         isbn.setText(book.getIsbn());
         category.setText(book.getCategory());
-        publishyear.setText(String.valueOf(book.getPublishYear()));
+        publishyear.setText(valueOf(book.getPublishYear()));
 
         // TODO: HIỂN THỊ MÔ TẢ SÁCH
         description.setText(book.fetchBookDescriptionFromAPI());
+
+        // TODO: HIỂN THỊ SỐ LƯỢNG SÁCH
+        quantity.setText(valueOf(book.getQuantity()));
 
         // TODO: HIỂN THỊ ẢNH QR
         // ImageQR.setImage(?????????????));
