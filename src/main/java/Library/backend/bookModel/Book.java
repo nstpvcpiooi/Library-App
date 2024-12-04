@@ -89,6 +89,12 @@ public class Book {
 
     }
 
+    public static Book getBookByIsbn(String strid){
+        ArrayList<Book> b= (ArrayList<Book>) searchBooks("isbn",strid);
+        return b.get(0);
+
+    }
+
     @Override
     public String toString() {
         return "Book [bookID=" + bookID + ", title=" + title + ", author=" + author + ", publishYear=" + publishYear
@@ -146,11 +152,12 @@ public class Book {
             if(i==30)break;
             i++;
         }
-*/
+*//*
         Book b=Book.getBookById("-90ewuAkZUsC");
         b.generateQrCodeForBook();
 
-
-
+*/
+        Book b= new Book("123","123","123",123,"123","123","123",123);
+        b.addBook();
     }
 }

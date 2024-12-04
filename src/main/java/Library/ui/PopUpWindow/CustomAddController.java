@@ -38,16 +38,22 @@ public class CustomAddController extends PopUpController {
         }
 
         try {
-            // Tạo đối tượng sách từ dữ liệu nhập vào
+            // Tạo bookID ngẫu nhiên bằng UUID
+            String randomBookID = java.util.UUID.randomUUID().toString();  // Tạo bookID ngẫu nhiên
+
+            // Nếu coverCode trống, thay bằng DEFAULT_COVER
+            String coverCode = cover.getImage() != null ? cover.getImage().getUrl() : String.valueOf(DEFAULT_COVER);
+
+            // Tạo đối tượng sách từ dữ liệu nhập vào, sắp xếp theo thứ tự constructor
             Book newBook = new Book(
-                    isbnCodeInput.getText(),
-                    titleInput.getText(),
-                    authorInput.getText(),
-                    Integer.parseInt(publishYearInput.getText()),
-                    categoryInput.getText(),
-                    "",
-                    "",
-                    Integer.parseInt(quantityInput.getText())
+                    randomBookID,  // bookID ngẫu nhiên
+                    titleInput.getText(),  // title
+                    authorInput.getText(),  // author
+                    Integer.parseInt(publishYearInput.getText()),  // publishYear
+                    categoryInput.getText(),  // category
+                    isbnCodeInput.getText().trim().isEmpty() ? null : isbnCodeInput.getText(),  // isbn
+                    coverCode,  // coverCode (sử dụng coverCode từ ảnh hoặc DEFAULT_COVER)
+                    Integer.parseInt(quantityInput.getText())  // quantity
             );
 
             // Lưu sách vào cơ sở dữ liệu
@@ -64,9 +70,10 @@ public class CustomAddController extends PopUpController {
         }
     }
 
+
     @FXML
     void goBack(ActionEvent event) {
-        getPopUpWindow().backtoAdd();
+        getPopUpWindow().backtoAdd();  // Kiểm tra lại phương thức này trong lớp cha nếu cần
     }
 
     /**
@@ -87,13 +94,17 @@ public class CustomAddController extends PopUpController {
      * @param book đối tượng Book chứa thông tin
      */
     private void displayBookDetails(Book book) {
-        isbnCodeInput.setText(book.getIsbn());
+        isbnCodeInput.setText(book.getIsbn() != null ? book.getIsbn() : "");
 
         try {
-            Image image = new Image(book.getCoverCode());
+            // Kiểm tra coverCode có hợp lệ không, nếu không thì dùng DEFAULT_COVER
+            String coverImageUrl = (book.getCoverCode() != null && !book.getCoverCode().isEmpty())
+                    ? book.getCoverCode()
+                    : String.valueOf(DEFAULT_COVER);
+            Image image = new Image(coverImageUrl);
             cover.setImage(image);
         } catch (Exception e) {
-            cover.setImage(DEFAULT_COVER);
+            cover.setImage(DEFAULT_COVER);  // Nếu gặp lỗi thì gán DEFAULT_COVER
         }
 
         titleInput.setText(book.getTitle());
@@ -102,6 +113,7 @@ public class CustomAddController extends PopUpController {
         publishYearInput.setText(Integer.toString(book.getPublishYear()));
         quantityInput.setText(Integer.toString(book.getQuantity()));
     }
+
 
     /**
      * Đặt lại giao diện về trạng thái ban đầu
@@ -122,17 +134,27 @@ public class CustomAddController extends PopUpController {
      */
     private boolean validateInputs() {
         try {
+            // Kiểm tra năm xuất bản
             int publishYear = Integer.parseInt(publishYearInput.getText());
             if (publishYear < 0) {
                 showNotification("Lỗi!", "Năm xuất bản phải là số không âm.");
                 return false;
             }
 
+            // Kiểm tra số lượng
             int quantity = Integer.parseInt(quantityInput.getText());
             if (quantity < 0) {
                 showNotification("Lỗi!", "Số lượng phải là số không âm.");
                 return false;
             }
+
+            // Kiểm tra các trường cần nhập không được để trống
+            if (titleInput.getText().trim().isEmpty()) {
+                showNotification("Lỗi!", "Tiêu đề sách không được để trống.");
+                return false;
+            }
+
+            // Không yêu cầu ISBN phải có giá trị, nếu để trống sẽ gán null
         } catch (NumberFormatException e) {
             showNotification("Lỗi!", "Vui lòng đảm bảo các trường số phải nhập đúng định dạng số nguyên.");
             return false;
