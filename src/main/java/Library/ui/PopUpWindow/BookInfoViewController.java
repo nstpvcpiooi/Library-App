@@ -19,6 +19,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
+import java.io.File;
+
 import static Library.ui.MainController.DEFAULT_COVER;
 import static java.lang.String.valueOf;
 
@@ -175,7 +177,26 @@ public class BookInfoViewController extends PopUpController {
         quantity.setText(valueOf(book.getQuantity()));
 
         // TODO: HIỂN THỊ ẢNH QR
-        // ImageQR.setImage(?????????????));
+        String qrCodePath = "src/main/resources/Library/" + selectedBook.getBookID() + "_qr.png";
+// Kiểm tra nếu file QR đã tồn tại
+        File qrFile = new File(qrCodePath);
+        if (qrFile.exists()) {
+            // Nếu file QR đã tồn tại, hiển thị ảnh QR
+            Image qrImage = new Image("file:" + qrCodePath);
+            ImageQR.setImage(qrImage);
+        } else {
+            // Nếu không có file QR, gọi hàm để tạo và lưu QR
+            selectedBook.generateQrCodeForBook(); // Gọi hàm tạo mã QR
+            // Sau khi tạo xong mã QR, ta thử lại để hiển thị ảnh QR
+            qrFile = new File(qrCodePath);
+            if (qrFile.exists()) {
+                Image qrImage = new Image("file:" + qrCodePath);
+                ImageQR.setImage(qrImage);
+            } else {
+                // Không hiển thị ảnh QR nếu không thể tạo
+                ImageQR.setImage(null); // Không hiển thị gì
+            }
+        }
 
         if (getPopUpWindow().getMainController() instanceof UserMainController) {
             // nếu sách đã được mượn thì hiển thị nút trả sách
