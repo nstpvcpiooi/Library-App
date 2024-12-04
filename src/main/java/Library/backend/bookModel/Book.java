@@ -39,6 +39,8 @@ public class Book {
         MysqlBookDao.getInstance().deleteBook(this.bookID);
     }
 
+
+
     // Cập nhật tài liệu
     public void updateBook(String newTitle, String newAuthor, int newPublishYear, String newCategory, String newIsbn,
                            String newCoverCode, int newQuantity) {
@@ -87,6 +89,12 @@ public class Book {
 
     }
 
+    public static Book getBookByIsbn(String strid){
+        ArrayList<Book> b= (ArrayList<Book>) searchBooks("isbn",strid);
+        return b.get(0);
+
+    }
+
     @Override
     public String toString() {
         return "Book [bookID=" + bookID + ", title=" + title + ", author=" + author + ", publishYear=" + publishYear
@@ -126,6 +134,10 @@ public class Book {
         return quantity; // Getter cho quantity
     }
 
+    public void setCoverCode(String s){
+        this.coverCode=s;
+    }
+
 
 
     public static List<Book> fetchAllBooksFromAPI() {
@@ -140,11 +152,12 @@ public class Book {
             if(i==30)break;
             i++;
         }
-*/
+*//*
         Book b=Book.getBookById("-90ewuAkZUsC");
         b.generateQrCodeForBook();
 
-
-
+*/
+        Book b= new Book("123","123","123",123,"123","123","123",123);
+        b.addBook();
     }
 }

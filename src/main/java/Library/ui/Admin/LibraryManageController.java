@@ -89,7 +89,7 @@ public class LibraryManageController implements Initializable {
      */
     private List<Book> getSearchList(String query) {
         if(query.isEmpty()) {
-            return Book.searchBooks("category","Psychology");
+            return Book.searchBooks("category","");
 //            return Book.searchBooks("category", "Literary Criticism");
         }
         List<Book> ls = new ArrayList<>();
