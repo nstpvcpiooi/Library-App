@@ -122,6 +122,29 @@ public class MemberDAOImpl implements MemberDAO {
     }
 
     @Override
+    public Member getMemberByUsername(String username) {
+        try (Connection connection = JDBCUtil.getConnection()) {
+            String query = "SELECT * FROM Members WHERE userName = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, username);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                Member member = new Member();
+                member.setMemberID(resultSet.getInt("memberID"));
+                member.setUserName(resultSet.getString("userName"));
+                member.setPassword(resultSet.getString("password"));
+                member.setEmail(resultSet.getString("email"));
+                member.setPhone(resultSet.getString("phone"));
+                return member;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public void updateOtp(Member member) {
         try (Connection connection = JDBCUtil.getConnection()) {
             String sql = "UPDATE members SET otp = ? WHERE email = ?";

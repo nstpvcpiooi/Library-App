@@ -109,7 +109,6 @@ public class LibraryManageController implements Initializable {
         } else {
             return Collections.emptyList();
         }
-
     }
 
     /**
