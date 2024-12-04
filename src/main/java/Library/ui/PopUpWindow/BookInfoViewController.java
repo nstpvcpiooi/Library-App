@@ -10,6 +10,7 @@ import Library.backend.bookModel.Book;
 import Library.ui.Admin.AdminMainController;
 import Library.ui.Utils.Notification;
 import Library.ui.User.UserMainController;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -20,6 +21,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
 import java.io.File;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static Library.ui.MainController.DEFAULT_COVER;
 import static java.lang.String.valueOf;
@@ -75,6 +79,8 @@ public class BookInfoViewController extends PopUpController {
 
     @FXML
     private HBox overdueBox;
+
+    private static final ExecutorService executorService = Executors.newFixedThreadPool(4); // Giới hạn 4 luồng
 
     @FXML
     void Remove(ActionEvent event) {
@@ -150,6 +156,7 @@ public class BookInfoViewController extends PopUpController {
         selectedBook = book;
 
         // 1. LẤY ẢNH BÌA SÁCH
+        /*
         try {
             // TODO KIỂM TRA ĐỊA CHỈ ẢNH BỊ LỖI?
             Image image = new Image(book.getCoverCode());
@@ -162,104 +169,130 @@ public class BookInfoViewController extends PopUpController {
             // demo với link ảnh trên web
 //            cover.setImage (new Image("https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg"));
         }
+        */
+        loadBookDetails(book);
+        Platform.runLater(() -> {
+            title.setText(book.getTitle());
+            author.setText(book.getAuthor());
+            isbn.setText(book.getIsbn());
+            category.setText(book.getCategory());
+            publishyear.setText(String.valueOf(book.getPublishYear()));
+            description.setText(book.fetchBookDescriptionFromAPI());
+            quantity.setText(String.valueOf(book.getQuantity()));
+        });
 
-        // 2. LẤY THONG TIN SÁCH
-        title.setText(book.getTitle());
-        author.setText(book.getAuthor());
-        isbn.setText(book.getIsbn());
-        category.setText(book.getCategory());
-        publishyear.setText(valueOf(book.getPublishYear()));
-
-        // TODO: HIỂN THỊ MÔ TẢ SÁCH
-        description.setText(book.fetchBookDescriptionFromAPI());
-
-        // TODO: HIỂN THỊ SỐ LƯỢNG SÁCH
-        quantity.setText(valueOf(book.getQuantity()));
-
-        // TODO: HIỂN THỊ ẢNH QR
-        String qrCodePath = "src/main/resources/Library/" + selectedBook.getBookID() + "_qr.png";
-// Kiểm tra nếu file QR đã tồn tại
-        File qrFile = new File(qrCodePath);
-        if (qrFile.exists()) {
-            // Nếu file QR đã tồn tại, hiển thị ảnh QR
-            Image qrImage = new Image("file:" + qrCodePath);
-            ImageQR.setImage(qrImage);
-        } else {
-            // Nếu không có file QR, gọi hàm để tạo và lưu QR
-            selectedBook.generateQrCodeForBook(); // Gọi hàm tạo mã QR
-            // Sau khi tạo xong mã QR, ta thử lại để hiển thị ảnh QR
-            qrFile = new File(qrCodePath);
-            if (qrFile.exists()) {
-                Image qrImage = new Image("file:" + qrCodePath);
-                ImageQR.setImage(qrImage);
-            } else {
-                // Không hiển thị ảnh QR nếu không thể tạo
-                ImageQR.setImage(null); // Không hiển thị gì
-            }
-        }
-
+        QRCodeHandler.handleQRCode(book, ImageQR);
         if (getPopUpWindow().getMainController() instanceof UserMainController) {
-            // nếu sách đã được mượn thì hiển thị nút trả sách
-            // hàm kiểm tra sách đã mượn?
+            // Xử lý trong luồng nền
+            CompletableFuture.runAsync(() -> {
+                SessionManager sessionManager = SessionManager.getInstance();
+                User user = new User(sessionManager.getLoggedInMember());
+                Request request = RequestDAOImpl.getInstance().getRequestByMemberIDAndBookID(user.getMemberID(), book.getBookID());
 
-            // if (!book.isBorrowed()) { ????????
-            SessionManager sessionManager = SessionManager.getInstance();
-            User user = new User(sessionManager.getLoggedInMember());
-            Request request = RequestDAOImpl.getInstance().getRequestByMemberIDAndBookID(user.getMemberID(), book.getBookID());
-            if (request == null) {
-                ActionButton.setText("MƯỢN SÁCH");
-                ActionButton.getStyleClass().remove("BorrowedButton");
-                ActionButton.setDisable(false);
-                RemoveButton.setVisible(false);
-            } else if (request.getStatus().equals("approved issue")) {
-                ActionButton.setText("ĐÃ MƯỢN");
-                ActionButton.getStyleClass().add("BorrowedButton");
-                ActionButton.setDisable(true);
-                RemoveButton.setText("TRẢ SÁCH");
-                RemoveButton.getStyleClass().remove("BorrowedButton");
-                RemoveButton.setVisible(true);
-                RemoveButton.setDisable(false);
-
-                // TODO: Hiện thông tin hạn trả sách
-                showOverdue("Hạn trả: " + request.getDueDate());
-            } else if (request.getStatus().equals("pending issue")) {
-                ActionButton.setText("ĐANG DUYỆT");
-                ActionButton.getStyleClass().add("BorrowedButton");
-                ActionButton.setDisable(true);
-                RemoveButton.setText("TRẢ SÁCH");
-                RemoveButton.setVisible(true);
-            }
-            else if (request.getStatus().equals("pending return")) {
-                ActionButton.setText("ĐÃ MƯỢN");
-                ActionButton.getStyleClass().add("BorrowedButton");
-                ActionButton.setDisable(true);
-                RemoveButton.setText("ĐANG TRẢ");
-                RemoveButton.setVisible(true);
-                RemoveButton.setDisable(true);
-                RemoveButton.getStyleClass().add("BorrowedButton");
-            }
-            else {
-                ActionButton.setText("MƯỢN SÁCH");
-                ActionButton.getStyleClass().remove("BorrowedButton");
-                ActionButton.setDisable(false);
-                RemoveButton.setVisible(false);
-            }
-
-
-            // } else {
-            //     ActionButton.setText("ĐANG MƯỢN");
-            //     ActionButton.getStyleClass().add("BorrowedButton");
-            //     ActionButton.setDisable(true);
-            //     RemoveButton.setText("TRẢ SÁCH");
-            //     RemoveButton.setVisible(true);
-            // }
-
+                Platform.runLater(() -> { // Cập nhật giao diện trên UI Thread
+                    if (request == null) {
+                        ActionButton.setText("MƯỢN SÁCH");
+                        ActionButton.getStyleClass().remove("BorrowedButton");
+                        ActionButton.setDisable(false);
+                        RemoveButton.setVisible(false);
+                    } else if ("approved issue".equals(request.getStatus())) {
+                        ActionButton.setText("ĐÃ MƯỢN");
+                        ActionButton.getStyleClass().add("BorrowedButton");
+                        ActionButton.setDisable(true);
+                        RemoveButton.setText("TRẢ SÁCH");
+                        RemoveButton.getStyleClass().remove("BorrowedButton");
+                        RemoveButton.setVisible(true);
+                        RemoveButton.setDisable(false);
+                        showOverdue("Hạn trả: " + request.getDueDate());
+                    } else if ("pending issue".equals(request.getStatus())) {
+                        ActionButton.setText("ĐANG DUYỆT");
+                        ActionButton.getStyleClass().add("BorrowedButton");
+                        ActionButton.setDisable(true);
+                        RemoveButton.setText("TRẢ SÁCH");
+                        RemoveButton.setVisible(true);
+                    } else if ("pending return".equals(request.getStatus())) {
+                        ActionButton.setText("ĐÃ MƯỢN");
+                        ActionButton.getStyleClass().add("BorrowedButton");
+                        ActionButton.setDisable(true);
+                        RemoveButton.setText("ĐANG TRẢ");
+                        RemoveButton.setVisible(true);
+                        RemoveButton.setDisable(true);
+                        RemoveButton.getStyleClass().add("BorrowedButton");
+                    } else {
+                        ActionButton.setText("MƯỢN SÁCH");
+                        ActionButton.getStyleClass().remove("BorrowedButton");
+                        ActionButton.setDisable(false);
+                        RemoveButton.setVisible(false);
+                    }
+                });
+            });
         } else {
-            ActionButton.setText("CHỈNH SỬA");
-            RemoveButton.setText("XÓA SÁCH");
-            RemoveButton.setVisible(true);
+            Platform.runLater(() -> { // Cập nhật giao diện trên UI Thread
+                ActionButton.setText("CHỈNH SỬA");
+                RemoveButton.setText("XÓA SÁCH");
+                RemoveButton.setVisible(true);
+            });
+        }
+    }
+
+    public class QRCodeHandler {
+        public static void handleQRCode(Book book, ImageView imageView) {
+            String qrCodePath = "src/main/resources/Library/" + book.getBookID() + "_qr.png";
+            File qrFile = new File(qrCodePath);
+
+            CompletableFuture.runAsync(() -> {
+                if (qrFile.exists()) {
+                    System.out.println("QR Code đã tồn tại: " + qrCodePath);
+                    loadImageToImageView(qrCodePath, imageView);
+                } else {
+                    System.out.println("Đang tạo QR Code mới cho sách: " + book.getTitle());
+                    try {
+                        String generatedQrCodePath = book.generateQrCodeForBook();
+                        loadImageToImageView(generatedQrCodePath, imageView);
+                    } catch (Exception e) {
+                        System.out.println("Lỗi khi tạo QR Code: " + e.getMessage());
+                    }
+                }
+            }, executorService);
         }
 
+        private static void loadImageToImageView(String imagePath, ImageView imageView) {
+            Platform.runLater(() -> {
+                try {
+                    Image qrImage = new Image("file:" + imagePath);
+                    imageView.setImage(qrImage);
+                } catch (Exception e) {
+                    System.out.println("Lỗi khi tải ảnh QR Code: " + e.getMessage());
+                }
+            });
+        }
+    }
+
+    public void loadBookCover(String coverCode) {
+        executorService.submit(() -> {
+            try {
+                Image image = new Image(coverCode, true);
+                Platform.runLater(() -> cover.setImage(image));
+            } catch (Exception e) {
+                System.err.println("Lỗi khi tải ảnh bìa: " + coverCode);
+                Platform.runLater(() -> cover.setImage(DEFAULT_COVER));
+            }
+        });
+    }
+
+    public void loadBookDetails(Book book) {
+        CompletableFuture<Void> coverTask = CompletableFuture.runAsync(() -> loadBookCover(book.getCoverCode()), executorService);
+        CompletableFuture<Void> qrCodeTask = CompletableFuture.runAsync(() -> QRCodeHandler.handleQRCode(book, ImageQR), executorService);
+        CompletableFuture<Void> descriptionTask = CompletableFuture.supplyAsync(book::fetchBookDescriptionFromAPI, executorService)
+                .thenAccept(descriptionText ->
+                        Platform.runLater(() -> description.setText(descriptionText))
+                );
+
+        CompletableFuture.allOf(coverTask, qrCodeTask).thenRun(() ->
+                Platform.runLater(() -> {
+                    System.out.println("Load cover và QR Code");
+                })
+        );
     }
 
     protected void showOverdue(String... text) {
@@ -276,5 +309,4 @@ public class BookInfoViewController extends PopUpController {
     protected void hideOverdue() {
         overdueBox.setVisible(false);
     }
-
 }
