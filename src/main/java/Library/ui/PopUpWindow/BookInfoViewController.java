@@ -80,8 +80,7 @@ public class BookInfoViewController extends PopUpController {
     @FXML
     private HBox overdueBox;
 
-    private static final ExecutorService executorService = Executors.newFixedThreadPool(4); // Giới hạn 4 luồng
-
+    private static final ExecutorService executorService = Executors.newFixedThreadPool(10);
     @FXML
     void Remove(ActionEvent event) {
         if (getPopUpWindow().getMainController() instanceof AdminMainController) {
@@ -152,87 +151,92 @@ public class BookInfoViewController extends PopUpController {
         }
     }
 
-    public void setData(Book book) {
+    public CompletableFuture<Void> setData(Book book) {
         selectedBook = book;
 
-        // 1. LẤY ẢNH BÌA SÁCH
-        /*
-        try {
-            // TODO KIỂM TRA ĐỊA CHỈ ẢNH BỊ LỖI?
-            Image image = new Image(book.getCoverCode());
-            cover.setImage(image);
-
-        } catch (Exception e) {
-            System.out.println("Error loading image from " + book.getCoverCode());
-            cover.setImage(DEFAULT_COVER);
-
-            // demo với link ảnh trên web
-//            cover.setImage (new Image("https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg"));
-        }
-        */
-        loadBookDetails(book);
-        Platform.runLater(() -> {
-            title.setText(book.getTitle());
-            author.setText(book.getAuthor());
-            isbn.setText(book.getIsbn());
-            category.setText(book.getCategory());
-            publishyear.setText(String.valueOf(book.getPublishYear()));
-            description.setText(book.fetchBookDescriptionFromAPI());
-            quantity.setText(String.valueOf(book.getQuantity()));
-        });
-
-        QRCodeHandler.handleQRCode(book, ImageQR);
-        if (getPopUpWindow().getMainController() instanceof UserMainController) {
-            // Xử lý trong luồng nền
-            CompletableFuture.runAsync(() -> {
+        // Tải dữ liệu đồng thời
+        CompletableFuture<Void> coverTask = CompletableFuture.runAsync(() -> loadBookCover(book.getCoverCode()), executorService);
+        CompletableFuture<Void> qrCodeTask = CompletableFuture.runAsync(() -> QRCodeHandler.handleQRCode(book, ImageQR), executorService);
+        CompletableFuture<Request> requestTask = CompletableFuture.supplyAsync(() -> {
+            if (getPopUpWindow().getMainController() instanceof UserMainController) {
                 SessionManager sessionManager = SessionManager.getInstance();
                 User user = new User(sessionManager.getLoggedInMember());
-                Request request = RequestDAOImpl.getInstance().getRequestByMemberIDAndBookID(user.getMemberID(), book.getBookID());
+                return RequestDAOImpl.getInstance().getRequestByMemberIDAndBookID(user.getMemberID(), book.getBookID());
+            }
+            return null; // Không cần tải request nếu là Admin
+        }, executorService);
 
-                Platform.runLater(() -> { // Cập nhật giao diện trên UI Thread
-                    if (request == null) {
-                        ActionButton.setText("MƯỢN SÁCH");
-                        ActionButton.getStyleClass().remove("BorrowedButton");
-                        ActionButton.setDisable(false);
-                        RemoveButton.setVisible(false);
-                    } else if ("approved issue".equals(request.getStatus())) {
-                        ActionButton.setText("ĐÃ MƯỢN");
-                        ActionButton.getStyleClass().add("BorrowedButton");
-                        ActionButton.setDisable(true);
-                        RemoveButton.setText("TRẢ SÁCH");
-                        RemoveButton.getStyleClass().remove("BorrowedButton");
-                        RemoveButton.setVisible(true);
-                        RemoveButton.setDisable(false);
-                        showOverdue("Hạn trả: " + request.getDueDate());
-                    } else if ("pending issue".equals(request.getStatus())) {
-                        ActionButton.setText("ĐANG DUYỆT");
-                        ActionButton.getStyleClass().add("BorrowedButton");
-                        ActionButton.setDisable(true);
-                        RemoveButton.setText("TRẢ SÁCH");
-                        RemoveButton.setVisible(true);
-                    } else if ("pending return".equals(request.getStatus())) {
-                        ActionButton.setText("ĐÃ MƯỢN");
-                        ActionButton.getStyleClass().add("BorrowedButton");
-                        ActionButton.setDisable(true);
-                        RemoveButton.setText("ĐANG TRẢ");
-                        RemoveButton.setVisible(true);
-                        RemoveButton.setDisable(true);
-                        RemoveButton.getStyleClass().add("BorrowedButton");
-                    } else {
-                        ActionButton.setText("MƯỢN SÁCH");
-                        ActionButton.getStyleClass().remove("BorrowedButton");
-                        ActionButton.setDisable(false);
-                        RemoveButton.setVisible(false);
-                    }
-                });
+
+        return CompletableFuture.allOf(coverTask, qrCodeTask, requestTask).thenRun(() -> {
+            Request request = requestTask.join();
+
+            // Cập nhật giao diện trên UI Thread
+            Platform.runLater(() -> {
+                title.setText(book.getTitle());
+                author.setText(book.getAuthor());
+                isbn.setText(book.getIsbn());
+                category.setText(book.getCategory());
+                publishyear.setText(String.valueOf(book.getPublishYear()));
+                quantity.setText(String.valueOf(book.getQuantity()));
+                description.setText(book.fetchBookDescriptionFromAPI());
+                if (request != null) {
+                    updateUserControls(request);
+                } else {
+                    updateAdminControls();
+                }
             });
+        });
+    }
+
+    // Cập nhật giao diện cho User
+    private void updateUserControls(Request request) {
+        if (request == null) {
+            ActionButton.setText("MƯỢN SÁCH");
+            ActionButton.getStyleClass().remove("BorrowedButton");
+            ActionButton.setDisable(false);
+            RemoveButton.setVisible(false);
         } else {
-            Platform.runLater(() -> { // Cập nhật giao diện trên UI Thread
-                ActionButton.setText("CHỈNH SỬA");
-                RemoveButton.setText("XÓA SÁCH");
-                RemoveButton.setVisible(true);
-            });
+            switch (request.getStatus()) {
+                case "approved issue":
+                    ActionButton.setText("ĐÃ MƯỢN");
+                    ActionButton.getStyleClass().add("BorrowedButton");
+                    ActionButton.setDisable(true);
+                    RemoveButton.setText("TRẢ SÁCH");
+                    RemoveButton.getStyleClass().remove("BorrowedButton");
+                    RemoveButton.setVisible(true);
+                    RemoveButton.setDisable(false);
+                    showOverdue("Hạn trả: " + request.getDueDate());
+                    break;
+                case "pending issue":
+                    ActionButton.setText("ĐANG DUYỆT");
+                    ActionButton.getStyleClass().add("BorrowedButton");
+                    ActionButton.setDisable(true);
+                    RemoveButton.setText("TRẢ SÁCH");
+                    RemoveButton.setVisible(true);
+                    break;
+                case "pending return":
+                    ActionButton.setText("ĐÃ MƯỢN");
+                    ActionButton.getStyleClass().add("BorrowedButton");
+                    ActionButton.setDisable(true);
+                    RemoveButton.setText("ĐANG TRẢ");
+                    RemoveButton.setVisible(true);
+                    RemoveButton.setDisable(true);
+                    RemoveButton.getStyleClass().add("BorrowedButton");
+                    break;
+                default:
+                    ActionButton.setText("MƯỢN SÁCH");
+                    ActionButton.getStyleClass().remove("BorrowedButton");
+                    ActionButton.setDisable(false);
+                    RemoveButton.setVisible(false);
+            }
         }
+    }
+
+    // Cập nhật giao diện cho Admin
+    private void updateAdminControls() {
+        ActionButton.setText("CHỈNH SỬA");
+        RemoveButton.setText("XÓA SÁCH");
+        RemoveButton.setVisible(true);
     }
 
     public class QRCodeHandler {
@@ -283,11 +287,6 @@ public class BookInfoViewController extends PopUpController {
     public void loadBookDetails(Book book) {
         CompletableFuture<Void> coverTask = CompletableFuture.runAsync(() -> loadBookCover(book.getCoverCode()), executorService);
         CompletableFuture<Void> qrCodeTask = CompletableFuture.runAsync(() -> QRCodeHandler.handleQRCode(book, ImageQR), executorService);
-        CompletableFuture<Void> descriptionTask = CompletableFuture.supplyAsync(book::fetchBookDescriptionFromAPI, executorService)
-                .thenAccept(descriptionText ->
-                        Platform.runLater(() -> description.setText(descriptionText))
-                );
-
         CompletableFuture.allOf(coverTask, qrCodeTask).thenRun(() ->
                 Platform.runLater(() -> {
                     System.out.println("Load cover và QR Code");
