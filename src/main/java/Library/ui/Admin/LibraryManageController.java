@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -75,10 +76,17 @@ public class LibraryManageController implements Initializable {
      */
     @FXML
     void search(KeyEvent event) {
-        String query = SearchText.getText();
-
-        SearchResult.getItems().clear();
-        SearchResult.getItems().addAll(getSearchList(query));
+        // kiem tra neu la phim nhap ky tu
+        if (event.getCode().isLetterKey() || event.getCode().isDigitKey() ||
+                event.getCode().isWhitespaceKey() || event.getCode().equals(KeyCode.ENTER)
+                || event.getCode().equals(KeyCode.BACK_SPACE) || event.getCode().equals(KeyCode.DELETE)) {
+            String query = SearchText.getText();
+            SearchResult.getItems().clear();
+            SearchResult.getItems().addAll(getSearchList(query));
+        }
+//        String query = SearchText.getText();
+//        SearchResult.getItems().clear();
+//        SearchResult.getItems().addAll(getSearchList(query));
     }
 
     /**
@@ -89,15 +97,15 @@ public class LibraryManageController implements Initializable {
      */
     private List<Book> getSearchList(String query) {
         if(query.isEmpty()) {
-            return Book.searchBooks("category","");
-//            return Book.searchBooks("category", "Literary Criticism");
+//            return Book.searchBooks("category","");
+            return Book.searchBooks("category", "Literary Criticism");
         }
         List<Book> ls = new ArrayList<>();
 
         ls = Book.searchBooks("title", query);
         if (ls != null) {
-            return Collections.singletonList(ls.get(0));
-//            return ls.subList(0, Math.min(ls.size(), 4));
+//            return Collections.singletonList(ls.get(0));
+            return ls.subList(0, Math.min(ls.size(), 4));
         } else {
             return Collections.emptyList();
         }

@@ -102,3 +102,17 @@ TextField, PasswordField {
     -fx-background-radius: 10px;
     -fx-background-color: white;
 }
+
+#overdueBox {
+    -fx-background-color: white;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-border-color: #ff5151;
+    -fx-border-width: 1.5px;
+}
+
+#overdueBox Label {
+    -fx-text-fill: #ff5151;
+    -fx-font-family: "Barlow SemiBold";
+    -fx-font-size: 13;
+}

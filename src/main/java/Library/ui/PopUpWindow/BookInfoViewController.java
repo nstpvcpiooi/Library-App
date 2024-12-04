@@ -17,8 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-
-import java.util.Scanner;
+import javafx.scene.layout.HBox;
 
 import static Library.ui.MainController.DEFAULT_COVER;
 
@@ -52,6 +51,9 @@ public class BookInfoViewController extends PopUpController {
     private Label publishyear;
 
     @FXML
+    private Label description;
+
+    @FXML
     private ImageView ImageQR;
 
     @FXML
@@ -61,6 +63,12 @@ public class BookInfoViewController extends PopUpController {
 
     @FXML
     private Button RemoveButton;
+
+    @FXML
+    private Label overdue;
+
+    @FXML
+    private HBox overdueBox;
 
     @FXML
     void Remove(ActionEvent event) {
@@ -98,11 +106,6 @@ public class BookInfoViewController extends PopUpController {
                 RemoveButton.setDisable(true);
                 RemoveButton.getStyleClass().add("BorrowedButton");
             }
-
-
-
-
-
         }
     }
 
@@ -161,6 +164,9 @@ public class BookInfoViewController extends PopUpController {
         category.setText(book.getCategory());
         publishyear.setText(String.valueOf(book.getPublishYear()));
 
+        // TODO: HIỂN THỊ MÔ TẢ SÁCH
+        description.setText(book.fetchBookDescriptionFromAPI());
+
         // TODO: HIỂN THỊ ẢNH QR
         // ImageQR.setImage(?????????????));
 
@@ -185,6 +191,9 @@ public class BookInfoViewController extends PopUpController {
                 RemoveButton.getStyleClass().remove("BorrowedButton");
                 RemoveButton.setVisible(true);
                 RemoveButton.setDisable(false);
+
+                // TODO: Hiện thông tin hạn trả sách
+                showOverdue("Hạn trả: " + request.getDueDate());
             } else if (request.getStatus().equals("pending issue")) {
                 ActionButton.setText("ĐANG DUYỆT");
                 ActionButton.getStyleClass().add("BorrowedButton");
@@ -223,6 +232,21 @@ public class BookInfoViewController extends PopUpController {
             RemoveButton.setVisible(true);
         }
 
+    }
+
+    protected void showOverdue(String... text) {
+        overdueBox.setVisible(true);
+
+        // thêm thông tin hạn trả sách
+        if (text.length > 0) {
+            overdue.setText(String.join("\n", text));
+        } else {
+            overdue.setText("Chưa có thông tin hạn trả");
+        }
+    }
+
+    protected void hideOverdue() {
+        overdueBox.setVisible(false);
     }
 
 }
