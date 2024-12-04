@@ -1,6 +1,7 @@
 package Library.ui.Admin;
 
 import Library.MainApplication;
+import Library.backend.bookModel.Book;
 import Library.ui.LogIn.AdminLogInController;
 import Library.ui.MainController;
 import javafx.fxml.FXML;

@@ -2,6 +2,8 @@ package Library.ui.Admin;
 
 import Library.backend.bookModel.Book;
 import Library.ui.BookCard.BookCardCell;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
@@ -24,6 +26,8 @@ import static Library.ui.BookCard.BookCardCell.BookCardType.LARGE;
  */
 public class LibraryManageController implements Initializable {
 
+    private ObservableList<Book> bookList = FXCollections.observableArrayList();
+
     /**
      * Nút thêm sách
      */
@@ -41,6 +45,7 @@ public class LibraryManageController implements Initializable {
      */
     @FXML
     private ListView<Book> SearchResult;
+
 
     /**
      * Ô nhập từ khóa tìm kiếm (chứa từ khóa tìm kiếm)
@@ -81,8 +86,8 @@ public class LibraryManageController implements Initializable {
                 event.getCode().isWhitespaceKey() || event.getCode().equals(KeyCode.ENTER)
                 || event.getCode().equals(KeyCode.BACK_SPACE) || event.getCode().equals(KeyCode.DELETE)) {
             String query = SearchText.getText();
-            SearchResult.getItems().clear();
-            SearchResult.getItems().addAll(getSearchList(query));
+            bookList.clear();
+            bookList.addAll(getSearchList(query));
         }
 //        String query = SearchText.getText();
 //        SearchResult.getItems().clear();
@@ -115,7 +120,7 @@ public class LibraryManageController implements Initializable {
      * Sau khi xóa sách, xoá sách khỏi danh sách kết quả tìm kiếm
      */
     public void removeBook(Book book) {
-        SearchResult.getItems().remove(book);
+        bookList.remove(book);
     }
 
     /**
@@ -135,11 +140,14 @@ public class LibraryManageController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // Gắn ObservableList vào ListView
+        SearchResult.setItems(bookList);
+
         // Khởi tạo book card cell
         SearchResult.setCellFactory(lv -> new BookCardCell(LARGE));
 
         // Hiển thị sách trong tab Library Manage khi mới mở ứng dụng
-        SearchResult.getItems().addAll(getSearchList(""));
+        bookList.addAll(getSearchList(""));
     }
 
     public void setMainController(AdminMainController adminMainController) {
@@ -148,5 +156,14 @@ public class LibraryManageController implements Initializable {
 
     public AdminMainController getMainController() {
         return MainController;
+    }
+
+    public void updateBookInList(Book updatedBook) {
+        for (int i = 0; i < bookList.size(); i++) {
+            if (bookList.get(i).getIsbn().equals(updatedBook.getIsbn())) {
+                bookList.set(i, updatedBook); // Cập nhật sách
+                break;
+            }
+        }
     }
 }

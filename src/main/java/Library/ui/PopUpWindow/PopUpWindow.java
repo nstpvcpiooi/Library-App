@@ -4,6 +4,7 @@ import Library.MainApplication;
 import Library.backend.Login.Model.Member;
 import Library.backend.bookModel.Book;
 import Library.ui.MainController;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -120,11 +121,15 @@ public class PopUpWindow {
     }
 
     public void displayInfo(Book selectedBook) {
-        PopUpStage.setScene(bookInfoScene);
         mainController.setBackgroundEffect();
-        bookInfoViewController.setData(selectedBook);
-        PopUpStage.show();
+        bookInfoViewController.setData(selectedBook).thenRun(() ->
+                Platform.runLater(() -> {
+                    PopUpStage.setScene(bookInfoScene);
+                    PopUpStage.show();
+                })
+        );
     }
+
 
     public void displayAdd() {
         PopUpStage.setScene(bookAddScene);
