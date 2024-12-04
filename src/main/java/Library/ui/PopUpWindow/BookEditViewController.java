@@ -1,6 +1,7 @@
 package Library.ui.PopUpWindow;
 
 import Library.backend.bookModel.Book;
+import Library.ui.Admin.AdminMainController;
 import Library.ui.Utils.Notification;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -66,8 +67,8 @@ public class BookEditViewController extends PopUpController {
                     Integer.parseInt(quantityInput.getText())
             );
             // Cập nhật giao diện
-            setData(b);  // Gọi lại setData để làm mới giao diện
-
+            AdminMainController mainController = (AdminMainController) getPopUpWindow().getMainController();
+            mainController.libraryManageController.updateBookInList(b);
             getPopUpWindow().close();  // Đóng cửa sổ popup
 
             // Hiển thị thông báo thành công
