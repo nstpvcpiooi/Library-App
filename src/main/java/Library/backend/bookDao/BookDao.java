@@ -15,6 +15,8 @@ public interface BookDao {
 
     List<Book> searchBooksValue(String value);
 
+    List<Book> advancedSearchBooks(String value, int limit, int offset);
+
     Book fetchBookInfoFromAPI(String isbn);
 
     void updateQuantity(String bookID, int n);

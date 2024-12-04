@@ -63,6 +63,9 @@ public class Book {
     public static ArrayList<Book> searchBooksValue(String value) {
         return (ArrayList<Book>) MysqlBookDao.getInstance().searchBooksValue(value);
     }
+    public static ArrayList<Book> advancedSearchBooks(String value, int limit, int offset) {
+        return (ArrayList<Library.backend.bookModel.Book>) MysqlBookDao.getInstance().advancedSearchBooks(value, limit, offset);
+    }
     // Tạo mã QR cho tài liệu, trả về đường dẫn đến file mã qr;
     public String generateQrCodeForBook() {
         GoogleBookDao.getInstance().generateQrCodeForBook(this.isbn);
