@@ -3,11 +3,14 @@ package Library.ui.PopUpWindow;
 import Library.backend.Login.Model.User;
 import Library.backend.Request.DAO.RequestDAOImpl;
 import Library.backend.Request.Model.Request;
+import Library.backend.Review.Dao.MysqlReviewDao;
+import Library.backend.Review.model.Review;
 import Library.backend.Session.SessionManager;
 import Library.backend.bookDao.BookDao;
 import Library.backend.bookDao.MysqlBookDao;
 import Library.backend.bookModel.Book;
 import Library.ui.Admin.AdminMainController;
+import Library.ui.BookCard.BookCardController;
 import Library.ui.Utils.Notification;
 import Library.ui.User.UserMainController;
 import javafx.application.Platform;
@@ -17,8 +20,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import org.controlsfx.control.Rating;
 
 import java.io.File;
 import java.text.ParseException;
@@ -84,6 +89,10 @@ public class BookInfoViewController extends PopUpController {
 
     @FXML
     private HBox overdueBox;
+    @FXML
+    private Rating Rating;
+    @FXML
+    private Rating YourRating;
 
     private static final ExecutorService executorService = Executors.newFixedThreadPool(10);
     @FXML
@@ -124,7 +133,16 @@ public class BookInfoViewController extends PopUpController {
             }
         }
     }
-
+    @FXML
+    void Rating(MouseEvent event)
+    {
+       // Review review = new Review()
+        System.out.println("Rating: " + YourRating.getRating());
+        //MysqlReviewDao.getInstance().addReview(selectedBook.getBookID(), YourRating.getRating());
+        SessionManager sessionManager = SessionManager.getInstance();
+        User user = new User(sessionManager.getLoggedInMember());
+        user.reviewBook(selectedBook.getBookID(), (int) YourRating.getRating(),"");
+    }
 
     @FXML
     void Action(ActionEvent event)  {
@@ -143,6 +161,9 @@ public class BookInfoViewController extends PopUpController {
                     return;
                 }
                 user.createIssueRequest(selectedBook.getBookID());
+                selectedBook = Book.getBookById(selectedBook.getBookID());
+                System.out.println("Số lượng sách còn lại: " + selectedBook.getQuantity());
+                setData(selectedBook);
                 ActionButton.setText("ĐANG DUYỆT");
                 ActionButton.getStyleClass().add("BorrowedButton");
                 ActionButton.setDisable(true);
@@ -184,6 +205,15 @@ public class BookInfoViewController extends PopUpController {
                 publishyear.setText(String.valueOf(book.getPublishYear()));
                 quantity.setText(String.valueOf(book.getQuantity()));
                 description.setText(book.fetchBookDescriptionFromAPI());
+                Rating.setRating(MysqlReviewDao.getInstance().getAverageRatingForBook(book.getBookID()));
+                if (MysqlReviewDao.getInstance().getReviewByBookAndMember(book.getBookID(),SessionManager.getInstance().getLoggedInMember().getMemberID())!=null)
+                YourRating.setRating(MysqlReviewDao.getInstance().getReviewByBookAndMember(book.getBookID(),SessionManager.getInstance().getLoggedInMember().getMemberID()).getRating());
+                else YourRating.setRating(0);
+                if (SessionManager.getInstance().getLoggedInMember().getDuty()==1) {
+                    YourRating.setDisable(true);
+                } else {
+                    YourRating.setDisable(false);
+                }
                 if (getPopUpWindow().getMainController() instanceof UserMainController) {
                     updateUserControls(request);
                 } else {
@@ -200,8 +230,16 @@ public class BookInfoViewController extends PopUpController {
             ActionButton.getStyleClass().remove("BorrowedButton");
             ActionButton.setDisable(false);
             RemoveButton.setVisible(false);
+            hideOverdue();
         } else {
             switch (request.getStatus()) {
+                case "":
+                    ActionButton.setText("MƯỢN SÁCH");
+                    ActionButton.getStyleClass().remove("BorrowedButton");
+                    ActionButton.setDisable(false);
+                    RemoveButton.setVisible(false);
+                    hideOverdue();
+                    break;
                 case "approved issue":
                     ActionButton.setText("ĐÃ MƯỢN");
                     ActionButton.getStyleClass().add("BorrowedButton");
@@ -218,6 +256,7 @@ public class BookInfoViewController extends PopUpController {
                     ActionButton.setDisable(true);
                     RemoveButton.setText("TRẢ SÁCH");
                     RemoveButton.setVisible(true);
+                    showOverdue("Hạn trả: " + normalizeDate(formatDate(request.getDueDate())));
                     break;
                 case "pending return":
                     ActionButton.setText("ĐÃ MƯỢN");
@@ -227,12 +266,16 @@ public class BookInfoViewController extends PopUpController {
                     RemoveButton.setVisible(true);
                     RemoveButton.setDisable(true);
                     RemoveButton.getStyleClass().add("BorrowedButton");
+                    showOverdue("Hạn trả: " + normalizeDate(formatDate(request.getDueDate())));
                     break;
                 default:
                     ActionButton.setText("MƯỢN SÁCH");
                     ActionButton.getStyleClass().remove("BorrowedButton");
                     ActionButton.setDisable(false);
                     RemoveButton.setVisible(false);
+                    System.out.println("Request status: " + request.getStatus());
+                    hideOverdue();
+                    System.out.println("Request status: " + request.getStatus());
             }
         }
     }

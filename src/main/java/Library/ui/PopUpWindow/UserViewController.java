@@ -100,6 +100,7 @@ public class UserViewController extends PopUpController implements Initializable
             if (mainController instanceof AdminMainController) {
                 AdminMainController adminMainController = (AdminMainController) mainController;
                 adminMainController.userManageController.updateUSerList();
+
             } else {
                 showNotification("Lỗi!", "Không thể cập nhật danh sách vì không phải AdminMainController.");
             }

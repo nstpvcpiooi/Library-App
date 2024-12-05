@@ -269,7 +269,7 @@ public class GoogleBookDao implements BookDao {
                 String previewLink = fetchBookPreviewLinkFromAPI(book);
                 if (!previewLink.equals("Không tìm thấy sách.")) {
                     // Đường dẫn lưu ảnh mã QR
-                    String filePath = "src/main/resources/Library/" + book.getBookID() + "_qr.png";
+                    String filePath = "src/main/resources/Library/" + book.getIsbn() + "_qr.png";
                     Path qrCodeFilePath = Paths.get(filePath);
 
                     // Kiểm tra nếu file ảnh mã QR đã tồn tại

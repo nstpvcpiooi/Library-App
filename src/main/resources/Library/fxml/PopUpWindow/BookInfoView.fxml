@@ -5,14 +5,17 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.Rating?>
 
-<AnchorPane id="container" fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="@../../css/popup.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.PopUpWindow.BookInfoViewController">
+<AnchorPane id="container" fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="@../../css/popup.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.PopUpWindow.BookInfoViewController">
    <children>
       <ImageView fitHeight="329.0" fitWidth="900.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -109,6 +112,7 @@
                               <Font name="Barlow Medium" size="13.0" />
                            </font>
                         </Label>
+                        <Label />
                      </children>
                   </HBox>
                   <Separator prefWidth="200.0">
@@ -157,6 +161,26 @@
                         <Label fx:id="overdue" alignment="CENTER" prefHeight="51.0" prefWidth="197.0" text="demo" />
                      </children>
                   </HBox>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="184.0" text="ĐÁNH GIÁ CHUNG" />
+                  <Rating fx:id="Rating" disable="true" layoutX="10.0" layoutY="205.0" partialRating="true" rating="5.0">
+                     <effect>
+                        <DropShadow>
+                           <color>
+                              <Color red="0.9473684430122375" green="0.5052631497383118" />
+                           </color>
+                        </DropShadow>
+                     </effect>
+                  </Rating>
+                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="206.0" text="ĐÁNH GIÁ CỦA BẠN" />
+                  <Rating fx:id="YourRating" onMouseClicked="#Rating" rating="0.0">
+                     <effect>
+                        <DropShadow>
+                           <color>
+                              <Color red="0.9473684430122375" green="0.5052631497383118" />
+                           </color>
+                        </DropShadow>
+                     </effect>
+                  </Rating>
                </children>
             </VBox>
          </children>
