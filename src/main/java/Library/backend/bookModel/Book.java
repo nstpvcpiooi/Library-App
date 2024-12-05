@@ -69,7 +69,7 @@ public class Book {
     // Tạo mã QR cho tài liệu, trả về đường dẫn đến file mã qr;
     public String generateQrCodeForBook() {
         GoogleBookDao.getInstance().generateQrCodeForBook(this.isbn);
-        return "src/main/resources/Library/" + this.bookID + "_qr.png";
+        return "src/main/resources/Library/" + this.isbn + "_qr.png";
     }
 
     // Tra cứu thông tin tài liệu từ API theo ISBN
