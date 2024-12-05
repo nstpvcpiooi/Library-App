@@ -51,7 +51,7 @@ public class CustomAddController extends PopUpController {
                     authorInput.getText(),  // author
                     Integer.parseInt(publishYearInput.getText()),  // publishYear
                     categoryInput.getText(),  // category
-                    isbnCodeInput.getText().trim().isEmpty() ? null : isbnCodeInput.getText(),  // isbn
+                    isbnCodeInput.getText().trim().isEmpty() ? randomBookID : isbnCodeInput.getText(),  // isbn
                     coverCode,  // coverCode (sử dụng coverCode từ ảnh hoặc DEFAULT_COVER)
                     Integer.parseInt(quantityInput.getText())  // quantity
             );

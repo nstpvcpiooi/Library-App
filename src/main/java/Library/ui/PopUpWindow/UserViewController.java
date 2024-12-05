@@ -6,6 +6,7 @@ import Library.backend.Login.DAO.MemberDAOImpl;
 import Library.backend.Login.Model.Member;
 import Library.backend.Session.SessionManager;
 import Library.ui.Admin.AdminMainController;
+import Library.ui.MainController;
 import Library.ui.Utils.Notification;
 import Library.ui.Utils.VisiblePasswordFieldSkin;
 import javafx.event.ActionEvent;
@@ -41,49 +42,76 @@ public class UserViewController extends PopUpController implements Initializable
     @FXML
     private Label tabTitle;
 
+    // Biến lưu trữ ID người dùng hiện tại
+    private int currentMemberID = -1;
 
 
     @FXML
-    void Save(ActionEvent event) throws InstantiationException, IllegalAccessException {
-        if (tabTitle.getText().equals("THÊM USER MỚI")) {
-            if (username.getText().isEmpty() || password.getText().isEmpty() || verifypassword.getText().isEmpty() || email.getText().isEmpty() || phone.getText().isEmpty()) {
-                Notification notification = new Notification("Lỗi", "Vui lòng điền đầy đủ thông tin");
-                notification.display();
-                return;
-            }
-            if (!password.getText().equals(verifypassword.getText())) {
-                Notification notification = new Notification("Lỗi", "Mật khẩu không khớp");
-                notification.display();
-                return;
-            }
+    void Save(ActionEvent event) {
+        try {
             MemberDAO memberDAO = MemberDAOImpl.getInstance();
-            Member member = new Member();
-            member.setUserName(username.getText());
-            member.setPassword(password.getText());
-            member.setEmail(email.getText());
-            member.setPhone(phone.getText());
-            memberDAO.createMember(member);
 
-            ((AdminMainController) getPopUpWindow().getMainController()).userManageController.updateUSerList();
-        } else {
-            MemberDAO memberDAO = MemberDAOImpl.getInstance();
-            Member member = new Member();
-            member.setMemberID(memberDAO.getMemberByEmail(email.getText()).getMemberID());
-            member.setUserName(username.getText());
-            member.setPassword(password.getText());
-            member.setEmail(email.getText());
-            member.setPhone(phone.getText());
-            memberDAO.updateMember(member);
-            System.out.println("Updated user: " + member);
-            SessionManager.getInstance().setLoggedInMember(member);
+            if (tabTitle.getText().equals("THÊM USER MỚI")) {
+                // Tạo người dùng mới
+                if (!validateInputs()) return; // Kiểm tra dữ liệu hợp lệ
+
+                Member newMember = new Member();
+                newMember.setUserName(username.getText());
+                newMember.setPassword(password.getText());
+                newMember.setEmail(email.getText());
+                newMember.setPhone(phone.getText());
+
+                if (memberDAO.createMember(newMember)) {
+                    showNotification("Thành công!", "Người dùng mới đã được thêm vào.");
+                } else {
+                    showNotification("Lỗi!", "Người dùng hoặc email đã tồn tại.");
+                    return;
+                }
+            } else {
+                // Cập nhật người dùng hiện tại
+                if (currentMemberID == -1) {
+                    showNotification("Lỗi!", "Không thể xác định tài khoản để cập nhật.");
+                    return;
+                }
+                if (!validateInputs()) return; // Kiểm tra dữ liệu hợp lệ
+
+                Member memberToUpdate = new Member();
+                memberToUpdate.setMemberID(currentMemberID); // Sử dụng ID đã lưu
+                memberToUpdate.setUserName(username.getText());
+                memberToUpdate.setPassword(password.getText());
+                memberToUpdate.setEmail(email.getText());
+                memberToUpdate.setPhone(phone.getText());
+
+                // Kiểm tra trùng lặp username hoặc email
+                if (isDuplicateUsernameOrEmail(memberDAO, memberToUpdate)) return;
+
+                if (memberDAO.updateMember(memberToUpdate)) {
+                    if (SessionManager.getInstance().getLoggedInMember().getMemberID() == currentMemberID) {
+                        SessionManager.getInstance().setLoggedInMember(memberToUpdate);
+                    }
+                    showNotification("Thành công!", "Thông tin người dùng đã được cập nhật.");
+                } else {
+                    showNotification("Lỗi!", "Không thể cập nhật thông tin người dùng.");
+                }
+            }
+
+            // Cập nhật danh sách người dùng trên giao diện
+            MainController mainController = getPopUpWindow().getMainController();
+            if (mainController instanceof AdminMainController) {
+                AdminMainController adminMainController = (AdminMainController) mainController;
+                adminMainController.userManageController.updateUSerList();
+            } else {
+                showNotification("Lỗi!", "Không thể cập nhật danh sách vì không phải AdminMainController.");
+            }
+
+            getPopUpWindow().close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showNotification("Lỗi!", "Đã xảy ra lỗi trong quá trình xử lý.");
         }
-        getPopUpWindow().close();
-        Notification notification = new Notification("Cập nhật thông tin người dùng", "Đã cập nhật thông tin người dùng thành công");
-        notification.display();
-        // Refresh the data in UserManageController
-        ;
-        
     }
+
 
     public void setData(Member user) {
         passwordFieldSkin.setDefault();
@@ -96,16 +124,57 @@ public class UserViewController extends PopUpController implements Initializable
             email.setText("");
             phone.setText("");
             return;
+        } else {
+            currentMemberID = user.getMemberID();
+            username.setText(user.getUserName());
+            password.setText(user.getPassword());
+            verifypassword.setText(user.getPassword());
+            email.setText(user.getEmail());
+            phone.setText(user.getPhone());
         }
-        username.setText(user.getUserName());
-        password.setText(user.getPassword());
-        verifypassword.setText(user.getPassword());
-        email.setText(user.getEmail());
-        phone.setText(user.getPhone());
     }
 
     public void setTabTitle(String title) {
         tabTitle.setText(title);
+    }
+
+    private boolean validateInputs() {
+        if (username.getText().isEmpty() || password.getText().isEmpty() || verifypassword.getText().isEmpty() ||
+                email.getText().isEmpty() || phone.getText().isEmpty()) {
+            showNotification("Lỗi!", "Vui lòng điền đầy đủ thông tin.");
+            return false;
+        }
+        if (!password.getText().equals(verifypassword.getText())) {
+            showNotification("Lỗi!", "Mật khẩu không khớp.");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Kiểm tra trùng lặp username hoặc email
+     */
+    private boolean isDuplicateUsernameOrEmail(MemberDAO memberDAO, Member memberToUpdate) {
+        Member existingUsername = memberDAO.getMemberByUsername(memberToUpdate.getUserName());
+        Member existingEmail = memberDAO.getMemberByEmail(memberToUpdate.getEmail());
+
+        if (existingUsername != null && existingUsername.getMemberID() != currentMemberID) {
+            showNotification("Lỗi!", "Tên người dùng đã tồn tại.");
+            return true;
+        }
+        if (existingEmail != null && existingEmail.getMemberID() != currentMemberID) {
+            showNotification("Lỗi!", "Email đã tồn tại.");
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Hiển thị thông báo
+     */
+    private void showNotification(String title, String message) {
+        Notification notification = new Notification(title, message);
+        notification.display();
     }
 
     VisiblePasswordFieldSkin passwordFieldSkin;

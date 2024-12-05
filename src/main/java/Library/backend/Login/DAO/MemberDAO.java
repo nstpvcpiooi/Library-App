@@ -9,6 +9,7 @@ import java.util.List;
 public interface MemberDAO {
     Member getMemberByUserNameAndPassword(String userName, String password);
     boolean createMember(Member member);
+    Member getMemberByUsername(String username);
     Member getMemberByEmail(String email);
     boolean updateMember(Member member);
     void updateOtp(Member member);

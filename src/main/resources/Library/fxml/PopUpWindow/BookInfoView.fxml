@@ -28,7 +28,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <HBox alignment="TOP_CENTER" layoutY="69.0" prefHeight="508.0" prefWidth="900.0" spacing="20.0">
+      <HBox alignment="TOP_CENTER" layoutY="67.0" prefHeight="533.0" prefWidth="900.0" spacing="20.0">
          <children>
             <VBox prefHeight="508.0" prefWidth="180.0" spacing="15.0">
                <HBox.margin>
@@ -43,7 +43,7 @@
                   <Button fx:id="RemoveButton" mnemonicParsing="false" onAction="#Remove" prefHeight="42.0" prefWidth="180.0" styleClass="WhiteButton" text="XÓA" visible="false" />
                </children>
             </VBox>
-            <VBox prefHeight="457.0" prefWidth="429.0" spacing="10.0">
+            <VBox prefHeight="524.0" prefWidth="429.0" spacing="10.0">
                <children>
                   <Label id="author" fx:id="author" prefHeight="17.0" prefWidth="445.0" text="Author">
                      <VBox.margin>
@@ -59,12 +59,12 @@
                      <children>
                         <Label contentDisplay="TOP" prefHeight="18.0" prefWidth="120.0" styleClass="InfoLabel" text="MÃ ISBN" textAlignment="RIGHT">
                            <font>
-                              <Font name="Barlow SemiBold" size="13.0" />
+                              <Font name="Barlow ExtraBold" size="13.0" />
                            </font>
                         </Label>
                         <Label fx:id="isbn" contentDisplay="TOP" prefHeight="18.0" prefWidth="320.0" styleClass="InfoLabel" text="isbn" textAlignment="RIGHT">
                            <font>
-                              <Font name="Barlow Regular" size="13.0" />
+                              <Font name="Barlow Medium" size="13.0" />
                            </font>
                         </Label>
                      </children>
@@ -73,12 +73,12 @@
                      <children>
                         <Label contentDisplay="TOP" prefHeight="18.0" prefWidth="120.0" styleClass="InfoLabel" text="THỂ LOẠI" textAlignment="RIGHT">
                            <font>
-                              <Font name="Barlow SemiBold" size="13.0" />
+                              <Font name="Barlow ExtraBold" size="13.0" />
                            </font>
                         </Label>
                         <Label fx:id="category" contentDisplay="TOP" prefHeight="18.0" prefWidth="320.0" styleClass="InfoLabel" text="category" textAlignment="RIGHT">
                            <font>
-                              <Font name="Barlow Regular" size="13.0" />
+                              <Font name="Barlow Medium" size="13.0" />
                            </font>
                         </Label>
                      </children>
@@ -87,35 +87,76 @@
                      <children>
                         <Label contentDisplay="TOP" prefHeight="21.0" prefWidth="120.0" styleClass="InfoLabel" text="NĂM PHÁT HÀNH" textAlignment="RIGHT">
                            <font>
-                              <Font name="Barlow SemiBold" size="13.0" />
+                              <Font name="Barlow ExtraBold" size="13.0" />
                            </font>
                         </Label>
                         <Label fx:id="publishyear" contentDisplay="TOP" prefHeight="18.0" prefWidth="320.0" styleClass="InfoLabel" text="yearpublish" textAlignment="RIGHT">
                            <font>
-                              <Font name="Barlow Regular" size="13.0" />
+                              <Font name="Barlow Medium" size="13.0" />
                            </font>
                         </Label>
                      </children>
                   </HBox>
+                  <HBox>
+                     <children>
+                        <Label contentDisplay="TOP" prefHeight="21.0" prefWidth="120.0" styleClass="InfoLabel" text="SỐ LƯỢNG SÁCH" textAlignment="RIGHT">
+                           <font>
+                              <Font name="Barlow ExtraBold" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="quantity" contentDisplay="TOP" prefHeight="18.0" prefWidth="320.0" styleClass="InfoLabel" text="quantity" textAlignment="RIGHT">
+                           <font>
+                              <Font name="Barlow Medium" size="13.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <Separator prefWidth="200.0">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Separator>
+                  <Label contentDisplay="TOP" prefHeight="18.0" prefWidth="120.0" styleClass="InfoLabel" text="MÔ TẢ SÁCH" textAlignment="RIGHT">
+                     <font>
+                        <Font name="Barlow ExtraBold" size="13.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="description" alignment="TOP_LEFT" prefHeight="205.0" prefWidth="429.0" styleClass="InfoLabel" text="Mô tả sách ở đây" textAlignment="JUSTIFY" wrapText="true">
+                     <font>
+                        <Font name="Barlow Medium" size="14.0" />
+                     </font>
+                  </Label>
                </children>
             </VBox>
-            <VBox id="QRpane" alignment="TOP_CENTER" maxHeight="-Infinity" prefHeight="195.0" prefWidth="167.0">
+            <VBox prefHeight="508.0" prefWidth="166.0">
                <children>
-                  <ImageView fx:id="ImageQR" fitHeight="205.0" fitWidth="149.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../18CeBQAAQBAJ_qr.png" />
-                     </image>
-                  </ImageView>
-                  <Label text="Quét mã QR">
-                     <font>
-                        <Font name="Barlow SemiBold" size="13.0" />
-                     </font>
-                  </Label>
-                  <Label text="để đọc bản xem trước">
-                     <font>
-                        <Font name="Barlow SemiBold" size="13.0" />
-                     </font>
-                  </Label>
+                  <VBox id="QRpane" alignment="TOP_CENTER" maxHeight="-Infinity" prefHeight="195.0" prefWidth="137.0">
+                     <children>
+                        <ImageView fx:id="ImageQR" fitHeight="205.0" fitWidth="149.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../18CeBQAAQBAJ_qr.png" />
+                           </image>
+                        </ImageView>
+                        <Label text="Quét mã QR">
+                           <font>
+                              <Font name="Barlow SemiBold" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label text="để đọc bản xem trước">
+                           <font>
+                              <Font name="Barlow SemiBold" size="13.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <HBox id="overdueBox" fx:id="overdueBox" prefHeight="33.0" prefWidth="200.0" visible="false">
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
+                     <children>
+                        <Label fx:id="overdue" alignment="CENTER" prefHeight="51.0" prefWidth="197.0" text="demo" />
+                     </children>
+                  </HBox>
                </children>
             </VBox>
          </children>

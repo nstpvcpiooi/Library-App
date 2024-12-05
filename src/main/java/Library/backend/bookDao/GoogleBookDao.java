@@ -8,6 +8,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +74,9 @@ public class GoogleBookDao implements BookDao {
         return List.of();
     }
 
+    @Override
+    public List<Book> advancedSearchBooks(String value, int limit, int offset) {return List.of();}
+
 
     @Override
     public Book fetchBookInfoFromAPI(String isbn) {
@@ -81,7 +87,7 @@ public class GoogleBookDao implements BookDao {
 
         try {
             // Tạo URL để gọi API Google Books với mã ISBN
-            URL url = new URL(API_URL + isbn +"&key=AIzaSyB-pJiUovcCyVGA6JvMC05gM_oG9-K9PSk");
+            URL url = new URL(API_URL + isbn +"&key=AIzaSyB7D91A7BOt29P9wCoiYi6ybeOn8R3DPW0");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
 
@@ -118,7 +124,6 @@ public class GoogleBookDao implements BookDao {
                     String category = bookInfo.has("categories") ? bookInfo.optJSONArray("categories").optString(0, "Unknown Category") : "Unknown Category";
                     String isbn13 = bookInfo.has("industryIdentifiers") ? bookInfo.getJSONArray("industryIdentifiers").getJSONObject(0).getString("identifier") : isbn;
                     String coverCode = bookInfo.has("imageLinks") ? bookInfo.getJSONObject("imageLinks").optString("thumbnail", "") : "";
-
                     // Tạo đối tượng Book và trả về
                     return new Book(bookID, title, author, publishYear, category, isbn13, coverCode, 1); // 1: trạng thái có sẵn
                 } else {
@@ -145,7 +150,7 @@ public class GoogleBookDao implements BookDao {
         String isbn = book.getIsbn(); // Lấy ISBN từ đối tượng Book
         try {
             // Tạo URL để gọi API Google Books với mã ISBN
-            URL url = new URL(API_URL + isbn +"&key=AIzaSyB-pJiUovcCyVGA6JvMC05gM_oG9-K9PSk");
+            URL url = new URL(API_URL + isbn +"&key=AIzaSyB7D91A7BOt29P9wCoiYi6ybeOn8R3DPW0");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
 
@@ -201,7 +206,7 @@ public class GoogleBookDao implements BookDao {
         String isbn = book.getIsbn(); // Lấy ISBN từ đối tượng Book
         try {
             // Tạo URL để gọi API Google Books với mã ISBN
-            URL url = new URL(API_URL + isbn +"&key=AIzaSyB-pJiUovcCyVGA6JvMC05gM_oG9-K9PSk");
+            URL url = new URL(API_URL + isbn +"&key=AIzaSyB7D91A7BOt29P9wCoiYi6ybeOn8R3DPW0");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
 
@@ -250,8 +255,14 @@ public class GoogleBookDao implements BookDao {
     @Override
     public void generateQrCodeForBook(String isbn) {
         try {
-            // Tạo kết nối đến cơ sở dữ liệu để lấy thông tin sách
-            Book book = fetchBookInfoFromAPI(isbn); // hoặc một phương thức khác để lấy Book
+            // Kiểm tra xem ISBN có hợp lệ không
+            if (isbn == null || isbn.trim().isEmpty()) {
+                System.out.println("Mã ISBN không hợp lệ.");
+                return;
+            }
+
+            // Tạo kết nối đến cơ sở dữ liệu hoặc API để lấy thông tin sách
+            Book book = fetchBookInfoFromAPI(isbn); // Lấy sách từ API hoặc cơ sở dữ liệu
 
             if (book != null) {
                 // Lấy link xem trước từ Google Books API
@@ -259,12 +270,12 @@ public class GoogleBookDao implements BookDao {
                 if (!previewLink.equals("Không tìm thấy sách.")) {
                     // Đường dẫn lưu ảnh mã QR
                     String filePath = "src/main/resources/Library/" + book.getBookID() + "_qr.png";
-                    File qrCodeFile = new File(filePath);
+                    Path qrCodeFilePath = Paths.get(filePath);
 
                     // Kiểm tra nếu file ảnh mã QR đã tồn tại
-                    if (qrCodeFile.exists()) {
+                    if (Files.exists(qrCodeFilePath)) {
                         System.out.println("Mã QR đã tồn tại tại: " + filePath);
-                        return; // Dừng lại nếu đã có file mã QR`
+                        return; // Dừng lại nếu đã có file mã QR
                     }
 
                     // Tạo mã QR với link preview
@@ -272,13 +283,13 @@ public class GoogleBookDao implements BookDao {
                     BitMatrix bitMatrix = qrCodeWriter.encode(previewLink, BarcodeFormat.QR_CODE, 300, 300);
 
                     // Lưu mã QR dưới dạng hình ảnh
-                    MatrixToImageWriter.writeToPath(bitMatrix, "PNG", qrCodeFile.toPath());
+                    MatrixToImageWriter.writeToPath(bitMatrix, "PNG", qrCodeFilePath);
                     System.out.println("Mã QR đã được lưu vào: " + filePath);
                 } else {
                     System.out.println("Không tìm thấy link xem trước cho sách với ID: " + book.getBookID());
                 }
             } else {
-                System.out.println("Không tìm thấy sách với ID: " + book.getBookID());
+                System.out.println("Không tìm thấy sách với ID: " + isbn);
             }
         } catch (WriterException e) {
             System.err.println("Lỗi khi tạo mã QR: " + e.getMessage());

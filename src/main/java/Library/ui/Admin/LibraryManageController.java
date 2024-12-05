@@ -2,10 +2,13 @@ package Library.ui.Admin;
 
 import Library.backend.bookModel.Book;
 import Library.ui.BookCard.BookCardCell;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -22,6 +25,8 @@ import static Library.ui.BookCard.BookCardCell.BookCardType.LARGE;
  * Controller cho giao diện quản lý thư viện của admin
  */
 public class LibraryManageController implements Initializable {
+
+    private ObservableList<Book> bookList = FXCollections.observableArrayList();
 
     /**
      * Nút thêm sách
@@ -40,6 +45,7 @@ public class LibraryManageController implements Initializable {
      */
     @FXML
     private ListView<Book> SearchResult;
+
 
     /**
      * Ô nhập từ khóa tìm kiếm (chứa từ khóa tìm kiếm)
@@ -75,10 +81,17 @@ public class LibraryManageController implements Initializable {
      */
     @FXML
     void search(KeyEvent event) {
-        String query = SearchText.getText();
-
-        SearchResult.getItems().clear();
-        SearchResult.getItems().addAll(getSearchList(query));
+        // kiem tra neu la phim nhap ky tu
+        if (event.getCode().isLetterKey() || event.getCode().isDigitKey() ||
+                event.getCode().isWhitespaceKey() || event.getCode().equals(KeyCode.ENTER)
+                || event.getCode().equals(KeyCode.BACK_SPACE) || event.getCode().equals(KeyCode.DELETE)) {
+            String query = SearchText.getText();
+            bookList.clear();
+            bookList.addAll(getSearchList(query));
+        }
+//        String query = SearchText.getText();
+//        SearchResult.getItems().clear();
+//        SearchResult.getItems().addAll(getSearchList(query));
     }
 
     /**
@@ -89,26 +102,25 @@ public class LibraryManageController implements Initializable {
      */
     private List<Book> getSearchList(String query) {
         if(query.isEmpty()) {
-            return Book.searchBooks("category","");
-//            return Book.searchBooks("category", "Literary Criticism");
+//            return Book.searchBooks("category","");
+            return Book.searchBooks("category", "Literary Criticism");
         }
         List<Book> ls = new ArrayList<>();
 
         ls = Book.searchBooks("title", query);
         if (ls != null) {
-            return Collections.singletonList(ls.get(0));
-//            return ls.subList(0, Math.min(ls.size(), 4));
+//            return Collections.singletonList(ls.get(0));
+            return ls.subList(0, Math.min(ls.size(), 4));
         } else {
             return Collections.emptyList();
         }
-
     }
 
     /**
      * Sau khi xóa sách, xoá sách khỏi danh sách kết quả tìm kiếm
      */
     public void removeBook(Book book) {
-        SearchResult.getItems().remove(book);
+        bookList.remove(book);
     }
 
     /**
@@ -128,11 +140,14 @@ public class LibraryManageController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // Gắn ObservableList vào ListView
+        SearchResult.setItems(bookList);
+
         // Khởi tạo book card cell
         SearchResult.setCellFactory(lv -> new BookCardCell(LARGE));
 
         // Hiển thị sách trong tab Library Manage khi mới mở ứng dụng
-        SearchResult.getItems().addAll(getSearchList(""));
+        bookList.addAll(getSearchList(""));
     }
 
     public void setMainController(AdminMainController adminMainController) {
@@ -141,5 +156,14 @@ public class LibraryManageController implements Initializable {
 
     public AdminMainController getMainController() {
         return MainController;
+    }
+
+    public void updateBookInList(Book updatedBook) {
+        for (int i = 0; i < bookList.size(); i++) {
+            if (bookList.get(i).getIsbn().equals(updatedBook.getIsbn())) {
+                bookList.set(i, updatedBook); // Cập nhật sách
+                break;
+            }
+        }
     }
 }

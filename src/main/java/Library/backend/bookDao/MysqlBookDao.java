@@ -177,6 +177,82 @@ public class MysqlBookDao implements BookDao {
     }
 
     @Override
+    public List<Book> advancedSearchBooks(String value, int limit, int offset) {
+        List<Book> books = new ArrayList<>();
+        if (value == null || value.trim().isEmpty()) {
+            System.err.println("Giá trị tìm kiếm không hợp lệ!");
+            return books;
+        }
+
+        String searchValue = "%" + value.trim() + "%";
+        String prefixValue = value.trim() + "%";
+
+        String sql = "SELECT *, " +
+                "   (CASE " +
+                "       WHEN LOWER(title) LIKE LOWER(?) THEN 100 " +
+                "       WHEN LOWER(title) LIKE LOWER(?) THEN 90 " +
+                "       WHEN LOWER(category) LIKE LOWER(?) THEN 80 " +
+                "       WHEN LOWER(author) LIKE LOWER(?) THEN 70 " +
+                "       WHEN LOWER(isbn) LIKE LOWER(?) THEN 60 " +
+                "       ELSE 50 " +
+                "    END) AS relevance, " +
+                "    LENGTH(title) - LENGTH(REPLACE(LOWER(title), LOWER(?), '')) AS frequency " +
+                "FROM Books " +
+                "WHERE LOWER(title) LIKE LOWER(?) " +
+                "   OR LOWER(category) LIKE LOWER(?) " +
+                "   OR LOWER(author) LIKE LOWER(?) " +
+                "   OR LOWER(isbn) LIKE LOWER(?) " +
+                "ORDER BY relevance DESC, frequency DESC, title ASC " +
+                "LIMIT ? OFFSET ?";
+
+        try (Connection con = JDBCUtil.getConnection();
+             PreparedStatement pst = con.prepareStatement(sql)) {
+
+            // Exact match
+            pst.setString(1, value);
+            // Prefix match
+            pst.setString(2, prefixValue);
+            // Category and other matches
+            pst.setString(3, prefixValue);
+            pst.setString(4, prefixValue);
+            pst.setString(5, prefixValue);
+
+            // Frequency calculation
+            pst.setString(6, value);
+
+            // WHERE conditions
+            pst.setString(7, searchValue);
+            pst.setString(8, searchValue);
+            pst.setString(9, searchValue);
+            pst.setString(10, searchValue);
+
+            // Pagination
+            pst.setInt(11, limit);
+            pst.setInt(12, offset);
+
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    books.add(new Book(
+                            rs.getString("bookID"),
+                            rs.getString("title"),
+                            rs.getString("author"),
+                            rs.getInt("publishYear"),
+                            rs.getString("category"),
+                            rs.getString("isbn"),
+                            rs.getString("coverCode"),
+                            rs.getInt("quantity")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Lỗi tìm kiếm: " + e.getMessage());
+        }
+
+        return books;
+    }
+
+    @Override
     public Book fetchBookInfoFromAPI(String isbn) {
         // ko viết trong lớp này
         return null;

@@ -101,6 +101,7 @@ public class RequestManageController implements Initializable {
             }
             Notification notification = new Notification("Success", "Request approved successfully");
             notification.display();
+            hideButtons(); // ẩn button approve sau khi đã approve xong
             refreshData();
         }
     }
