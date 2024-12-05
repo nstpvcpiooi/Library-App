@@ -166,4 +166,8 @@ public class LibraryManageController implements Initializable {
             }
         }
     }
+    public void refreshData() {
+        bookList.clear();
+        bookList.addAll(getSearchList(""));
+    }
 }
