@@ -293,17 +293,11 @@ public class BookInfoViewController extends PopUpController {
             File qrFile = new File(qrCodePath);
 
             CompletableFuture.runAsync(() -> {
-                if (qrFile.exists()) {
-                    System.out.println("QR Code đã tồn tại: " + qrCodePath);
-                    loadImageToImageView(qrCodePath, imageView);
-                } else {
-                    System.out.println("Đang tạo QR Code mới cho sách: " + book.getTitle());
-                    try {
-                        String generatedQrCodePath = book.generateQrCodeForBook();
-                        loadImageToImageView(generatedQrCodePath, imageView);
-                    } catch (Exception e) {
-                        System.out.println("Lỗi khi tạo QR Code: " + e.getMessage());
-                    }
+                try {
+                    String qrPath = qrFile.exists() ? qrCodePath : book.generateQrCodeForBook();
+                    loadImageToImageView(qrPath, imageView);
+                } catch (Exception e) {
+                    System.err.println("Lỗi khi xử lý QR Code: " + e.getMessage());
                 }
             }, executorService);
         }
