@@ -21,21 +21,21 @@ public class BookCardLargeController extends BookCardController {
 
         // 2. LẤY TIÊU ĐỀ
         title.setText(book.getTitle());
-        if (SessionManager.getInstance().getLoggedInMember().getDuty()==0)   {
-            if (RequestDAOImpl.getInstance().
-                    getRequestByMemberIDAndBookID
-                            (SessionManager.getInstance().getLoggedInMember().getMemberID(),
-                                    book.getBookID()).isOverdue() ) {
-                System.out.println("Overdue");
-                OverdueTag.setText("Quá hạn");
+
+        if (SessionManager.getInstance().getLoggedInMember().getDuty()==0)
+            if (RequestDAOImpl.getInstance().getRequestByMemberIDAndBookID(SessionManager.getInstance().getLoggedInMember().getMemberID(), book.getBookID()) != null) {
+                if (RequestDAOImpl.getInstance().
+                        getRequestByMemberIDAndBookID
+                                (SessionManager.getInstance().getLoggedInMember().getMemberID(),
+                                        book.getBookID()).isOverdue()) {
+                    System.out.println("Overdue");
+                    OverdueTag.setText("Quá hạn");
+                } else {
+                    OverdueTag.setVisible(false);
 
 
+                }
             }
-        } else {
-            OverdueTag.setVisible(false);
-
-
-        }
         // 3. LẤY TÊN TÁC GIẢ
         author.setText(book.getAuthor());
 
