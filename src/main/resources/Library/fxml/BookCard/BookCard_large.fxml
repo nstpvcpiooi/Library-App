@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox fx:id="container" alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="830.0" stylesheets="@../../css/BookCard.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.BookCard.BookCardLargeController">
+<HBox fx:id="container" alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="830.0" stylesheets="@../../css/BookCard.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.BookCard.BookCardLargeController">
    <children>
       <ImageView fx:id="cover" fitHeight="129.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
          <HBox.margin>
@@ -27,7 +27,22 @@
             <Label fx:id="title" text="Tiêu đề">
                <font>
                   <Font name="Barlow ExtraBold" size="16.0" />
-               </font></Label>
+               </font>
+            </Label>
+            <Label fx:id="quantity" text="Số lượng">
+               <font>
+                  <Font name="Barlow ExtraBold" size="16.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+      <VBox prefHeight="150.0" prefWidth="367.0">
+         <children>
+            <Label fx:id="OverdueTag" alignment="CENTER" prefHeight="152.0" prefWidth="168.0" textFill="RED">
+               <font>
+                  <Font name="System Bold" size="28.0" />
+               </font>
+            </Label>
          </children>
       </VBox>
    </children>

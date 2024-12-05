@@ -103,6 +103,7 @@ public class RequestManageController implements Initializable {
             notification.display();
             hideButtons(); // ẩn button approve sau khi đã approve xong
             refreshData();
+            MainController.libraryManageController.refreshData();
         }
     }
 

@@ -17,25 +17,36 @@ public class BookCardLargeController extends BookCardController {
     @Override
     public void setData(Book book) {
         // 1. LẤY ẢNH BÌA SÁCH
-        try {
-            // TODO KIỂM TRA ĐỊA CHỈ ẢNH BỊ LỖI?
-            Image image = new Image(book.getCoverCode());
-            System.out.println("Loading image from " + book.getCoverCode());
-            cover.setImage(image);
 
-        } catch (Exception e) {
-            System.out.println("Error loading image from " + book.getCoverCode());
-            cover.setImage(DEFAULT_COVER);
-
-            // demo với link ảnh trên web
-//            cover.setImage (new Image("https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg"));
-        }
 
         // 2. LẤY TIÊU ĐỀ
         title.setText(book.getTitle());
+        if (SessionManager.getInstance().getLoggedInMember().getDuty()==0)   {
+            if (RequestDAOImpl.getInstance().
+                    getRequestByMemberIDAndBookID
+                            (SessionManager.getInstance().getLoggedInMember().getMemberID(),
+                                    book.getBookID()).isOverdue() ) {
+                System.out.println("Overdue");
+                OverdueTag.setText("Quá hạn");
 
+
+            }
+        } else {
+            OverdueTag.setVisible(false);
+
+
+        }
         // 3. LẤY TÊN TÁC GIẢ
         author.setText(book.getAuthor());
+
+        if (SessionManager.getInstance().getLoggedInMember().getDuty()==1)   {
+            OverdueTag.setVisible(false);
+
+            quantity.setText("Số lượng: " + book.getQuantity());
+            quantity.setVisible(true);
+        } else {
+            quantity.setVisible(false);
+        }
         // if request exists and returnDate is null, show due date
         // (because it is not returned yet so we can show due date)
         // add highlight to the card if overdue
