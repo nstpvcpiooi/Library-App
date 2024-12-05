@@ -206,6 +206,11 @@ public class BookInfoViewController extends PopUpController {
                 quantity.setText(String.valueOf(book.getQuantity()));
                 description.setText(book.fetchBookDescriptionFromAPI());
                 Rating.setRating(MysqlReviewDao.getInstance().getAverageRatingForBook(book.getBookID()));
+                if (SessionManager.getInstance().getLoggedInMember().getDuty()==1) {
+                    YourRating.setDisable(true);
+                } else {
+                    YourRating.setDisable(false);
+                }
                 if (getPopUpWindow().getMainController() instanceof UserMainController) {
                     updateUserControls(request);
                 } else {
