@@ -1,5 +1,7 @@
 package Library.ui.Admin;
 
+import Library.backend.bookDao.GoogleBookDao;
+import Library.backend.bookDao.MysqlBookDao;
 import Library.backend.bookModel.Book;
 import Library.ui.BookCard.BookCardCell;
 import javafx.collections.FXCollections;
@@ -103,7 +105,7 @@ public class LibraryManageController implements Initializable {
     private List<Book> getSearchList(String query) {
         if(query.isEmpty()) {
 //            return Book.searchBooks("category","");
-            return Book.searchBooks("category", "Literary Criticism");
+            return Book.searchBooksValue("");
         }
         List<Book> ls = new ArrayList<>();
 
