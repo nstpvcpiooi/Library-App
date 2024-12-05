@@ -45,10 +45,6 @@ public class Recommendation {
         return daoInstance.getRecommendationsForMember(memberID);
     }
 
-    public static List<Book> findRecommendationsBasedOnPreferencesAndRequests(int memberID) {
-        return daoInstance.getRecommendationsBasedOnPreferencesAndRequests(memberID);
-    }
-
     public static List<Book> findPopularRecommendations() {
         return daoInstance.getPopularRecommendations();
     }

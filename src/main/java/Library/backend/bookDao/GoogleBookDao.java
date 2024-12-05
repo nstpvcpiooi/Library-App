@@ -87,7 +87,7 @@ public class GoogleBookDao implements BookDao {
 
         try {
             // Tạo URL để gọi API Google Books với mã ISBN
-            URL url = new URL(API_URL + isbn +"&key=AIzaSyB7D91A7BOt29P9wCoiYi6ybeOn8R3DPW0");
+            URL url = new URL(API_URL + isbn +"&key=AIzaSyAmWmP0OfkanSPfW72I5X0X4CwGn_84yTU");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
 
@@ -150,7 +150,7 @@ public class GoogleBookDao implements BookDao {
         String isbn = book.getIsbn(); // Lấy ISBN từ đối tượng Book
         try {
             // Tạo URL để gọi API Google Books với mã ISBN
-            URL url = new URL(API_URL + isbn +"&key=AIzaSyB7D91A7BOt29P9wCoiYi6ybeOn8R3DPW0");
+            URL url = new URL(API_URL + isbn +"&key=AIzaSyAmWmP0OfkanSPfW72I5X0X4CwGn_84yTU");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
 
@@ -206,7 +206,7 @@ public class GoogleBookDao implements BookDao {
         String isbn = book.getIsbn(); // Lấy ISBN từ đối tượng Book
         try {
             // Tạo URL để gọi API Google Books với mã ISBN
-            URL url = new URL(API_URL + isbn +"&key=AIzaSyB7D91A7BOt29P9wCoiYi6ybeOn8R3DPW0");
+            URL url = new URL(API_URL + isbn +"&key=AIzaSyAmWmP0OfkanSPfW72I5X0X4CwGn_84yTU");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
 

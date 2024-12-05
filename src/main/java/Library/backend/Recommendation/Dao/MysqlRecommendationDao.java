@@ -63,39 +63,6 @@ public class MysqlRecommendationDao implements RecommendationDao {
     }
 
     @Override
-    public List<Book> getRecommendationsBasedOnPreferencesAndRequests(int memberID) {
-        List<Book> booksList = new ArrayList<>();
-        String query = "SELECT DISTINCT b.* FROM Books b " +
-                "LEFT JOIN Requests r ON b.bookID = r.bookID " +
-                "WHERE r.memberID = ? OR b.category IN (" +
-                "  SELECT preferenceCategory FROM Recommendations WHERE memberID = ?" +
-                ") ORDER BY RAND() LIMIT 10";
-        try (Connection connection = JDBCUtil.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, memberID);
-            statement.setInt(2, memberID);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Book book = new Book(
-                        resultSet.getString("bookID"),
-                        resultSet.getString("title"),
-                        resultSet.getString("author"),
-                        resultSet.getInt("publishYear"),
-                        resultSet.getString("category"),
-                        resultSet.getString("isbn"),
-                        resultSet.getString("qrCode"),
-                       // resultSet.getInt("status"),
-                        resultSet.getInt("quantiy")
-                );
-                booksList.add(book);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return booksList;
-    }
-
-    @Override
     public List<Book> getPopularRecommendations() {
         List<Book> booksList = new ArrayList<>();
         String query = "SELECT b.*, AVG(r.rating) AS avgRating " +
@@ -205,13 +172,11 @@ public class MysqlRecommendationDao implements RecommendationDao {
     @Override
     public List<Book> getCombinedRecommendations(int memberID) {
         // Lấy danh sách từ các phương pháp khác nhau
-        List<Book> basedOnPreferences = getRecommendationsBasedOnPreferencesAndRequests(memberID);
         List<Book> basedOnBorrowHistory = getRecommendationsBasedOnBorrowHistory(memberID);
         List<Book> basedOnSimilarUsers = getRecommendationsFromSimilarUsers(memberID);
         List<Book> popularBooks = getPopularRecommendations();
 
         LinkedHashSet<Book> combinedRecommendations = new LinkedHashSet<>();
-        combinedRecommendations.addAll(basedOnPreferences);
         combinedRecommendations.addAll(basedOnBorrowHistory);
         combinedRecommendations.addAll(basedOnSimilarUsers);
         combinedRecommendations.addAll(popularBooks);
