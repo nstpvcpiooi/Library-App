@@ -10,6 +10,14 @@ UETLibz là ứng dụng quản lý thư viện số được phát triển cho 
 
 ## Giao diện người dùng
 
+![Giao diện 1](screenshot/screenshot_1.png)
+![Giao diện 2](screenshot/screenshot_2.png)
+![Giao diện 3](screenshot/screenshot_3.png)
+![Giao diện 4](screenshot/screenshot_4.png)
+![Giao diện 5](screenshot/screenshot_5.png)
+![Giao diện 6](screenshot/screenshot_6.png)
+![Giao diện 7](screenshot/screenshot_7.png)
+
 ## Cấu trúc ứng dụng
 
 Ứng dụng được tổ chức theo mô hình MVC (Model-View-Controller) với các thành phần chính:
