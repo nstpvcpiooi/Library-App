@@ -1,14 +1,13 @@
 package Library.ui.Admin;
 
 import Library.MainApplication;
-import Library.backend.bookModel.Book;
-import Library.ui.LogIn.AdminLogInController;
 import Library.ui.MainController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -31,14 +30,12 @@ public class AdminMainController extends MainController {
     @FXML
     private Pane UserManageButton;
 
-
-    /** ADMIN LOG IN*/
-    public AdminLogInController adminLogInController;
+    @FXML
+    private AnchorPane root;
 
     /** LibraryManage Tab */
     public LibraryManageController libraryManageController;
     public AnchorPane libraryManageTab;
-
 
     /** UserManage Tab */
     public UserManageController userManageController;
@@ -47,8 +44,6 @@ public class AdminMainController extends MainController {
     /** RequestManage Tab */
     public RequestManageController requestManageController;
     public AnchorPane requestManageTab;
-
-
 
     /**
      * Xử lý sự kiện khi click vào các nút điều hướng -> hiển thị tab tương ứng (setContentPane).
@@ -61,13 +56,12 @@ public class AdminMainController extends MainController {
             setContentPane(libraryManageTab);
         } else if (currentTab.equals(UserManageButton)) {
             setContentPane(userManageTab);
-            userManageController.hideButtons();
+//            userManageController.hideButtons();
         } else if (currentTab.equals(RequestManageButton)) {
             setContentPane(requestManageTab);
-            requestManageController.hideButtons();
+//            requestManageController.hideButtons();
         }
     }
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -110,14 +104,6 @@ public class AdminMainController extends MainController {
         ContentPane.getChildren().add(libraryManageTab);
 
         super.initialize(location, resources);
-    }
-
-    public Pane getLibraryManageButton() {
-        return LibraryManageButton;
-    }
-
-    public Pane getUserManageButton() {
-        return UserManageButton;
     }
 
 }

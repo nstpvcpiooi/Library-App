@@ -1,6 +1,7 @@
 package Library.ui.User;
 
 import Library.backend.Request.DAO.RequestDAOImpl;
+import Library.backend.Request.Model.Request;
 import Library.backend.Session.SessionManager;
 import Library.backend.bookModel.Book;
 import Library.ui.BookCard.BookCardCell;
@@ -8,18 +9,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
+
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import static Library.ui.BookCard.BookCardCell.BookCardType.LARGE;
 
-public class MyRequestTabController implements Initializable {
+public class MyRequestTabController extends UserTabController implements Initializable {
 
     @FXML
     private ListView<Book> BorrowedBooks;
-
-    private UserMainController userMainController;
 
     @FXML
     void SelectBook(MouseEvent event) {
@@ -28,9 +29,16 @@ public class MyRequestTabController implements Initializable {
     }
 
     private List<Book> getBorrowedBooks() {
-
-
-        return RequestDAOImpl.getInstance().getBooksByMemberID(SessionManager.getInstance().getLoggedInMember().getMemberID());
+        List<Book> allBooks = RequestDAOImpl.getInstance().getBooksByMemberID(SessionManager.getInstance().getLoggedInMember().getMemberID());
+        return allBooks.stream()
+            .filter(book -> {
+                Request request = RequestDAOImpl.getInstance().getRequestByMemberIDAndBookID(
+                    SessionManager.getInstance().getLoggedInMember().getMemberID(),
+                    book.getBookID()
+                );
+                return request != null && request.getStatus().equals("approved issue");
+            })
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -39,11 +47,4 @@ public class MyRequestTabController implements Initializable {
         BorrowedBooks.getItems().addAll(getBorrowedBooks());
     }
 
-    public UserMainController getMainController() {
-        return userMainController;
-    }
-
-    public void setMainController(UserMainController userMainController) {
-        this.userMainController = userMainController;
-    }
 }

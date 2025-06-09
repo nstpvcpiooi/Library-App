@@ -27,18 +27,17 @@ public class UserLogInController extends LogInTabController {
 
     @FXML
     void submit(ActionEvent event) {
-
         String username = this.username.getText();
         String password = this.password.getText();
         if(memberDAO.login(username, password) != null) {
+            // TODO: YES, set the logged in member to user
             SessionManager.getInstance().setLoggedInMember(memberDAO.login(username, password));
             logInViewController.setReturnType(LogInViewController.LogInType.USER);
-
             Stage current = ((Stage) submitButton.getScene().getWindow());
             current.close();
         }
         else {
-            // Notify the user that they have failed to log in
+            // TODO: Notify the user that they have failed to log in
             Notification notification = new Notification("Lỗi!", "Đăng nhập thất bại!");
             notification.display();
         }

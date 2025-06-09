@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="950.0" stylesheets="@../../css/table-view.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.Admin.UserManageController">
+<AnchorPane prefHeight="700.0" prefWidth="950.0" stylesheets="@../../css/table-view.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.Admin.UserManageController">
    <children>
-      <Label layoutX="42.0" layoutY="42.0" text="QUẢN LÝ NGƯỜI DÙNG" textFill="#e89e5f">
+      <Label layoutX="42.0" layoutY="42.0" styleClass="PageTitle" text="QUẢN LÝ NGƯỜI DÙNG" textFill="#e89e5f">
          <font>
             <Font name="Barlow ExtraBold" size="24.0" />
          </font>

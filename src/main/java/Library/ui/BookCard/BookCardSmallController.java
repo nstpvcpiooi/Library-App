@@ -14,7 +14,15 @@ public class BookCardSmallController extends BookCardController {
     public void setData(Book book) {
 
         // 1. LẤY ẢNH BÌA SÁCH
+        try {
+            // TODO KIỂM TRA ĐỊA CHỈ ẢNH BỊ LỖI?
+            Image image = new Image(book.getCoverCode());
+            cover.setImage(image);
 
+        } catch (Exception e) {
+            System.out.println("Error loading image from " + book.getCoverCode());
+            cover.setImage(DEFAULT_COVER);
+        }
 
         // 2. LẤY TIÊU ĐỀ
         title.setText(book.getTitle());

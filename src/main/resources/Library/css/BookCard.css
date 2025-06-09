@@ -1,5 +1,12 @@
+* {
+    -default-font-family: 'Inter', sans-serif;
+    -lighter-blue: #dcf1fd;
+    -blue: #2c7ce7;
+    -light-blue:#76cdff;
+}
+
 #container:hover {
-    -fx-background-color: #fff4e8;
+    -fx-background-color: -lighter-blue;
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
     -fx-cursor: hand;
@@ -9,6 +16,44 @@ VBox, HBox {
     -fx-background-color: transparent;
 }
 
+/* Base Label styles */
 Label {
-    -fx-text-fill: #e89e5f;
+    -fx-text-fill: -blue;
+    -fx-font-family: -default-font-family;
 }
+
+/* Specific styles for title and author labels */
+#title {
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+}
+
+#author {
+    -fx-font-size: 13px;
+}
+
+/* Override ListCell selection styles */
+.list-cell:selected {
+    -fx-background-color: transparent;
+}
+
+.list-cell:selected #container {
+    -fx-background-color: transparent;
+}
+
+/* Ensure labels maintain their style in all states */
+.list-cell:selected Label,
+.list-cell:selected #title,
+.list-cell:selected #author,
+.list-cell:focused Label,
+.list-cell:focused #title,
+.list-cell:focused #author {
+    -fx-text-fill: -blue;
+}
+
+/* Override any default selection text fill */
+.list-cell:selected .text {
+    -fx-fill: -blue;
+}
+
+

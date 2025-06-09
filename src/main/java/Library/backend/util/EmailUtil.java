@@ -1,19 +1,15 @@
 package Library.backend.util;
 
-
-import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
+import java.util.Properties;
 
 public class EmailUtil {
-
-
     public static void sendEmail(String to, String subject, String body) {
-        String from = "duongtuanminh2005@gmail.com";
+        String from = "minh30920051010@gmail.com";
         String host = "smtp.gmail.com";
-        final String username = "duongtuanminh2005@gmail.com";
+        final String username = "minh30920051010@gmail.com";
         final String password = "xxed tevp gavq nphs";
         Properties properties = System.getProperties();
         properties.setProperty("mail.smtp.host", host);
@@ -38,7 +34,6 @@ public class EmailUtil {
             System.out.println("Sent message successfully....");
         } catch (MessagingException mex) {
             mex.printStackTrace();
-
         }
     }
 }

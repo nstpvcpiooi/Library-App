@@ -3,37 +3,21 @@ package Library.ui.PopUpWindow;
 import Library.backend.Login.Model.User;
 import Library.backend.Request.DAO.RequestDAOImpl;
 import Library.backend.Request.Model.Request;
-import Library.backend.Review.Dao.MysqlReviewDao;
-import Library.backend.Review.model.Review;
 import Library.backend.Session.SessionManager;
 import Library.backend.bookDao.BookDao;
 import Library.backend.bookDao.MysqlBookDao;
 import Library.backend.bookModel.Book;
 import Library.ui.Admin.AdminMainController;
-import Library.ui.BookCard.BookCardController;
 import Library.ui.Utils.Notification;
 import Library.ui.User.UserMainController;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import org.controlsfx.control.Rating;
-
-import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import static Library.ui.MainController.DEFAULT_COVER;
 import static java.lang.String.valueOf;
@@ -89,12 +73,7 @@ public class BookInfoViewController extends PopUpController {
 
     @FXML
     private HBox overdueBox;
-    @FXML
-    private Rating Rating;
-    @FXML
-    private Rating YourRating;
 
-    private static final ExecutorService executorService = Executors.newFixedThreadPool(10);
     @FXML
     void Remove(ActionEvent event) {
         if (getPopUpWindow().getMainController() instanceof AdminMainController) {
@@ -104,25 +83,133 @@ public class BookInfoViewController extends PopUpController {
             getPopUpWindow().close();
             Notification notification = new Notification("Chúc mừng!", "Bạn đã xóa sách thành công");
             notification.display();
-
         } else if (getPopUpWindow().getMainController() instanceof UserMainController) {
             //  TODO: TRẢ SÁCH
             SessionManager sessionManager = SessionManager.getInstance();
             User user = new User(sessionManager.getLoggedInMember());
-            user.createReturnRequest(selectedBook.getBookID());
             Request request = RequestDAOImpl.getInstance().getRequestByMemberIDAndBookID(user.getMemberID(), selectedBook.getBookID());
-            RequestDAOImpl.getInstance().updateRequest(request);
-            //request = RequestDAOImpl.getInstance().getRequestByMemberIDAndBookID(user.getMemberID(), selectedBook.getBookID());
-            if (request.getStatus().equals("approved return")) {
-                ActionButton.setText("MƯỢN SÁCH");
+            
+            if (request != null && request.getStatus().equals("approved issue")) {
+                user.createReturnRequest(selectedBook.getBookID());
+                request = RequestDAOImpl.getInstance().getRequestByMemberIDAndBookID(user.getMemberID(), selectedBook.getBookID());
+                
+                if (request.getStatus().equals("pending return")) {
+                    ActionButton.setText("ĐÃ MƯỢN");
+                    ActionButton.getStyleClass().add("BorrowedButton");
+                    ActionButton.setDisable(true);
+                    RemoveButton.setText("ĐANG TRẢ");
+                    RemoveButton.setVisible(true);
+                    RemoveButton.setDisable(true);
+                    RemoveButton.getStyleClass().add("BorrowedButton");
+                    Notification notification = new Notification("Thông báo", "Yêu cầu trả sách đang chờ duyệt");
+                    notification.display();
+                }
+            }
+        }
+    }
 
+    @FXML
+    void Action(ActionEvent event)  {
+        if (getPopUpWindow().getMainController() instanceof AdminMainController) {
+            getPopUpWindow().displayEdit(selectedBook);
+        } else if (getPopUpWindow().getMainController() instanceof UserMainController) {
+            SessionManager sessionManager = SessionManager.getInstance();
+            User user = new User(sessionManager.getLoggedInMember());
+            
+            if (selectedBook.getQuantity() > 0) {
+                if (user.hasOverdueBook()) {
+                    Notification notification = new Notification("Lỗi!", "Bạn đang mượn sách quá hạn. Vui lòng trả sách trước khi mượn sách mới");
+                    notification.display();
+                    return;
+                }
+                
+                user.createIssueRequest(selectedBook.getBookID());
+                Request request = RequestDAOImpl.getInstance().getRequestByMemberIDAndBookID(user.getMemberID(), selectedBook.getBookID());
+                
+                if (request != null && request.getStatus().equals("pending issue")) {
+                    ActionButton.setText("ĐANG DUYỆT");
+                    ActionButton.getStyleClass().add("BorrowedButton");
+                    ActionButton.setDisable(true);
+                    RemoveButton.setText("HỦY MƯỢN");
+                    RemoveButton.setVisible(true);
+                    RemoveButton.setDisable(false);
+                    Notification notification = new Notification("Thông báo", "Yêu cầu mượn sách đang chờ duyệt");
+                    notification.display();
+                }
+            } else {
+                ActionButton.setText("HẾT SÁCH");
+                ActionButton.setDisable(true);
+                Notification notification = new Notification("Thông báo", "Sách hiện đang hết");
+                notification.display();
+            }
+        }
+    }
+
+    public void setData(Book book) {
+        selectedBook = book;
+
+        // 1. LẤY ẢNH BÌA SÁCH
+        try {
+            // TODO KIỂM TRA ĐỊA CHỈ ẢNH BỊ LỖI?
+            Image image = new Image(book.getCoverCode());
+            cover.setImage(image);
+
+        } catch (Exception e) {
+            System.out.println("Error loading image from " + book.getCoverCode());
+            cover.setImage(DEFAULT_COVER);
+
+            // demo với link ảnh trên web
+//            cover.setImage (new Image("https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg"));
+        }
+
+        // 2. LẤY THONG TIN SÁCH
+        title.setText(book.getTitle());
+        author.setText(book.getAuthor());
+        isbn.setText(book.getIsbn());
+        category.setText(book.getCategory());
+        publishyear.setText(valueOf(book.getPublishYear()));
+
+        // TODO: HIỂN THỊ MÔ TẢ SÁCH
+        description.setText(book.fetchBookDescriptionFromAPI());
+
+        // TODO: HIỂN THỊ SỐ LƯỢNG SÁCH
+//        quantity.setText(valueOf(book.getQuantity()));
+
+        // TODO: HIỂN THỊ ẢNH QR
+        // ImageQR.setImage(?????????????));
+
+        if (getPopUpWindow().getMainController() instanceof UserMainController) {
+            // nếu sách đã được mượn thì hiển thị nút trả sách
+            // hàm kiểm tra sách đã mượn?
+
+            // if (!book.isBorrowed()) { ????????
+            SessionManager sessionManager = SessionManager.getInstance();
+            User user = new User(sessionManager.getLoggedInMember());
+            Request request = RequestDAOImpl.getInstance().getRequestByMemberIDAndBookID(user.getMemberID(), book.getBookID());
+            if (request == null) {
+                ActionButton.setText("MƯỢN SÁCH");
                 ActionButton.getStyleClass().remove("BorrowedButton");
                 ActionButton.setDisable(false);
                 RemoveButton.setVisible(false);
-                Notification notification = new Notification("Chúc mừng!", "Bạn đã trả sách thành công");
-                notification.display();
+            } else if (request.getStatus().equals("approved issue")) {
+                ActionButton.setText("ĐÃ MƯỢN");
+                ActionButton.getStyleClass().add("BorrowedButton");
+                ActionButton.setDisable(true);
+                RemoveButton.setText("TRẢ SÁCH");
+                RemoveButton.getStyleClass().remove("BorrowedButton");
+                RemoveButton.setVisible(true);
+                RemoveButton.setDisable(false);
+
+                // TODO: Hiện thông tin hạn trả sách
+                showOverdue("Hạn trả: " + request.getDueDate());
+            } else if (request.getStatus().equals("pending issue")) {
+                ActionButton.setText("ĐANG DUYỆT");
+                ActionButton.getStyleClass().add("BorrowedButton");
+                ActionButton.setDisable(true);
+                RemoveButton.setText("TRẢ SÁCH");
+                RemoveButton.setVisible(true);
             }
-            else {
+            else if (request.getStatus().equals("pending return")) {
                 ActionButton.setText("ĐÃ MƯỢN");
                 ActionButton.getStyleClass().add("BorrowedButton");
                 ActionButton.setDisable(true);
@@ -131,232 +218,28 @@ public class BookInfoViewController extends PopUpController {
                 RemoveButton.setDisable(true);
                 RemoveButton.getStyleClass().add("BorrowedButton");
             }
-        }
-    }
-    @FXML
-    void Rating(MouseEvent event)
-    {
-       // Review review = new Review()
-        System.out.println("Rating: " + YourRating.getRating());
-        //MysqlReviewDao.getInstance().addReview(selectedBook.getBookID(), YourRating.getRating());
-        SessionManager sessionManager = SessionManager.getInstance();
-        User user = new User(sessionManager.getLoggedInMember());
-        user.reviewBook(selectedBook.getBookID(), (int) YourRating.getRating(),"");
-    }
-
-    @FXML
-    void Action(ActionEvent event)  {
-        if (getPopUpWindow().getMainController() instanceof AdminMainController) {
-            getPopUpWindow().displayEdit(selectedBook);
-        } else if (getPopUpWindow().getMainController() instanceof UserMainController) {
-
-            // TODO: MƯỢN SÁCH
-            SessionManager sessionManager = SessionManager.getInstance();
-            User user = new User(sessionManager.getLoggedInMember());
-            if (selectedBook.getQuantity()>0) {
-                if (user.hasOverdueBook())
-                {
-                    Notification notification = new Notification("Lỗi!", "Bạn đang mượn sách quá hạn. Vui lòng trả sách trước khi mượn sách mới");
-                    notification.display();
-                    return;
-                }
-                user.createIssueRequest(selectedBook.getBookID());
-                selectedBook = Book.getBookById(selectedBook.getBookID());
-                System.out.println("Số lượng sách còn lại: " + selectedBook.getQuantity());
-                setData(selectedBook);
-                ActionButton.setText("ĐANG DUYỆT");
-                ActionButton.getStyleClass().add("BorrowedButton");
-                ActionButton.setDisable(true);
-                RemoveButton.setText("TRẢ SÁCH");
-                RemoveButton.setVisible(true);
-            }
             else {
-                ActionButton.setText("HẾT SÁCH");
-                ActionButton.setDisable(true);
+                ActionButton.setText("MƯỢN SÁCH");
+                ActionButton.getStyleClass().remove("BorrowedButton");
+                ActionButton.setDisable(false);
+                RemoveButton.setVisible(false);
             }
-        }
-    }
-
-    public CompletableFuture<Void> setData(Book book) {
-        selectedBook = book;
-
-        // Tải dữ liệu đồng thời
-        CompletableFuture<Void> coverTask = CompletableFuture.runAsync(() -> loadBookCover(book.getCoverCode()), executorService);
-        CompletableFuture<Void> qrCodeTask = CompletableFuture.runAsync(() -> QRCodeHandler.handleQRCode(book, ImageQR), executorService);
-        CompletableFuture<Request> requestTask = CompletableFuture.supplyAsync(() -> {
-            if (getPopUpWindow().getMainController() instanceof UserMainController) {
-                SessionManager sessionManager = SessionManager.getInstance();
-                User user = new User(sessionManager.getLoggedInMember());
-                return RequestDAOImpl.getInstance().getRequestByMemberIDAndBookID(user.getMemberID(), book.getBookID());
-            }
-            return null; // Không cần tải request nếu là Admin
-        }, executorService);
 
 
-        return CompletableFuture.allOf(coverTask, qrCodeTask, requestTask).thenRun(() -> {
-            Request request = requestTask.join();
+            // } else {
+            //     ActionButton.setText("ĐANG MƯỢN");
+            //     ActionButton.getStyleClass().add("BorrowedButton");
+            //     ActionButton.setDisable(true);
+            //     RemoveButton.setText("TRẢ SÁCH");
+            //     RemoveButton.setVisible(true);
+            // }
 
-            // Cập nhật giao diện trên UI Thread
-            Platform.runLater(() -> {
-                title.setText(book.getTitle());
-                author.setText(book.getAuthor());
-                isbn.setText(book.getIsbn());
-                category.setText(book.getCategory());
-                publishyear.setText(String.valueOf(book.getPublishYear()));
-                quantity.setText(String.valueOf(book.getQuantity()));
-                description.setText(book.fetchBookDescriptionFromAPI());
-                Rating.setRating(MysqlReviewDao.getInstance().getAverageRatingForBook(book.getBookID()));
-                if (MysqlReviewDao.getInstance().getReviewByBookAndMember(book.getBookID(),SessionManager.getInstance().getLoggedInMember().getMemberID())!=null)
-                YourRating.setRating(MysqlReviewDao.getInstance().getReviewByBookAndMember(book.getBookID(),SessionManager.getInstance().getLoggedInMember().getMemberID()).getRating());
-                else YourRating.setRating(0);
-                if (SessionManager.getInstance().getLoggedInMember().getDuty()==1) {
-                    YourRating.setDisable(true);
-                } else {
-                    YourRating.setDisable(false);
-                }
-                if (getPopUpWindow().getMainController() instanceof UserMainController) {
-                    updateUserControls(request);
-                } else {
-                    updateAdminControls();
-                }
-            });
-        });
-    }
-
-    // Cập nhật giao diện cho User
-    private void updateUserControls(Request request) {
-        if (request == null) {
-            ActionButton.setText("MƯỢN SÁCH");
-            ActionButton.getStyleClass().remove("BorrowedButton");
-            ActionButton.setDisable(false);
-            RemoveButton.setVisible(false);
-            hideOverdue();
         } else {
-            switch (request.getStatus()) {
-                case "":
-                    ActionButton.setText("MƯỢN SÁCH");
-                    ActionButton.getStyleClass().remove("BorrowedButton");
-                    ActionButton.setDisable(false);
-                    RemoveButton.setVisible(false);
-                    hideOverdue();
-                    break;
-                case "approved issue":
-                    ActionButton.setText("ĐÃ MƯỢN");
-                    ActionButton.getStyleClass().add("BorrowedButton");
-                    ActionButton.setDisable(true);
-                    RemoveButton.setText("TRẢ SÁCH");
-                    RemoveButton.getStyleClass().remove("BorrowedButton");
-                    RemoveButton.setVisible(true);
-                    RemoveButton.setDisable(false);
-                    showOverdue("Hạn trả: " + normalizeDate(formatDate(request.getDueDate())));
-                    break;
-                case "pending issue":
-                    ActionButton.setText("ĐANG DUYỆT");
-                    ActionButton.getStyleClass().add("BorrowedButton");
-                    ActionButton.setDisable(true);
-                    RemoveButton.setText("TRẢ SÁCH");
-                    RemoveButton.setVisible(true);
-                    showOverdue("Hạn trả: " + normalizeDate(formatDate(request.getDueDate())));
-                    break;
-                case "pending return":
-                    ActionButton.setText("ĐÃ MƯỢN");
-                    ActionButton.getStyleClass().add("BorrowedButton");
-                    ActionButton.setDisable(true);
-                    RemoveButton.setText("ĐANG TRẢ");
-                    RemoveButton.setVisible(true);
-                    RemoveButton.setDisable(true);
-                    RemoveButton.getStyleClass().add("BorrowedButton");
-                    showOverdue("Hạn trả: " + normalizeDate(formatDate(request.getDueDate())));
-                    break;
-                default:
-                    ActionButton.setText("MƯỢN SÁCH");
-                    ActionButton.getStyleClass().remove("BorrowedButton");
-                    ActionButton.setDisable(false);
-                    RemoveButton.setVisible(false);
-                    System.out.println("Request status: " + request.getStatus());
-                    hideOverdue();
-                    System.out.println("Request status: " + request.getStatus());
-            }
-        }
-    }
-
-    // Cập nhật giao diện cho Admin
-    private void updateAdminControls() {
-        ActionButton.setText("CHỈNH SỬA");
-        RemoveButton.setText("XÓA SÁCH");
-        RemoveButton.setVisible(true);
-    }
-
-    public class QRCodeHandler {
-        public static void handleQRCode(Book book, ImageView imageView) {
-            String qrCodePath = "src/main/resources/Library/" + book.getBookID() + "_qr.png";
-            File qrFile = new File(qrCodePath);
-
-            CompletableFuture.runAsync(() -> {
-                try {
-                    String qrPath = qrFile.exists() ? qrCodePath : book.generateQrCodeForBook();
-                    loadImageToImageView(qrPath, imageView);
-                } catch (Exception e) {
-                    System.err.println("Lỗi khi xử lý QR Code: " + e.getMessage());
-                }
-            }, executorService);
+            ActionButton.setText("CHỈNH SỬA");
+            RemoveButton.setText("XÓA SÁCH");
+            RemoveButton.setVisible(true);
         }
 
-        private static void loadImageToImageView(String imagePath, ImageView imageView) {
-            Platform.runLater(() -> {
-                try {
-                    Image qrImage = new Image("file:" + imagePath);
-                    imageView.setImage(qrImage);
-                } catch (Exception e) {
-                    System.out.println("Lỗi khi tải ảnh QR Code: " + e.getMessage());
-                }
-            });
-        }
-    }
-
-    public void loadBookCover(String coverCode) {
-        executorService.submit(() -> {
-            try {
-                Image image = new Image(coverCode, true);
-                Platform.runLater(() -> cover.setImage(image));
-            } catch (Exception e) {
-                System.err.println("Lỗi khi tải ảnh bìa: " + coverCode);
-                Platform.runLater(() -> cover.setImage(DEFAULT_COVER));
-            }
-        });
-    }
-
-    public void loadBookDetails(Book book) {
-        CompletableFuture<Void> coverTask = CompletableFuture.runAsync(() -> loadBookCover(book.getCoverCode()), executorService);
-        CompletableFuture<Void> qrCodeTask = CompletableFuture.runAsync(() -> QRCodeHandler.handleQRCode(book, ImageQR), executorService);
-        CompletableFuture.allOf(coverTask, qrCodeTask).thenRun(() ->
-                Platform.runLater(() -> {
-                    System.out.println("Load cover và QR Code");
-                })
-        );
-    }
-
-    private String normalizeDate(String dateString) {
-        if (dateString == null) {
-            return null;
-        }
-        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd"); // Adjust this format based on your input date format
-        SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yy");
-
-        try {
-            Date date = inputFormat.parse(dateString);
-            return outputFormat.format(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-    private String formatDate(LocalDateTime dateTime) {
-        if (dateTime == null) {
-            return null;
-        }
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return dateTime.format(formatter);
     }
 
     protected void showOverdue(String... text) {
@@ -373,4 +256,5 @@ public class BookInfoViewController extends PopUpController {
     protected void hideOverdue() {
         overdueBox.setVisible(false);
     }
+
 }

@@ -4,12 +4,14 @@ import Library.MainApplication;
 import Library.backend.Login.Model.Member;
 import Library.backend.bookModel.Book;
 import Library.ui.MainController;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ListView;
 import javafx.scene.paint.Color;
-import javafx.stage.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
@@ -32,7 +34,7 @@ public class PopUpWindow {
     protected CustomAddController customAddController;
 
     protected Scene UserScene;
-    protected UserViewController userViewController;
+    protected UserConfigController userConfigController;
 
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
@@ -42,20 +44,19 @@ public class PopUpWindow {
         return mainController;
     }
 
-    public UserViewController getUserViewController() {
-        return userViewController;
+    public UserConfigController getUserViewController() {
+        return userConfigController;
     }
 
     /**
      * Constructor
      */
     public PopUpWindow() {
-
         PopUpStage = new Stage();
         PopUpStage.initStyle(StageStyle.TRANSPARENT);
         PopUpStage.initModality(Modality.APPLICATION_MODAL);
-        PopUpStage.setX(282);
-        PopUpStage.setY(110);
+        PopUpStage.setX(403.33331298828125);
+        PopUpStage.setY(162.66665649414062);
 
         // BookInfoView
         try {
@@ -109,29 +110,27 @@ public class PopUpWindow {
 
         // UserView
         try {
-            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("fxml/PopUpWindow/UserView.fxml"));
+            FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("fxml/PopUpWindow/UserConfig.fxml"));
             Parent root = loader.load();
-            userViewController = loader.getController();
-            userViewController.setPopUpWindow(this);
+            userConfigController = loader.getController();
+            userConfigController.setPopUpWindow(this);
             UserScene = new Scene(root);
             UserScene.setFill(Color.TRANSPARENT);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
     }
 
     public void displayInfo(Book selectedBook) {
+        PopUpStage.setScene(bookInfoScene);
         mainController.setBackgroundEffect();
-        bookInfoViewController.setData(selectedBook).thenRun(() ->
-                Platform.runLater(() -> {
-                    PopUpStage.setScene(bookInfoScene);
-                    PopUpStage.show();
-                })
-        );
+        bookInfoViewController.setData(selectedBook);
+        PopUpStage.show();
     }
 
-
-    public void displayAdd() {
+    public void displayAdd(ListView<Book> SearchResult) {
         PopUpStage.setScene(bookAddScene);
         mainController.setBackgroundEffect();
         PopUpStage.show();
@@ -171,7 +170,7 @@ public class PopUpWindow {
     public void displayUser(Member user) {
         PopUpStage.setScene(UserScene);
         mainController.setBackgroundEffect();
-        userViewController.setData(user);
+        userConfigController.setData(user);
         PopUpStage.show();
     }
 

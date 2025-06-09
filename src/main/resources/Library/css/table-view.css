@@ -1,3 +1,18 @@
+* {
+    -default-font-family: 'Inter', sans-serif;
+    -lighter-blue: #dcf1fd;
+    -blue: #2c7ce7;
+    -light-blue:#76cdff;
+    -background-blue: #f6fbff;
+}
+
+.PageTitle {
+    -fx-font-family: -default-font-family;
+    -fx-font-weight: bold;
+    -fx-font-size: 24;
+    -fx-text-fill: -blue;
+}
+
 #ID {
     -fx-alignment: center;
     -fx-text-alignment: center;
@@ -11,7 +26,7 @@
 
 .table-view{
     -fx-background-color: transparent;
-    -fx-font-family: "Barlow Medium";
+    -fx-font-family: "Inter Semi Bold";
     -fx-font-size: 14px;
 }
 
@@ -24,14 +39,14 @@
 }
 
 .table-view .column-header-background{
-    -fx-background-color: #e89e5f;
+    -fx-background-color: -blue;
     -fx-padding: 6px 0px 6px 0px;
 }
 
 .table-view .column-header-background .label{
     -fx-background-color: transparent;
     -fx-text-fill: white;
-    -fx-font-family: "Barlow SemiBold";
+    -fx-font-family: "Inter Semi Bold";
     -fx-font-size: 16px;
 }
 
@@ -46,7 +61,7 @@
 }
 
 .table-row-cell:even:selected, .table-row-cell:odd:selected {
-    -fx-background-color: #ffdec6;
+    -fx-background-color: -lighter-blue;
 }
 
 .table-row-cell:focused, .table-cell:focused{
@@ -65,7 +80,7 @@
     -fx-background-color: white;
 }
 .table-row-cell:even:hover, .table-row-cell:odd:hover{
-    -fx-background-color: #ffdec6;
+    -fx-background-color: -lighter-blue;
 }
 
 .table-row-cell:even:empty, .table-row-cell:odd:empty{
@@ -80,8 +95,9 @@
 }
 
 .ColorButton {
-    -fx-background-color: #e89e5f;
-    -fx-font-family: "Barlow ExtraBold";
+    -fx-background-color: -blue;
+    -fx-font-family: -default-font-family;
+    -fx-font-weight: bold;
     -fx-text-fill: white;
     -fx-font-size: 16;
     -fx-background-radius: 10px;
@@ -115,7 +131,7 @@
 }
 
 .scroll-bar:vertical .thumb {
-    -fx-background-color : #f4d2ba;
+    -fx-background-color : -lighter-blue;
     -fx-background-insets : 2.0, 0.0, 0.0;
     -fx-background-radius : 2.0em;
 }

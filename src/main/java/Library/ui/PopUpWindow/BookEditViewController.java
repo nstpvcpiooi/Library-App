@@ -41,34 +41,33 @@ public class BookEditViewController extends PopUpController {
     @FXML
     private TextField titleInput;
 
+    private Book selectedBook;
+
     /**
      * Hàm lưu thông tin sách sau khi chỉnh sửa
      * @param event sự kiện nhấn nút
      */
     @FXML
     void Save(ActionEvent event) {
-        boolean success = validateInputs();
-
-        if (success) {
+        if (validateInputs()) {
             // Lấy thông tin sách từ ISBN, sau đó cập nhật
-            Book b = Book.getBookByIsbn(isbnCodeInput.getText());
-            if (b == null) {
+            if (selectedBook == null) {
                 showNotification("Lỗi!", "Không tìm thấy sách với ISBN này.");
                 return;  // Dừng lại nếu không tìm thấy sách
             }
 
-            b.updateBook(
+            selectedBook.updateBook(
                     titleInput.getText(),
                     authorInput.getText(),
                     Integer.parseInt(publishYearInput.getText()),
                     categoryInput.getText(),
-                    b.getIsbn(),
-                    b.getCoverCode(),
+                    selectedBook.getIsbn(),
+                    selectedBook.getCoverCode(),
                     Integer.parseInt(quantityInput.getText())
             );
             // Cập nhật giao diện
-            AdminMainController mainController = (AdminMainController) getPopUpWindow().getMainController();
-            mainController.libraryManageController.updateBookInList(b);
+            setData(selectedBook);  // Gọi lại setData để làm mới giao diện
+            ((AdminMainController) getPopUpWindow().getMainController()).libraryManageController.getSearchResult().refresh();
             getPopUpWindow().close();  // Đóng cửa sổ popup
 
             // Hiển thị thông báo thành công
@@ -95,6 +94,8 @@ public class BookEditViewController extends PopUpController {
      * @param selectedBook sách được chọn
      */
     public void setData(Book selectedBook) {
+        this.selectedBook = selectedBook;
+
         isbnCodeInput.setText(selectedBook.getIsbn());
         titleInput.setText(selectedBook.getTitle());
         publishYearInput.setText(String.valueOf(selectedBook.getPublishYear()));

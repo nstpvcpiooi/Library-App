@@ -11,23 +11,21 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="950.0" stylesheets="@../../css/table-view.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.Admin.RequestManageController">
+<AnchorPane prefHeight="700.0" prefWidth="950.0" stylesheets="@../../css/table-view.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.Admin.RequestManageController">
    <children>
-      <Label layoutX="42.0" layoutY="42.0" text="QUẢN LÝ TRẢ SÁCH" textFill="#e89e5f">
+      <Label layoutX="42.0" layoutY="42.0" styleClass="PageTitle" text="QUẢN LÝ TRẢ SÁCH" textFill="#e89e5f">
          <font>
             <Font name="Barlow ExtraBold" size="24.0" />
          </font>
       </Label>
       <TableView fx:id="table" layoutX="42.0" layoutY="89.0" onMouseClicked="#selectItem" prefHeight="533.0" prefWidth="865.0">
          <columns>
-            <TableColumn fx:id="requestID" prefWidth="37.0" text="STT" />
-            <TableColumn fx:id="memberID" minWidth="0.0" prefWidth="44.0" text="ID" />
-            <TableColumn fx:id="BookID" prefWidth="218.0" text="Tên Sách" />
-            <TableColumn fx:id="IssueDate" prefWidth="112.0" text="Mượn" />
-            <TableColumn fx:id="DueDate" prefWidth="98.0" text="Hạn" />
-            <TableColumn fx:id="ReturnDate" prefWidth="101.0" text="Trả" />
-            <TableColumn fx:id="Overdue" prefWidth="79.0" text="Quá hạn" />
-            <TableColumn fx:id="Status" prefWidth="175.0" text="Trạng thái" />
+            <TableColumn fx:id="userName" minWidth="0.0" prefWidth="114.0" text="Username" />
+            <TableColumn fx:id="BookID" prefWidth="294.66668701171875" text="Tên Sách" />
+            <TableColumn fx:id="IssueDate" prefWidth="100.0" text="Mượn" />
+            <TableColumn fx:id="DueDate" prefWidth="100.0" text="Hạn" />
+            <TableColumn fx:id="ReturnDate" prefWidth="100.0" text="Trả" />
+            <TableColumn fx:id="Status" prefWidth="154.66670735677087" text="Trạng thái" />
          </columns>
       </TableView>
       <HBox alignment="CENTER_RIGHT" layoutX="41.0" layoutY="622.0" prefHeight="66.0" prefWidth="865.0" spacing="15.0">

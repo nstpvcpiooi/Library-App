@@ -2,10 +2,12 @@ package Library.ui.PopUpWindow;
 
 import Library.backend.bookDao.MysqlBookDao;
 import Library.backend.bookModel.Book;
+import Library.ui.Admin.AdminMainController;
 import Library.ui.Utils.Notification;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,8 +25,6 @@ public class CustomAddController extends PopUpController {
     @FXML
     private Button saveButton, backButton;
 
-    private String fetchedBookID = null; // Biến lưu tạm bookID từ API
-
     /**
      * Hàm xử lý sự kiện khi nhấn vào nút lưu thông tin sách
      * @param event sự kiện chuột
@@ -41,21 +41,19 @@ public class CustomAddController extends PopUpController {
 
         try {
             // Tạo bookID ngẫu nhiên bằng UUID
-            String bookID  = (fetchedBookID != null && !fetchedBookID.isEmpty())
-                    ? fetchedBookID
-                    : java.util.UUID.randomUUID().toString();
+            String randomBookID = java.util.UUID.randomUUID().toString();  // Tạo bookID ngẫu nhiên
 
             // Nếu coverCode trống, thay bằng DEFAULT_COVER
             String coverCode = cover.getImage() != null ? cover.getImage().getUrl() : String.valueOf(DEFAULT_COVER);
 
             // Tạo đối tượng sách từ dữ liệu nhập vào, sắp xếp theo thứ tự constructor
             Book newBook = new Book(
-                    bookID,  // bookID ngẫu nhiên
+                    randomBookID,  // bookID ngẫu nhiên
                     titleInput.getText(),  // title
                     authorInput.getText(),  // author
                     Integer.parseInt(publishYearInput.getText()),  // publishYear
                     categoryInput.getText(),  // category
-                    isbnCodeInput.getText().trim().isEmpty() ? bookID : isbnCodeInput.getText(),  // isbn
+                    isbnCodeInput.getText().trim().isEmpty() ? randomBookID : isbnCodeInput.getText(),  // isbn
                     coverCode,  // coverCode (sử dụng coverCode từ ảnh hoặc DEFAULT_COVER)
                     Integer.parseInt(quantityInput.getText())  // quantity
             );
@@ -63,6 +61,7 @@ public class CustomAddController extends PopUpController {
             // Lưu sách vào cơ sở dữ liệu
             MysqlBookDao bookDao = MysqlBookDao.getInstance();
             bookDao.addBook(newBook);
+            ((AdminMainController) getPopUpWindow().getMainController()).libraryManageController.getSearchResult().getItems().add(0, newBook);
 
             // Đóng popup và hiển thị thông báo thành công
             getPopUpWindow().close();
@@ -85,14 +84,11 @@ public class CustomAddController extends PopUpController {
      * @param selectedBook đối tượng Book được chọn
      */
     public void setData(Book selectedBook) {
-        System.out.println("ISBN Value: " + isbnCodeInput.getText());
         if (selectedBook != null) {
-            fetchedBookID = selectedBook.getBookID();
             displayBookDetails(selectedBook);
             selectedBook.setCoverCode(selectedBook.getCoverCode() != null ? selectedBook.getCoverCode() : "");
         } else {
             resetForm();
-            fetchedBookID = null;
         }
     }
 

@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.HashSet;
 public class MysqlRecommendationDao implements RecommendationDao {
     private static MysqlRecommendationDao instance;
 

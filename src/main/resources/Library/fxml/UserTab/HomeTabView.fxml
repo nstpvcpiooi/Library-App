@@ -6,37 +6,37 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="950.0" stylesheets="@../../css/hometab.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.User.HomeTabController">
+<AnchorPane prefHeight="700.0" prefWidth="950.0" stylesheets="@../../css/hometab.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.User.HomeTabController">
    <children>
       <ImageView fitHeight="210.0" fitWidth="950.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../image/peakpx.jpg" />
+            <Image url="@../../image/peakpx.png" />
          </image>
       </ImageView>
       <VBox id="welcome" fx:id="welcomeBox" alignment="CENTER" layoutX="73.0" layoutY="94.0" prefHeight="210.0" prefWidth="804.0" AnchorPane.leftAnchor="73.0" AnchorPane.rightAnchor="73.28571428571422" AnchorPane.topAnchor="94.0">
          <children>
-            <Label id="welcomeText" text="THƯ VIỆN UET" />
-            <Pane id="searchButton" fx:id="searchBar" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#SearchButtonClicked" prefHeight="45.0" prefWidth="467.0">
+            <Label id="welcomeText" text="UETlib!" />
+            <HBox id="searchButton" fx:id="searchBar" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#SearchButtonClicked" prefHeight="44.0" prefWidth="342.0" spacing="15.0">
                <VBox.margin>
                   <Insets top="40.0" />
                </VBox.margin>
                <children>
-                  <ImageView fitHeight="31.0" fitWidth="22.0" layoutX="193.0" layoutY="12.0" opacity="0.35" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="31.0" fitWidth="22.0" opacity="0.35" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../icon/search-icon-1.png" />
+                        <Image url="@../../icon/search-icon.png" />
                      </image>
                   </ImageView>
-                  <Label layoutX="223.0" layoutY="13.0" opacity="0.35" text="Search" />
+                  <Label opacity="0.35" text="Bạn đang tìm sách gì?" />
                </children>
-            </Pane>
+            </HBox>
          </children>
       </VBox>
       <ListView id="RecommendationList" fx:id="RecommendationList" layoutX="25.0" layoutY="415.0" onMouseClicked="#SelectBook" orientation="HORIZONTAL" prefHeight="130.0" prefWidth="900.0" />
-      <Label layoutX="31.0" layoutY="376.0" prefHeight="17.0" prefWidth="271.0" text="GỢI Ý ĐỌC SÁCH" textFill="#e89e5f">
+      <Label layoutX="31.0" layoutY="376.0" prefHeight="17.0" prefWidth="271.0" styleClass="PageTitle" text="GỢI Ý ĐỌC SÁCH" textFill="#e89e5f">
          <font>
             <Font name="Barlow ExtraBold" size="18.0" />
          </font>

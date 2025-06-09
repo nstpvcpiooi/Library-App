@@ -1,3 +1,11 @@
+* {
+    -default-font-family: 'Inter', sans-serif;
+    -lighter-blue: #dcf1fd;
+    -blue: #2c7ce7;
+    -light-blue:#76cdff;
+    -background-blue: #f6fbff;
+}
+
 #back {
     -fx-background-color: #e3e3e3;
     -fx-background-radius: 5px;
@@ -6,7 +14,7 @@
     -fx-cursor: hand;
 }
 
-#SearchBar {
+#SearchBar, #AddButton {
     -fx-background-color: #ffffff;
     -fx-background-radius: 20px;
     -fx-border-radius: 20px;
@@ -16,7 +24,7 @@
 
 #SearchText {
     -fx-background-color: transparent;
-    -fx-font-family: "Barlow SemiBold";
+    -fx-font-family: Inter;
     -fx-font-size: 20;
     -fx-text-fill: rgba(0, 0, 0, 0.7);
 }
@@ -38,7 +46,7 @@ ListView {
 }
 
 .list-cell:filled:selected:focused Label, .list-cell:filled:selected Label {
-    -fx-text-fill: #e89e5f;
+    -fx-text-fill: -blue;
 }
 
 .scroll-bar:vertical {
@@ -52,7 +60,7 @@ ListView {
 }
 
 .scroll-bar:vertical .thumb {
-    -fx-background-color : #f4d2ba;
+    -fx-background-color : -light-blue;
     -fx-background-insets : 2.0, 0.0, 0.0;
     -fx-background-radius : 2.0em;
 }

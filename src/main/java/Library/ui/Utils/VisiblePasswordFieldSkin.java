@@ -14,20 +14,12 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 
-/**
- * TextFieldSkin cho PasswordField, cho phép hiển thị hoặc ẩn mật khẩu.
- * (Hiển thị mật khẩu dưới dạng ký tự thường thay vì dấu chấm)
- */
 public class VisiblePasswordFieldSkin extends TextFieldSkin {
 
-    // Button để hiển thị hoặc ẩn mật khẩu
     private final Button actionButton = new Button("View");
     private final SVGPath actionIcon = new SVGPath();
+    public static final char BULLET = '•';
 
-    // Ký tự thay thế cho mật khẩu
-    public static final char BULLET = '●';
-
-    // Trạng thái hiện tại của mật khẩu (đang ẩn hay đang hiển thị)
     private boolean mask = true;
 
     public VisiblePasswordFieldSkin(PasswordField textField) {
@@ -36,7 +28,7 @@ public class VisiblePasswordFieldSkin extends TextFieldSkin {
 
         actionButton.setId("actionButton");
         actionButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-        actionButton.setPrefSize(20,20);
+        actionButton.setPrefSize(30,30);
         actionButton.setFocusTraversable(false);
         actionButton.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, new Insets(0))));
 
@@ -95,7 +87,7 @@ public class VisiblePasswordFieldSkin extends TextFieldSkin {
         }
     }
 
-    public enum Icons {
+    enum Icons {
 
         VIEWER_OFF("M12 6c3.79 0 7.17 2.13 8.82 5.5-.59 1.22-1.42 2.27-2." +
                 "41 3.12l1.41 1.41c1.39-1.23 2.49-2.77 3.18-4.53C21.27 7.11 17 4 12 4c-1.27 " +
@@ -120,4 +112,5 @@ public class VisiblePasswordFieldSkin extends TextFieldSkin {
         }
     }
 }
+
 

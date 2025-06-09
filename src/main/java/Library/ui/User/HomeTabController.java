@@ -10,7 +10,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,7 @@ import static Library.ui.BookCard.BookCardCell.BookCardType.SMALL;
 /**
  * Controller cho home tab.
  */
-public class HomeTabController implements Initializable {
+public class HomeTabController extends UserTabController implements Initializable {
 
     /** Nút tìm kiếm. Khi bấm vào sẽ chuyển sang Search tab */
     @FXML
@@ -36,8 +38,6 @@ public class HomeTabController implements Initializable {
     private VBox welcomeBox;
 
     RecommendationDao recommendationDao = MysqlRecommendationDao.getInstance();
-
-    private UserMainController userMainController;
 
     /** Khi click vào nút tìm kiếm, chuyển sang tab tìm kiếm */
     @FXML
@@ -55,7 +55,6 @@ public class HomeTabController implements Initializable {
         getMainController().getPopUpWindow().displayInfo(selectedBook);
     }
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         System.out.println("HomeTabController initialized");
@@ -63,22 +62,22 @@ public class HomeTabController implements Initializable {
         RecommendationList.getItems().addAll(getRecommendations());
     }
 
-
     // TODO Lấy reccomendation từ back-end
     private List<Book> getRecommendations() {
+//        SessionManager sessionManager = SessionManager.getInstance();
+//        Member member = sessionManager.getLoggedInMember();
+//        return recommendationDao.getCombinedRecommendations(member.getMemberID());
 
-        SessionManager sessionManager = SessionManager.getInstance();
-        Member member = sessionManager.getLoggedInMember();
-        return recommendationDao.getCombinedRecommendations(member.getMemberID());
+        List<Book> books = Book.searchBooksValue("");
+        List<Book> recommendations = new ArrayList<>();
 
-    }
+        for (int i = 0; i < 4; i++) {
+            int randomIndex = (int) (Math.random() * books.size());
+            recommendations.add(books.get(randomIndex));
+            books.remove(randomIndex);
+        }
+        return recommendations;
 
-    public UserMainController getMainController() {
-        return userMainController;
-    }
-
-    public void setMainController(UserMainController userMainController) {
-        this.userMainController = userMainController;
     }
 
 }

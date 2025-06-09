@@ -1,9 +1,11 @@
 package Library.ui.Admin;
 
+import Library.backend.Login.DAO.MemberDAOImpl;
 import Library.backend.Login.Model.Admin;
 import Library.backend.Request.DAO.RequestDAOImpl;
 import Library.backend.Request.Model.Request;
 import Library.ui.Utils.Notification;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,7 +29,7 @@ import java.util.ResourceBundle;
 /**
  * Controller cho giao diện quản lý yêu cầu của admin
  */
-public class RequestManageController implements Initializable {
+public class RequestManageController extends AdminTabController implements Initializable {
 
     /**
      * Bảng hiển thị danh sách yêu cầu
@@ -51,27 +53,18 @@ public class RequestManageController implements Initializable {
     private TableColumn<Request, String> ReturnDate;
 
     @FXML
-    private TableColumn<Request, Integer> memberID;
-
-    @FXML
-    private TableColumn<Request, Integer> requestID;
+    private TableColumn<Request, String> userName;
 
     @FXML
     private TableColumn<Request, String> Status;
 
-    @FXML
-    private TableColumn<Request, Boolean> Overdue;
+    private MemberDAOImpl memberDAO;
 
     /**
      * Nút duyệt yêu cầu
      */
     @FXML
     private Button approveButton;
-
-    /**
-     * Controller chính của admin
-     */
-    private AdminMainController MainController;
 
     /**
      * Duyệt yêu cầu (hàm xử lý sự kiện khi nhấn nút duyệt yêu cầu approveButton)
@@ -103,7 +96,7 @@ public class RequestManageController implements Initializable {
             notification.display();
             hideButtons(); // ẩn button approve sau khi đã approve xong
             refreshData();
-            MainController.libraryManageController.refreshData();
+            getMainController().libraryManageController.refreshData();
         }
     }
 
@@ -175,8 +168,14 @@ public class RequestManageController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         hideButtons();
         refreshData();
-        requestID.setCellValueFactory(new PropertyValueFactory<Request, Integer>("requestID"));
-        memberID.setCellValueFactory(new PropertyValueFactory<Request, Integer>("memberID"));
+
+        memberDAO = MemberDAOImpl.getInstance();
+
+        userName.setCellValueFactory(cellData -> {
+            int user_id = cellData.getValue().getMemberID();
+            String user_name = memberDAO.getUserNameByID(user_id);
+            return new SimpleStringProperty(user_name);
+        });
         BookID.setCellValueFactory(new PropertyValueFactory<Request, String>("title"));
         IssueDate.setCellValueFactory(cellData -> {
             String normalizedDate = normalizeDate(formatDate(cellData.getValue().getIssueDate()));
@@ -191,7 +190,6 @@ public class RequestManageController implements Initializable {
             return new SimpleStringProperty(normalizedDate);
         });
         Status.setCellValueFactory(new PropertyValueFactory<Request, String>("status"));
-        Overdue.setCellValueFactory(new PropertyValueFactory<Request, Boolean>("overdue"));
     }
 
     /**
@@ -200,14 +198,5 @@ public class RequestManageController implements Initializable {
     void refreshData() {
         ObservableList<Request> requests = FXCollections.observableArrayList(RequestDAOImpl.getInstance().getAllRequests());
         table.setItems(requests);
-    }
-
-    public void setMainController(AdminMainController adminMainController) {
-        this.MainController = adminMainController;
-
-    }
-
-    public AdminMainController getMainController() {
-        return MainController;
     }
 }

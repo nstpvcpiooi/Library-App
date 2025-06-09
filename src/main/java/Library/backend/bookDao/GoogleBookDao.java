@@ -1,7 +1,15 @@
 package Library.backend.bookDao;
 
+import Library.backend.bookModel.Book;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -13,17 +21,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import Library.backend.bookModel.Book;
 
 public class GoogleBookDao implements BookDao {
     private static GoogleBookDao instance; // Thể hiện duy nhất của lớp
@@ -403,7 +400,4 @@ public class GoogleBookDao implements BookDao {
 
         return allBooks;
     }
-
-
-
 }

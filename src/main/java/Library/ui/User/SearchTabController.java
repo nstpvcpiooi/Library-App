@@ -2,25 +2,30 @@ package Library.ui.User;
 
 import Library.backend.bookModel.Book;
 import Library.ui.BookCard.BookCardCell;
+import Library.ui.Utils.SearchUtils;
+import javafx.animation.PauseTransition;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.util.Duration;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static Library.ui.BookCard.BookCardCell.BookCardType.LARGE;
 
-public class SearchTabController implements Initializable {
+public class SearchTabController extends UserTabController implements Initializable, SearchUtils {
 
     /**
      * Button quay về trang chủ
@@ -61,35 +66,33 @@ public class SearchTabController implements Initializable {
     }
 
     @FXML
-    void search(KeyEvent event) {
-        String query = SearchText.getText();
-        SearchResult.getItems().clear();
-        SearchResult.getItems().addAll(getSearchList(query));
-    }
-
-    @FXML
     void SelectBook(MouseEvent event) {
         Book selectedBook = SearchResult.getSelectionModel().getSelectedItem();
         getMainController().getPopUpWindow().displayInfo(selectedBook);
     }
 
+    private final PauseTransition debounce = makeDebounce();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         SearchResult.setCellFactory(lv -> new BookCardCell(LARGE));
-        SearchResult.getItems().addAll(getSearchList(""));
-    }
 
-    /**
-     * Lấy danh sách kết quả tìm kiếm từ query
-     *
-     * @param query từ khóa tìm kiếm
-     * @return danh sách kết quả tìm kiếm
-     */
-    private List<Book> getSearchList(String query) {
-        if (query == null || query.trim().isEmpty()) {
-            return Book.searchBooksValue("");
-        }
-        return Book.searchBooksValue(query);
+//        /* Đăng ký debounce cho ô tìm kiếm */
+//        SearchText.textProperty().addListener((obs, oldTxt, newTxt) -> {
+//            pause.stop();                        // gõ tiếp → reset timer
+//            pause.setOnFinished(e -> triggerSearch(newTxt, SearchResult));
+//            pause.playFromStart();               // 400 ms sau nếu không gõ nữa → tìm
+//        });
+//
+//        triggerSearch("", SearchResult);   // tải danh sách ban đầu
+
+        SearchText.textProperty().addListener((obs,o,n) -> {
+            debounce.stop();
+            debounce.setOnFinished(e -> triggerSearch(n, SearchResult));
+            debounce.playFromStart();
+        });
+
+        triggerSearch("", SearchResult);          // tải lần đầu
     }
 
     public UserMainController getMainController() {
@@ -99,4 +102,5 @@ public class SearchTabController implements Initializable {
     public void setMainController(UserMainController userMainController) {
         this.userMainController = userMainController;
     }
+
 }

@@ -1,53 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.Admin.AdminMainController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.Admin.AdminMainController">
    <children>
-      <VBox id="sidepane" prefHeight="700.0" prefWidth="250.0">
+      <VBox id="sidepane" alignment="TOP_CENTER" prefHeight="700.0" prefWidth="250.0" spacing="10.0">
          <children>
-            <Pane fx:id="LibraryManageButton" onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
+            <HBox>
                <VBox.margin>
-                  <Insets top="200.0" />
+                  <Insets top="10.0" />
                </VBox.margin>
                <children>
-                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Quản lý thư viện" />
-                  <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="31.0" layoutY="15.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../icon/books.png" />
-                     </image>
-                  </ImageView>
+                  <Button fx:id="SignOutButton" mnemonicParsing="false" onAction="#SignOut" opacity="0.89" prefHeight="33.0" prefWidth="125.0" text="Đăng xuất">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icon/back-icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                </children>
-            </Pane>
-            <Pane fx:id="UserManageButton" onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
+            </HBox>
+            <HBox fx:id="LibraryManageButton" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#ButtonClick" prefHeight="55.0" prefWidth="230.0" spacing="20.0" styleClass="MenuButton">
+               <VBox.margin>
+                  <Insets top="180.0" />
+               </VBox.margin>
                <children>
-                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Quản lý người dùng" />
-                  <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="31.0" layoutY="15.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="20.0" fitWidth="25.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../icon/user.png" />
+                        <Image url="@../icon/bookTab.png" />
                      </image>
                   </ImageView>
+                  <Label contentDisplay="CENTER" graphicTextGap="0.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Thư viện" />
                </children>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </HBox>
+            <HBox fx:id="UserManageButton" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#ButtonClick" prefHeight="55.0" prefWidth="230.0" spacing="20.0" styleClass="MenuButton">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
-            </Pane>
-            <Pane fx:id="RequestManageButton" onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
                <children>
-                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Quản lý trả sách" />
-                  <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="31.0" layoutY="15.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="20.0" fitWidth="20.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../icon/list.png" />
+                        <Image url="@../icon/memberTab.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label contentDisplay="CENTER" graphicTextGap="0.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Người dùng" />
+               </children>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </HBox>
+            <HBox fx:id="RequestManageButton" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#ButtonClick" prefHeight="55.0" prefWidth="230.0" spacing="20.0" styleClass="MenuButton">
+               <children>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icon/requestTab.png" />
                      </image>
                   </ImageView>
+                  <Label contentDisplay="CENTER" graphicTextGap="0.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Yêu cầu" />
                </children>
-            </Pane>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </HBox>
          </children>
       </VBox>
       <AnchorPane id="ContentPane" fx:id="ContentPane" layoutX="250.0" prefHeight="700.0" prefWidth="950.0" />

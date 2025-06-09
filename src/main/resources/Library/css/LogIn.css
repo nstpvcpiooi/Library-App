@@ -1,0 +1,90 @@
+.transparent-vbox {
+    -fx-background-color: transparent;
+    -fx-background-radius: 20px;
+}
+
+.white-vbox {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20px;
+}
+
+.welcome-text {
+    -fx-font-family: "Marlin Soft ExtBlk";
+    -fx-font-size: 56px;
+    -fx-text-fill: white;
+}
+
+.LogInButton {
+    -fx-background-radius: 10px;
+    -fx-font-family: "Inter Semi Bold";
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-graphic-text-gap: 12px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
+    -fx-background-color: white;
+    -fx-text-fill: #0246f6;
+}
+
+.LogInButton:hover {
+    -fx-cursor: hand;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-scale-z: 1.05;
+}
+
+.LogInInput {
+    -fx-border-color: #b9b9b9;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-font-family: "Inter";
+    -fx-font-size: 16;
+}
+
+PasswordField, TextField {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.SubmitButton {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 0, 0);
+}
+
+.SubmitButton Button {
+    -fx-font-family: "Inter";
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: #0246f6;
+    -fx-font-size: 20px;
+    -fx-cursor: hand;
+}
+
+.SubmitButton:hover {
+    -fx-spacing: 5px;
+}
+
+.BackButton {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-family: Inter;
+    -fx-font-size: 20px;
+    -fx-text-fill: rgba(0, 0, 0, 0.4);
+    -fx-cursor: hand;
+}
+
+.BackButton ImageView {
+    -fx-opacity: 0.4;
+}
+
+.BackButton:hover {
+    -fx-text-fill: rgba(0, 0, 0, 0.8);
+    -fx-cursor: hand;
+}
+
+.BackButton:hover ImageView {
+    -fx-opacity: 0.8;
+}
+
+.text-input:focused {
+    -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
+}

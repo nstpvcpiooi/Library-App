@@ -30,10 +30,7 @@ public abstract class BookCardController {
      */
     @FXML
     protected Label author;
-    @FXML
-    protected Label quantity;
-    @FXML
-    protected Label OverdueTag;
+
     /**
      * Hiển thị thông tin sách lên giao diện (lấy link ảnh bìa, tiêu đề, tác giả từ đối tượng sách
      * và hiển thị lên container).

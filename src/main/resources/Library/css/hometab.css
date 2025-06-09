@@ -1,21 +1,36 @@
+* {
+    -default-font-family: 'Inter', sans-serif;
+    -lighter-blue: #dcf1fd;
+    -blue: #2c7ce7;
+    -light-blue:#76cdff;
+    -background-blue: #f6fbff;
+}
+
 #welcome {
     -fx-background-radius: 20px;
-    -fx-background-color: #ffffff;
+    -fx-background-color: white;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 0);
 }
 
 #welcomeText {
-    -fx-font-family: Barlow;
+    -fx-font-family: "Marlin Soft ExtBlk";
     -fx-font-weight: bold;
-    -fx-font-size: 24;
-    -fx-text-fill: #e89e5f;
+    -fx-font-size: 36;
+    -fx-text-fill: -blue;
+}
+
+.PageTitle {
+    -fx-font-family: -default-font-family;
+    -fx-font-weight: bold;
+    -fx-font-size: 18;
+    -fx-text-fill: -blue;
 }
 
 #searchButton {
-    -fx-background-color: #fff3e9;
-    -fx-background-radius: 50px;
-    -fx-font-family: Barlow;
-    -fx-font-weight: bold;
+    -fx-border-color: #b7b7b7;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 50px;
+    -fx-font-family: -default-font-family;
     -fx-font-size: 16;
     -fx-cursor: text;
 }
@@ -37,7 +52,7 @@ ListView {
 }
 
 .list-cell:filled:selected:focused Label, .list-cell:filled:selected Label {
-    -fx-text-fill: #e89e5f;
+    -fx-text-fill: -blue;
 }
 
 .scroll-bar:horizontal {
@@ -51,7 +66,7 @@ ListView {
 }
 
 .scroll-bar:horizontal .thumb {
-    -fx-background-color : #f4d2ba;
+    -fx-background-color : -light-blue;
     -fx-background-insets : 2.0, 0.0, 0.0;
     -fx-background-radius : 2.0em;
 }
@@ -80,4 +95,6 @@ ListView {
 .corner {
     -fx-background-color: transparent;
 }
+
+
 

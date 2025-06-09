@@ -1,11 +1,8 @@
 package Library.backend.Login.Model;
 
-import Library.backend.Login.DAO.MemberDAO;
-import Library.backend.Login.DAO.MemberDAOImpl;
 import Library.backend.bookDao.BookDao;
 import Library.backend.bookDao.MysqlBookDao;
 import Library.backend.bookModel.Book;
-import Library.backend.util.EmailUtil;
 
 import java.util.List;
 

@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface MemberDAO {
     Member getMemberByUserNameAndPassword(String userName, String password);
+    String getUserNameByID(int memberId);
     boolean createMember(Member member);
     Member getMemberByUsername(String username);
     Member getMemberByEmail(String email);
@@ -21,5 +22,4 @@ public interface MemberDAO {
     boolean changePass(String email, String newPassword);
     Member login(String userName, String password);
     List<User> DisplayMembers();
-
 }

@@ -2,7 +2,6 @@ package Library.ui.User;
 
 import Library.MainApplication;
 import Library.backend.Login.Model.Member;
-import Library.backend.Login.Model.User;
 import Library.backend.Session.SessionManager;
 import Library.ui.MainController;
 import javafx.fxml.FXML;
@@ -16,26 +15,28 @@ import javafx.scene.layout.Pane;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-/**
- * Controller cho giao diện chính của ứng dụng dành cho người dùng. (UserMainView)
- * (gồm các nút điều hướng và phần chứa nội dung chính của các tab)
- */
 public class UserMainController extends MainController {
-    private Member currentUser;
-    /**
-     * Các nút điều hướng giữa các tab.
-     */
-    @FXML
-    private Pane homeButton;
 
     @FXML
-    private Pane searchButton;
+    private AnchorPane ContentPane;
+
+    @FXML
+    private Pane MyRequestButton;
+
+    @FXML
+    private Pane homeButton;
 
     @FXML
     private HBox profileButton;
 
     @FXML
-    private Pane MyRequestButton;
+    private AnchorPane root;
+
+    @FXML
+    private Pane searchButton;
+
+    @FXML
+    private Label userName;
 
     /** Home Tab */
     public HomeTabController homeTabController;
@@ -45,40 +46,18 @@ public class UserMainController extends MainController {
     public SearchTabController searchTabController;
     public AnchorPane searchTab;
 
-
     /** MyRequest Tab */
     public MyRequestTabController myRequestTabController;
     public AnchorPane myRequestTab;
 
-    @FXML
-    private Label userName;
+    private Member currentUser;
 
-    /**
-     * Xử lý sự kiện khi click vào các nút điều hướng -> hiển thị tab tương ứng (setContentPane).
-     */
-    @FXML
-    void ButtonClick(MouseEvent event) {
-        if (event.getSource().equals(profileButton)) {
-            currentUser = SessionManager.getInstance().getLoggedInMember();
-            System.out.println("Logged-in Member: " + currentUser);
-            // TODO: Hiển thị NGƯỜI DÙNG VỪA ĐĂNG NHẬP
-            if (currentUser != null) {
-                getPopUpWindow().displayUser(currentUser);
-                getPopUpWindow().getUserViewController().setTabTitle("THÔNG TIN CỦA BẠN");
-            } else {
-                System.err.println("Không tìm thấy thông tin người dùng!");
-            }
-            return;
-        }
-        setCurrentTab((Pane) event.getSource());
+    public Pane getSearchButton() {
+        return searchButton;
+    }
 
-        if (currentTab.equals(homeButton)) {
-            setContentPane(homeTab);
-        } else if (currentTab.equals(searchButton)) {
-            setContentPane(searchTab);
-        } else if (currentTab.equals(MyRequestButton)) {
-            setContentPane(myRequestTab);
-        }
+    public Pane getHomeButton() {
+        return homeButton;
     }
 
     /**
@@ -86,8 +65,9 @@ public class UserMainController extends MainController {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        currentUser = SessionManager.getInstance().getLoggedInMember();
-        System.out.println("Logged-in Member: " + currentUser);
+        setCurrentUser(SessionManager.getInstance().getLoggedInMember());
+        System.out.println("Logged-in Member: " + getCurrentUser());
+
         // KHỞI TẠO HOME TAB
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("fxml/UserTab/HomeTabView.fxml"));
@@ -126,8 +106,8 @@ public class UserMainController extends MainController {
         ContentPane.getChildren().add(homeTab);
 
         // TODO: Hiển thị thông tin người dùng
-        if (currentUser != null) {
-            userName.setText("Xin chào, " + currentUser.getUserName());
+        if (getCurrentUser() != null) {
+            userName.setText("Xin chào, " + getCurrentUser().getUserName());
         } else {
             userName.setText("Xin chào, khách!");
         }
@@ -135,12 +115,34 @@ public class UserMainController extends MainController {
         super.initialize(location, resources);
     }
 
+    /**
+     * Xử lý sự kiện khi click vào các nút điều hướng -> hiển thị tab tương ứng (setContentPane).
+     */
+    @FXML
+    void ButtonClick(MouseEvent event) {
+        if (event.getSource().equals(profileButton)) {
 
-    public Pane getHomeButton() {
-        return homeButton;
+            currentUser = SessionManager.getInstance().getLoggedInMember();
+            System.out.println("Logged-in Member: " + currentUser);
+            // TODO: Hiển thị NGƯỜI DÙNG VỪA ĐĂNG NHẬP
+            if (currentUser != null) {
+                getPopUpWindow().displayUser(currentUser);
+                getPopUpWindow().getUserViewController().setTabTitle("THÔNG TIN CỦA BẠN");
+            } else {
+                System.err.println("Không tìm thấy thông tin người dùng!");
+            }
+            return;
+
+        }
+        setCurrentTab((Pane) event.getSource());
+
+        if (currentTab.equals(homeButton)) {
+            setContentPane(homeTab);
+        } else if (currentTab.equals(searchButton)) {
+            setContentPane(searchTab);
+        } else if (currentTab.equals(MyRequestButton)) {
+            setContentPane(myRequestTab);
+        }
     }
 
-    public Pane getSearchButton() {
-        return searchButton;
-    }
 }

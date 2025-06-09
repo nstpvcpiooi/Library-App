@@ -1,74 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.User.UserMainController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.User.UserMainController">
    <children>
-      <VBox id="sidepane" alignment="TOP_CENTER" prefHeight="700.0" prefWidth="250.0">
+      <VBox id="sidepane" alignment="TOP_CENTER" prefHeight="700.0" prefWidth="250.0" spacing="10.0">
          <children>
-            <Pane fx:id="homeButton" onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
+            <HBox>
+               <children>
+                  <Button fx:id="SignOutButton" mnemonicParsing="false" onAction="#SignOut" opacity="0.89" prefHeight="33.0" prefWidth="125.0" text="Đăng xuất">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icon/back-icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
                <VBox.margin>
-                  <Insets top="200.0" />
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox fx:id="homeButton" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#ButtonClick" prefHeight="55.0" prefWidth="230.0" spacing="20.0" styleClass="MenuButton">
+               <VBox.margin>
+                  <Insets top="180.0" />
                </VBox.margin>
                <children>
-                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Trang chủ" />
-                  <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="31.0" layoutY="15.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="20.0" fitWidth="20.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../icon/home.png" />
                      </image>
                   </ImageView>
+                  <Label contentDisplay="CENTER" graphicTextGap="0.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Trang chủ" />
                </children>
-            </Pane>
-            <Pane fx:id="searchButton" onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </HBox>
+            <HBox fx:id="searchButton" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#ButtonClick" prefHeight="55.0" prefWidth="230.0" spacing="20.0" styleClass="MenuButton">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
                <children>
-                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Tìm kiếm" />
-                  <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="31.0" layoutY="15.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="20.0" fitWidth="20.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../icon/search.png" />
                      </image>
                   </ImageView>
+                  <Label contentDisplay="CENTER" graphicTextGap="0.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Tìm kiếm" />
                </children>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </HBox>
+            <HBox fx:id="MyRequestButton" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#ButtonClick" prefHeight="55.0" prefWidth="230.0" spacing="20.0" styleClass="MenuButton">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
-            </Pane>
-            <Pane fx:id="MyRequestButton" onMouseClicked="#ButtonClick" prefHeight="50.0" prefWidth="250.0" styleClass="MenuButton">
                <children>
-                  <Label contentDisplay="CENTER" graphicTextGap="0.0" layoutX="60.0" layoutY="10.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Sách đã mượn" />
-                  <ImageView fitHeight="16.0" fitWidth="16.0" layoutX="31.0" layoutY="15.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="20.0" fitWidth="20.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../icon/apps.png" />
                      </image>
                   </ImageView>
+                  <Label contentDisplay="CENTER" graphicTextGap="0.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Sách đang mượn" />
                </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </Pane>
-            <HBox id="profileButton" fx:id="profileButton" alignment="CENTER" maxWidth="-Infinity" onMouseClicked="#ButtonClick" prefHeight="82.0" prefWidth="222.0" spacing="10.0">
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
+            </HBox>
+            <HBox id="profileButton" fx:id="profileButton" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#ButtonClick" prefHeight="75.0" prefWidth="230.0" spacing="20.0">
                <children>
-                  <ImageView fitHeight="53.0" fitWidth="57.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="20.0" fitWidth="20.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../icon/profile-picture.png" />
+                        <Image url="@../icon/memberTab.png" />
                      </image>
                   </ImageView>
-                  <VBox alignment="CENTER_LEFT" prefHeight="63.0" prefWidth="121.0">
+                  <VBox alignment="CENTER_LEFT" prefHeight="75.0" prefWidth="170.0">
                      <children>
-                        <Label contentDisplay="CENTER" graphicTextGap="0.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Hồ sơ của tôi" />
-                        <Label id="userName" fx:id="userName" contentDisplay="CENTER" graphicTextGap="0.0" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Hồ sơ của tôi" />
+                        <Label id="profiletext" contentDisplay="CENTER" graphicTextGap="0.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" opacity="0.8" prefHeight="25.0" prefWidth="133.0" text="Hồ sơ của tôi" />
+                        <Label id="userName" fx:id="userName" contentDisplay="CENTER" graphicTextGap="0.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" opacity="0.8" prefHeight="24.0" prefWidth="152.0" text="Hồ sơ của tôi" />
                      </children>
                   </VBox>
                </children>
                <VBox.margin>
-                  <Insets top="250.0" />
+                  <Insets top="175.0" />
                </VBox.margin>
+               <padding>
+                  <Insets left="20.0" />
+               </padding>
             </HBox>
          </children>
       </VBox>

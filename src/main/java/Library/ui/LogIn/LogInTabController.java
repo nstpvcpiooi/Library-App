@@ -27,6 +27,14 @@ public abstract class LogInTabController implements Initializable {
 
     protected LogInViewController logInViewController;
 
+    public LogInViewController getLogInViewController() {
+        return logInViewController;
+    }
+
+    public void setLogInViewController(LogInViewController logInViewController) {
+        this.logInViewController = logInViewController;
+    }
+
     abstract void submit(ActionEvent event);
 
     @FXML
@@ -34,7 +42,6 @@ public abstract class LogInTabController implements Initializable {
         logInViewController.setContainer(logInViewController.selectRolesView);
         logInViewController.setReturnType(LogInViewController.LogInType.GUEST);
         password.clear();
-        passwordFieldSkin.setDefault();
     }
 
     @FXML
@@ -44,19 +51,10 @@ public abstract class LogInTabController implements Initializable {
         }
     }
 
-    public LogInViewController getLogInViewController() {
-        return logInViewController;
-    }
-
-    public void setLogInViewController(LogInViewController logInViewController) {
-        this.logInViewController = logInViewController;
-    }
-
-    VisiblePasswordFieldSkin passwordFieldSkin;
+    VisiblePasswordFieldSkin visiblePasswordFieldSkin;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        passwordFieldSkin = new VisiblePasswordFieldSkin(password);
-        password.setSkin(passwordFieldSkin);
+        password.setSkin(new VisiblePasswordFieldSkin(password));
     }
 }

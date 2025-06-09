@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.PasswordField?>
@@ -9,29 +10,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane stylesheets="@../../css/loginwindow.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.LogIn.AdminLogInController">
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.LogIn.AdminLogInController">
    <children>
-      <VBox alignment="CENTER" prefHeight="650.0" prefWidth="500.0">
+      <VBox alignment="CENTER" prefHeight="400.0" prefWidth="500.0" styleClass="white-vbox">
          <children>
-            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="500.0">
+            <VBox alignment="CENTER" spacing="20.0">
                <children>
-                  <Button id="back" fx:id="backButton" focusTraversable="false" graphicTextGap="5.0" mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="82.0" styleClass="LogInButton" text="Back">
-                     <HBox.margin>
-                        <Insets left="20.0" />
-                     </HBox.margin>
-                     <graphic>
-                        <ImageView fitHeight="15.0" fitWidth="13.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../icon/back-icon.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-               </children>
-            </HBox>
-            <VBox alignment="CENTER" prefHeight="630.0" prefWidth="500.0" spacing="25.0">
-               <children>
-                  <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="51.0" prefWidth="422.0" spacing="5.0" styleClass="input">
+                  <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="51.0" prefWidth="422.0" spacing="5.0" styleClass="LogInInput">
                      <children>
                         <ImageView fitHeight="18.0" fitWidth="18.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -41,13 +26,44 @@
                               <Insets left="15.0" />
                            </HBox.margin>
                         </ImageView>
-                        <PasswordField fx:id="password" onKeyPressed="#enter" prefHeight="47.0" prefWidth="406.0" promptText="Nhập mẩu khẩu cho admin" />
+                        <PasswordField fx:id="password" onKeyPressed="#enter" prefHeight="37.0" prefWidth="377.0" promptText="Password" />
                      </children>
                   </HBox>
-                  <Button id="submitButton" fx:id="submitButton" focusTraversable="false" mnemonicParsing="false" onAction="#submit" prefHeight="46.0" prefWidth="206.0" styleClass="LogInButton" text="ĐĂNG NHẬP" />
+                  <HBox>
+                     <children>
+                        <Button fx:id="backButton" focusTraversable="false" graphicTextGap="5.0" mnemonicParsing="false" onAction="#goBack" prefHeight="50.0" prefWidth="121.0" styleClass="BackButton" text="BACK">
+                           <HBox.margin>
+                              <Insets left="30.0" />
+                           </HBox.margin>
+                           <graphic>
+                              <ImageView fitHeight="21.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../icon/return.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="140.0" styleClass="SubmitButton">
+                           <children>
+                              <Button fx:id="submitButton" mnemonicParsing="false" onAction="#submit" prefHeight="46.0" prefWidth="101.0" text="LOG IN" />
+                              <ImageView fitHeight="23.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../icon/arrow-right.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                           <HBox.margin>
+                              <Insets left="180.0" />
+                           </HBox.margin>
+                        </HBox>
+                     </children>
+                  </HBox>
                </children>
             </VBox>
          </children>
       </VBox>
    </children>
+   <stylesheets>
+      <URL value="@../../css/LogIn.css" />
+   </stylesheets>
 </AnchorPane>

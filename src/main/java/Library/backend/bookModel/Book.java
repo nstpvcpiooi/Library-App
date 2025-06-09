@@ -1,9 +1,10 @@
 package Library.backend.bookModel;
 
-import java.util.ArrayList;
-import java.util.List;
 import Library.backend.bookDao.GoogleBookDao;
 import Library.backend.bookDao.MysqlBookDao;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Book {
     private String bookID; // Mã tài liệu
@@ -64,7 +65,7 @@ public class Book {
         return (ArrayList<Book>) MysqlBookDao.getInstance().searchBooksValue(value);
     }
     public static ArrayList<Book> advancedSearchBooks(String value, int limit, int offset) {
-        return (ArrayList<Library.backend.bookModel.Book>) MysqlBookDao.getInstance().advancedSearchBooks(value, limit, offset);
+        return (ArrayList<Book>) MysqlBookDao.getInstance().advancedSearchBooks(value, limit, offset);
     }
     // Tạo mã QR cho tài liệu, trả về đường dẫn đến file mã qr;
     public String generateQrCodeForBook() {
@@ -145,22 +146,5 @@ public class Book {
 
     public static List<Book> fetchAllBooksFromAPI() {
         return GoogleBookDao.getInstance().fetchAllBooksFromAPI();
-    }
-
-    public static void main(String[] args) {
-      /*  List<Book> L = Book.fetchAllBooksFromAPI();
-        int i=0;
-        for(Book b : L){
-            b.addBook();
-            if(i==30)break;
-            i++;
-        }
-*//*
-        Book b=Book.getBookById("-90ewuAkZUsC");
-        b.generateQrCodeForBook();
-
-*/
-        Book b= new Book("123","123","123",123,"123","123","123",123);
-        b.addBook();
     }
 }

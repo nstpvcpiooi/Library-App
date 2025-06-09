@@ -1,4 +1,3 @@
-// src/main/java/Library/ui/Admin/UserManageController.java
 package Library.ui.Admin;
 
 import Library.backend.Login.Model.User;
@@ -12,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.beans.property.SimpleIntegerProperty;
 
 import java.net.URL;
 import java.util.List;
@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 /**
  * Controller cho giao diện quản lý người dùng của admin
  */
-public class UserManageController implements Initializable {
+public class UserManageController extends AdminTabController implements Initializable {
 
     /**
      * Bảng hiển thị danh sách người dùng
@@ -61,23 +61,7 @@ public class UserManageController implements Initializable {
      */
     private ObservableList<User> UserList;
 
-    /**
-     * Controller chính của admin
-     */
-    private AdminMainController MainController;
-
     private static UserManageController instance;
-
-    public void setMainController(AdminMainController adminMainController) {
-        refreshData();
-        this.MainController = adminMainController;
-    }
-
-    public AdminMainController getMainController() {
-        refreshData();
-        return MainController;
-
-    }
 
     @FXML
     void add(ActionEvent event) {
@@ -108,6 +92,7 @@ public class UserManageController implements Initializable {
         if (opt.get() == yes) {
             MemberDAOImpl.getInstance().deleteMemberById(selectedItem.getMemberID());
             UserList.remove(selectedItem);
+            table.getSelectionModel().clearSelection();
             Notification notification = new Notification("Thành công!", "Đã xóa thành công " + selectedItem.getUserName());
             notification.display();
         }
@@ -116,24 +101,21 @@ public class UserManageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         hideButtons();
-        List<User> users = MemberDAOImpl.getInstance().DisplayMembers();
-        UserList = FXCollections.observableArrayList(users);
-        UserName.setCellValueFactory(new PropertyValueFactory<User, String>("userName"));
-        Email.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
-        Phone.setCellValueFactory(new PropertyValueFactory<User, String>("phone"));
-        ID.setCellValueFactory(new PropertyValueFactory<User, Integer>("memberID"));
-        table.setItems(UserList);
+        refreshData();
     }
 
     public void refreshData() {
-//        List<User> users = MemberDAOImpl.getInstance().DisplayMembers();
-//        UserList = FXCollections.observableArrayList(users);
+        List<User> users = MemberDAOImpl.getInstance().DisplayMembers();
+        UserList = FXCollections.observableArrayList(users);
 
         UserName.setCellValueFactory(new PropertyValueFactory<User, String>("userName"));
         Email.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
         Phone.setCellValueFactory(new PropertyValueFactory<User, String>("phone"));
-        ID.setCellValueFactory(new PropertyValueFactory<User, Integer>("memberID"));
-//        table.setItems(UserList);
+        ID.setCellValueFactory(cellData -> {
+            int index = UserList.indexOf(cellData.getValue());
+            return new SimpleIntegerProperty(index + 1).asObject();
+        });
+        table.setItems(UserList);
 
         updateUSerList();
     }
