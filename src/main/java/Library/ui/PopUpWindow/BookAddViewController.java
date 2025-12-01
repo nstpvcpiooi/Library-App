@@ -1,6 +1,7 @@
 package Library.ui.PopUpWindow;
 
-import Library.backend.bookModel.Book;
+import Library.backend.Book.Model.Book;
+import Library.backend.Book.Service.BookService;
 import Library.ui.Utils.Notification;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,9 +22,11 @@ public class BookAddViewController extends PopUpController {
         isbnCode.clear();
     }
 
+    private final BookService bookService = BookService.getInstance();
+
     @FXML
     void displayAddIsbn(ActionEvent event) {
-        Book book = Book.fetchBookInfoFromAPI(isbnCode.getText());
+        Book book = bookService.fetchBookInfoFromApi(isbnCode.getText());
         if (book != null) {
             getPopUpWindow().displayAddIsbn(book);
 

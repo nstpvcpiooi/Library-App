@@ -1,16 +1,8 @@
-package Library.backend.Recommendation.model;
-
-import Library.backend.Recommendation.Dao.MysqlRecommendationDao;
-import Library.backend.bookModel.Book;
-
-import java.util.List;
+package Library.backend.Recommendation.Model;
 
 public class Recommendation {
     private int memberID; // ID của thành viên
     private String preferenceCategory; // Thể loại yêu thích của người dùng
-
-    // Singleton instance of DAO
-    private static final MysqlRecommendationDao daoInstance = MysqlRecommendationDao.getInstance();
 
     // Private Constructor for Builder
     private Recommendation(Builder builder) {
@@ -36,30 +28,6 @@ public class Recommendation {
         this.preferenceCategory = preferenceCategory;
     }
 
-    // DAO Methods integrated into the model
-    public boolean save() {
-        return daoInstance.addRecommendation(this);
-    }
-
-    public static List<Recommendation> findByMemberId(int memberID) {
-        return daoInstance.getRecommendationsForMember(memberID);
-    }
-
-    public static List<Book> findPopularRecommendations() {
-        return daoInstance.getPopularRecommendations();
-    }
-
-    public static List<Book> findRecommendationsBasedOnBorrowHistory(int memberID) {
-        return daoInstance.getRecommendationsBasedOnBorrowHistory(memberID);
-    }
-
-    public static List<Book> findRecommendationsFromSimilarUsers(int memberID) {
-        return daoInstance.getRecommendationsFromSimilarUsers(memberID);
-    }
-
-    public static List<Book> getCombinedRecommendations(int memberID) {
-        return daoInstance.getCombinedRecommendations(memberID);
-    }
     @Override
     public String toString() {
         return "Recommendation{" +

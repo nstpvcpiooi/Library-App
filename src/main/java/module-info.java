@@ -9,6 +9,8 @@ module libraryapp.libraryapp {
     requires java.mail;
     requires jdk.compiler;
     requires org.controlsfx.controls;
+    requires org.junit.jupiter.api;
+    requires org.junit.jupiter.params;
 
     exports Library.backend.Request.Model;
     opens Library.backend.Request.Model to javafx.fxml;
@@ -26,6 +28,19 @@ module libraryapp.libraryapp {
     opens Library.ui.Admin to javafx.fxml;
     exports Library.ui.PopUpWindow;
     opens Library.ui.PopUpWindow to javafx.fxml;
-    exports Library.backend.Login.Model;
-    opens Library.backend.Login.Model to javafx.fxml;
+    exports Library.backend.Member.Model;
+    opens Library.backend.Member.Model to javafx.fxml;
+    exports Library.backend.Member.Service;
+    opens Library.backend.Member.Service to org.junit.platform.commons;
+    opens Library.backend.Book.Service to org.junit.platform.commons;
+    opens Library.backend.Book.DAO to org.junit.platform.commons;
+    opens Library.backend.Book.Test to org.junit.platform.commons;
+    opens Library.backend.Member.Test to org.junit.platform.commons;
+    opens Library.backend.Recommendation.Test to org.junit.platform.commons;
+    opens Library.backend.Review.Test to org.junit.platform.commons;
+    opens Library.backend.Review.DAO to org.junit.platform.commons;
+    opens Library.backend.Review.service to org.junit.platform.commons;
+    opens Library.backend.Request.Test to org.junit.platform.commons;
+    opens Library.backend.Request.DAO to org.junit.platform.commons;
+    opens Library.backend.Request.service to org.junit.platform.commons;
 }

@@ -1,8 +1,7 @@
 package Library.ui.User;
 
 import Library.MainApplication;
-import Library.backend.Login.Model.Member;
-import Library.backend.Login.Model.User;
+import Library.backend.Member.Model.Member;
 import Library.backend.Session.SessionManager;
 import Library.ui.MainController;
 import javafx.fxml.FXML;

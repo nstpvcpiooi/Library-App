@@ -2,27 +2,40 @@
 
 <?import java.net.URL?>
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <AnchorPane prefHeight="700.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.Admin.LibraryManageController">
    <children>
-      <HBox id="SearchBar" fx:id="SearchBar" alignment="CENTER" layoutX="25.0" layoutY="40.0" prefHeight="54.0" prefWidth="826.0">
+      <VBox layoutX="25.0" layoutY="25.0" spacing="12.0" prefWidth="896.0">
          <children>
-            <TextField id="SearchText" fx:id="SearchText" onKeyReleased="#search" prefHeight="40.0" prefWidth="748.0" promptText="Tìm sách" />
-            <ImageView fitHeight="22.0" fitWidth="22.0" opacity="0.6" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../icon/search.png" />
-               </image>
-            </ImageView>
+            <HBox id="SearchBar" fx:id="SearchBar" alignment="CENTER" prefHeight="54.0" prefWidth="896.0">
+               <children>
+                  <TextField id="SearchText" fx:id="SearchText" onKeyReleased="#search" prefHeight="40.0" prefWidth="812.0" promptText="Tìm sách" />
+                  <ImageView fitHeight="22.0" fitWidth="22.0" opacity="0.6" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icon/search.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+            <HBox id="AdvancedBox" spacing="10.0" prefWidth="896.0">
+               <children>
+                  <ComboBox fx:id="categoryField" promptText="Thể loại" prefWidth="200.0" />
+                  <TextField fx:id="authorField" promptText="Tác giả" prefWidth="200.0" />
+                  <ComboBox fx:id="minRatingField" promptText="Rating tối thiểu" prefWidth="150.0" />
+               </children>
+            </HBox>
          </children>
-      </HBox>
-      <ListView id="SearchResult" fx:id="SearchResult" layoutX="25.0" layoutY="118.0" onMouseClicked="#SelectBook" prefHeight="585.0" prefWidth="896.0" />
-      <HBox id="AddButton" fx:id="AddButton" alignment="CENTER" layoutX="866.0" layoutY="40.0" onMouseClicked="#AddBook" prefHeight="54.0" prefWidth="54.0">
+      </VBox>
+      <ListView id="SearchResult" fx:id="SearchResult" layoutX="25.0" layoutY="150.0" onMouseClicked="#SelectBook" prefHeight="553.0" prefWidth="896.0" />
+      <HBox id="AddButton" fx:id="AddButton" alignment="CENTER" layoutX="866.0" layoutY="25.0" onMouseClicked="#AddBook" prefHeight="54.0" prefWidth="54.0">
          <children>
             <ImageView fitHeight="31.0" fitWidth="26.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
                <image>

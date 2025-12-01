@@ -1,8 +1,4 @@
-package Library.backend.Review.model;
-
-import Library.backend.Review.Dao.MysqlReviewDao;
-
-import java.util.List;
+package Library.backend.Review.Model;
 
 public class Review {
     private String bookID; // ID của sách
@@ -63,35 +59,6 @@ public class Review {
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    // Convenience methods to interact with MysqlReviewDao
-    public boolean save() {
-        return MysqlReviewDao.getInstance().addReview(this);
-    }
-
-    public boolean update() {
-        return MysqlReviewDao.getInstance().updateReview(this);
-    }
-
-    public boolean delete() {
-        return MysqlReviewDao.getInstance().deleteReview(this.bookID, this.memberID);
-    }
-
-    public static Review findByBookAndMember(String bookID, int memberID) {
-        return MysqlReviewDao.getInstance().getReviewByBookAndMember(bookID, memberID);
-    }
-
-    public static List<Review> findByBookId(String bookID) {
-        return MysqlReviewDao.getInstance().getReviewsForBook(bookID);
-    }
-
-    public static List<Review> findByMemberId(int memberID) {
-        return MysqlReviewDao.getInstance().getReviewsByMember(memberID);
-    }
-
-    public static double getAverageRating(String bookID) {
-        return MysqlReviewDao.getInstance().getAverageRatingForBook(bookID);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package Library.ui.LogIn;
 
-import Library.backend.Login.DAO.MemberDAO;
-import Library.backend.Login.DAO.MemberDAOImpl;
+import Library.backend.Member.Service.MemberService;
 import Library.ui.Utils.VisiblePasswordFieldSkin;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,7 +22,7 @@ public abstract class LogInTabController implements Initializable {
     @FXML
     protected PasswordField password;
 
-    public MemberDAO memberDAO = MemberDAOImpl.getInstance();
+    public MemberService memberService = MemberService.getInstance();
 
     protected LogInViewController logInViewController;
 
@@ -31,8 +30,9 @@ public abstract class LogInTabController implements Initializable {
 
     @FXML
     void goBack(ActionEvent event) {
-        logInViewController.setContainer(logInViewController.selectRolesView);
-        logInViewController.setReturnType(LogInViewController.LogInType.GUEST);
+        if (logInViewController != null) {
+            logInViewController.setReturnType(LogInViewController.LogInType.GUEST);
+        }
         password.clear();
         passwordFieldSkin.setDefault();
     }

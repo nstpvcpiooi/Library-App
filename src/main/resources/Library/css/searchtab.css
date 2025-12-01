@@ -21,6 +21,26 @@
     -fx-text-fill: rgba(0, 0, 0, 0.7);
 }
 
+#AdvancedBox {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e3e3e3;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-padding: 12 14 12 14;
+}
+
+#AdvancedTitle {
+    -fx-font-family: "Barlow SemiBold";
+    -fx-text-fill: rgba(0,0,0,0.7);
+}
+
+#filterButton {
+    -fx-background-color: #e89e5f;
+    -fx-text-fill: white;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+}
+
 .text-input:focused {
     -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
 }

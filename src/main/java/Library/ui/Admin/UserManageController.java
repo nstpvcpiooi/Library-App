@@ -1,8 +1,8 @@
 // src/main/java/Library/ui/Admin/UserManageController.java
 package Library.ui.Admin;
 
-import Library.backend.Login.Model.User;
-import Library.backend.Login.DAO.MemberDAOImpl;
+import Library.backend.Member.Model.Member;
+import Library.backend.Member.Service.MemberService;
 import Library.ui.Utils.Notification;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,34 +19,25 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
- * Controller cho giao diện quản lý người dùng của admin
+ * Controller cho giao diện quản lý người dùng của admin.
  */
 public class UserManageController implements Initializable {
 
-    /**
-     * Bảng hiển thị danh sách người dùng
-     */
     @FXML
-    private TableView<User> table;
-
-    /**
-     * Cột hiển thị mã người dùng, tên người dùng, email, số điện thoại
-     */
-    @FXML
-    private TableColumn<User, String> Email;
+    private TableView<Member> table;
 
     @FXML
-    private TableColumn<User, String> Phone;
+    private TableColumn<Member, String> Email;
 
     @FXML
-    private TableColumn<User, Integer> ID;
+    private TableColumn<Member, String> Phone;
 
     @FXML
-    private TableColumn<User, String> UserName;
+    private TableColumn<Member, Integer> ID;
 
-    /**
-     * Nút thêm, sửa, xóa người dùng
-     */
+    @FXML
+    private TableColumn<Member, String> UserName;
+
     @FXML
     private Button addButton;
 
@@ -56,14 +47,8 @@ public class UserManageController implements Initializable {
     @FXML
     private Button removeButton;
 
-    /**
-     * Danh sách người dùng
-     */
-    private ObservableList<User> UserList;
+    private ObservableList<Member> UserList;
 
-    /**
-     * Controller chính của admin
-     */
     private AdminMainController MainController;
 
     private static UserManageController instance;
@@ -81,20 +66,20 @@ public class UserManageController implements Initializable {
 
     @FXML
     void add(ActionEvent event) {
-        getMainController().getPopUpWindow().getUserViewController().setTabTitle("THÊM USER MỚI");
+        getMainController().getPopUpWindow().getUserViewController().setTabTitle("THASM USER MỚI");
         getMainController().getPopUpWindow().displayUser(null);
     }
 
     @FXML
     void edit(ActionEvent event) {
-        User selectedItem = table.getSelectionModel().getSelectedItem();
+        Member selectedItem = table.getSelectionModel().getSelectedItem();
         getMainController().getPopUpWindow().getUserViewController().setTabTitle("CHỈNH SỬA USER");
         getMainController().getPopUpWindow().displayUser(selectedItem);
     }
 
     @FXML
     void remove(ActionEvent event) {
-        User selectedItem = table.getSelectionModel().getSelectedItem();
+        Member selectedItem = table.getSelectionModel().getSelectedItem();
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Xác nhận");
         alert.setHeaderText("Bạn có chắc chắn muốn xóa người dùng này?");
@@ -105,8 +90,8 @@ public class UserManageController implements Initializable {
         alert.getButtonTypes().addAll(yes, no);
         Optional<ButtonType> opt = alert.showAndWait();
 
-        if (opt.get() == yes) {
-            MemberDAOImpl.getInstance().deleteMemberById(selectedItem.getMemberID());
+        if (opt.isPresent() && opt.get() == yes) {
+            MemberService.getInstance().deleteMemberById(selectedItem.getMemberID());
             UserList.remove(selectedItem);
             Notification notification = new Notification("Thành công!", "Đã xóa thành công " + selectedItem.getUserName());
             notification.display();
@@ -116,24 +101,20 @@ public class UserManageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         hideButtons();
-        List<User> users = MemberDAOImpl.getInstance().DisplayMembers();
+        List<Member> users = MemberService.getInstance().displayMembers();
         UserList = FXCollections.observableArrayList(users);
-        UserName.setCellValueFactory(new PropertyValueFactory<User, String>("userName"));
-        Email.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
-        Phone.setCellValueFactory(new PropertyValueFactory<User, String>("phone"));
-        ID.setCellValueFactory(new PropertyValueFactory<User, Integer>("memberID"));
+        UserName.setCellValueFactory(new PropertyValueFactory<Member, String>("userName"));
+        Email.setCellValueFactory(new PropertyValueFactory<Member, String>("email"));
+        Phone.setCellValueFactory(new PropertyValueFactory<Member, String>("phone"));
+        ID.setCellValueFactory(new PropertyValueFactory<Member, Integer>("memberID"));
         table.setItems(UserList);
     }
 
     public void refreshData() {
-//        List<User> users = MemberDAOImpl.getInstance().DisplayMembers();
-//        UserList = FXCollections.observableArrayList(users);
-
-        UserName.setCellValueFactory(new PropertyValueFactory<User, String>("userName"));
-        Email.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
-        Phone.setCellValueFactory(new PropertyValueFactory<User, String>("phone"));
-        ID.setCellValueFactory(new PropertyValueFactory<User, Integer>("memberID"));
-//        table.setItems(UserList);
+        UserName.setCellValueFactory(new PropertyValueFactory<Member, String>("userName"));
+        Email.setCellValueFactory(new PropertyValueFactory<Member, String>("email"));
+        Phone.setCellValueFactory(new PropertyValueFactory<Member, String>("phone"));
+        ID.setCellValueFactory(new PropertyValueFactory<Member, Integer>("memberID"));
 
         updateUSerList();
     }
@@ -154,7 +135,7 @@ public class UserManageController implements Initializable {
     @FXML
     void selectItem(MouseEvent event) {
 
-        User selectedItem = table.getSelectionModel().getSelectedItem();
+        Member selectedItem = table.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             showButtons();
         } else {
@@ -163,7 +144,7 @@ public class UserManageController implements Initializable {
     }
 
     public void updateUSerList() {
-        UserList = FXCollections.observableArrayList(MemberDAOImpl.getInstance().DisplayMembers());
+        UserList = FXCollections.observableArrayList(MemberService.getInstance().displayMembers());
         table.setItems(UserList);
     }
 }

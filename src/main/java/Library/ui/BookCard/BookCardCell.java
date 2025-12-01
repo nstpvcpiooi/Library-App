@@ -1,17 +1,16 @@
 package Library.ui.BookCard;
 
 import Library.MainApplication;
-import Library.backend.bookModel.Book;
+import Library.backend.Book.Model.Book;
+import Library.ui.MainController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class BookCardCell extends ListCell<Book> {
     public enum BookCardType {SMALL, LARGE}
@@ -51,9 +50,7 @@ public class BookCardCell extends ListCell<Book> {
 
                     // Load book data
                     controller.setData(book);
-
-                    // Load book cover image
-                    Image image = new Image(book.getCoverCode());
+                    Image image = resolveCoverImage(book);
 
                     // Update the UI on the JavaFX Application Thread
                     Platform.runLater(() -> {
@@ -66,6 +63,19 @@ public class BookCardCell extends ListCell<Book> {
                     e.printStackTrace();
                 }
             });
+        }
+    }
+
+    private Image resolveCoverImage(Book book) {
+        String coverCode = book.getCoverCode();
+        if (coverCode == null || coverCode.isBlank()) {
+            return MainController.DEFAULT_COVER;
+        }
+        try {
+            return new Image(coverCode, true);
+        } catch (RuntimeException ex) {
+            System.err.println("Failed to load cover for book " + book.getBookID() + ": " + ex.getMessage());
+            return MainController.DEFAULT_COVER;
         }
     }
 }

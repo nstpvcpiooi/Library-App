@@ -1,6 +1,7 @@
 package Library.ui.PopUpWindow;
 
-import Library.backend.bookModel.Book;
+import Library.backend.Book.Model.Book;
+import Library.backend.Book.Service.BookService;
 import Library.ui.Admin.AdminMainController;
 import Library.ui.Utils.Notification;
 import javafx.event.ActionEvent;
@@ -9,6 +10,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
 
 import static Library.ui.MainController.DEFAULT_COVER;
 
@@ -33,6 +38,9 @@ public class BookEditViewController extends PopUpController {
     private TextField isbnCodeInput;
 
     @FXML
+    private Button changeCoverButton;
+
+    @FXML
     private TextField publishYearInput;
 
     @FXML
@@ -41,31 +49,36 @@ public class BookEditViewController extends PopUpController {
     @FXML
     private TextField titleInput;
 
+    private final BookService bookService = BookService.getInstance();
+
     /**
      * Hàm lưu thông tin sách sau khi chỉnh sửa
      * @param event sự kiện nhấn nút
      */
+    private String coverPath;
+
     @FXML
     void Save(ActionEvent event) {
         boolean success = validateInputs();
 
         if (success) {
             // Lấy thông tin sách từ ISBN, sau đó cập nhật
-            Book b = Book.getBookByIsbn(isbnCodeInput.getText());
+            Book b = bookService.getBookByIsbn(isbnCodeInput.getText());
             if (b == null) {
                 showNotification("Lỗi!", "Không tìm thấy sách với ISBN này.");
                 return;  // Dừng lại nếu không tìm thấy sách
             }
 
-            b.updateBook(
-                    titleInput.getText(),
-                    authorInput.getText(),
-                    Integer.parseInt(publishYearInput.getText()),
-                    categoryInput.getText(),
-                    b.getIsbn(),
-                    b.getCoverCode(),
-                    Integer.parseInt(quantityInput.getText())
-            );
+            String newCover = (coverPath == null || coverPath.isBlank()) ? b.getCoverCode() : coverPath;
+
+            b.setTitle(titleInput.getText());
+            b.setAuthor(authorInput.getText());
+            b.setPublishYear(Integer.parseInt(publishYearInput.getText()));
+            b.setCategory(categoryInput.getText());
+            b.setCoverCode(newCover);
+            b.setQuantity(Integer.parseInt(quantityInput.getText()));
+
+            bookService.updateBook(b);
             // Cập nhật giao diện
             AdminMainController mainController = (AdminMainController) getPopUpWindow().getMainController();
             mainController.libraryManageController.updateBookInList(b);
@@ -78,6 +91,27 @@ public class BookEditViewController extends PopUpController {
             // Hiển thị thông báo lỗi nếu không hợp lệ
             Notification notification = new Notification("Lỗi!", "Vui lòng thử lại");
             notification.display();
+        }
+    }
+
+    /**
+     * Chọn ảnh bìa mới từ máy tính
+     */
+    @FXML
+    void chooseCover(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Chọn ảnh bìa");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
+        );
+        File selectedFile = fileChooser.showOpenDialog(((Stage) changeCoverButton.getScene().getWindow()));
+        if (selectedFile != null) {
+            coverPath = selectedFile.toURI().toString();
+            try {
+                cover.setImage(new Image(coverPath, true));
+            } catch (Exception e) {
+                cover.setImage(DEFAULT_COVER);
+            }
         }
     }
 
@@ -101,10 +135,11 @@ public class BookEditViewController extends PopUpController {
         categoryInput.setText(selectedBook.getCategory());
         quantityInput.setText(String.valueOf(selectedBook.getQuantity()));
         authorInput.setText(selectedBook.getAuthor());
+        coverPath = selectedBook.getCoverCode();
 
         // Hiển thị hình ảnh bìa sách
         try {
-            Image image = new Image(selectedBook.getCoverCode());
+            Image image = new Image(coverPath);
             cover.setImage(image);
         } catch (Exception e) {
             cover.setImage(DEFAULT_COVER);

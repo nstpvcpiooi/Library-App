@@ -13,7 +13,7 @@
 
 <AnchorPane prefHeight="700.0" prefWidth="950.0" stylesheets="@../../css/table-view.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.Admin.RequestManageController">
    <children>
-      <Label layoutX="42.0" layoutY="42.0" text="QUẢN LÝ TRẢ SÁCH" textFill="#e89e5f">
+      <Label layoutX="42.0" layoutY="42.0" text="QUẢN LÝ YÊU CẦU" textFill="#e89e5f">
          <font>
             <Font name="Barlow ExtraBold" size="24.0" />
          </font>
@@ -32,7 +32,7 @@
       </TableView>
       <HBox alignment="CENTER_RIGHT" layoutX="41.0" layoutY="622.0" prefHeight="66.0" prefWidth="865.0" spacing="15.0">
          <children>
-            <Button fx:id="approveButton" alignment="CENTER" graphicTextGap="7.0" mnemonicParsing="false" onAction="#approve" opacity="0.9" prefHeight="36.0" prefWidth="150.0" stylesheets="@../../css/popup.css" text="CHẤP NHẬN">
+            <Button fx:id="approveButton" alignment="CENTER" graphicTextGap="7.0" mnemonicParsing="false" onAction="#approve" opacity="0.9" prefHeight="36.0" prefWidth="150.0" stylesheets="@../../css/popup.css" text="CẬP NHẬT">
                <graphic>
                   <ImageView fitHeight="14.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
                      <image>

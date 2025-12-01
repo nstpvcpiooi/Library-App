@@ -1,7 +1,9 @@
 package Library;
 
-import Library.backend.Request.OverdueRequestHandler;
+import Library.backend.Request.service.RequestService;
+import Library.backend.database.DatabaseConnectionException;
 import Library.ui.LogIn.LogInViewController;
+import Library.ui.Utils.Notification;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -16,10 +18,24 @@ import java.util.Objects;
 public class MainApplication extends Application {
 
     public LogInViewController.LogInType logInType;
-    private OverdueRequestHandler overdueRequestHandler;
+    private RequestService requestService;
 
     @Override
     public void start(Stage stage) throws Exception {
+
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
+            Throwable cause = throwable;
+            while (cause != null && !(cause instanceof DatabaseConnectionException)) {
+                cause = cause.getCause();
+            }
+            if (cause instanceof DatabaseConnectionException) {
+                DatabaseConnectionException dbEx = (DatabaseConnectionException) cause;
+                Platform.runLater(() -> {
+                    Notification notification = new Notification("Lỗi!", dbEx.getMessage());
+                    notification.display();
+                });
+            }
+        });
 
         /**
          * 1. Hiển thị cửa sổ đăng nhập
@@ -42,8 +58,8 @@ public class MainApplication extends Application {
 
         // Add a shutdown hook to stop the scheduler gracefully
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if (overdueRequestHandler != null) {
-                overdueRequestHandler.stop();
+            if (requestService != null) {
+                requestService.stopOverdueScheduler();
             }
         }));
     }
@@ -73,8 +89,8 @@ public class MainApplication extends Application {
         stage.setScene(scene);
 
         // Start the overdue handler thread
-        overdueRequestHandler = new OverdueRequestHandler();
-        overdueRequestHandler.start();
+        requestService = RequestService.getInstance();
+        requestService.startOverdueScheduler();
 
         // KHI ĐÓNG CỬA SỔ
         stage.setOnCloseRequest(windowEvent -> {
@@ -94,8 +110,8 @@ public class MainApplication extends Application {
         stage.setScene(scene);
 
         // Start the overdue handler thread
-        overdueRequestHandler = new OverdueRequestHandler();
-        overdueRequestHandler.start();
+        requestService = RequestService.getInstance();
+        requestService.startOverdueScheduler();
 
         // KHI ĐÓNG CỬA SỔ
         stage.setOnCloseRequest(windowEvent -> {
