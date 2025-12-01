@@ -1,10 +1,11 @@
 package Library.ui.BookCard;
 
-import Library.backend.bookModel.Book;
+import Library.backend.Book.Model.Book;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import org.controlsfx.control.Rating;
 
 public abstract class BookCardController {
     /**
@@ -34,6 +35,10 @@ public abstract class BookCardController {
     protected Label quantity;
     @FXML
     protected Label OverdueTag;
+    @FXML
+    protected Rating averageRating;
+    @FXML
+    protected Label ratingCount;
     /**
      * Hiển thị thông tin sách lên giao diện (lấy link ảnh bìa, tiêu đề, tác giả từ đối tượng sách
      * và hiển thị lên container).

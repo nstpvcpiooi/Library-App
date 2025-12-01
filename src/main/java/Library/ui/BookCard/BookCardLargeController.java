@@ -1,10 +1,10 @@
 package Library.ui.BookCard;
 
-import Library.backend.Request.DAO.RequestDAO;
-import Library.backend.Request.DAO.RequestDAOImpl;
+import Library.backend.Request.service.RequestService;
 import Library.backend.Request.Model.Request;
 import Library.backend.Session.SessionManager;
-import Library.backend.bookModel.Book;
+import Library.backend.Book.Model.Book;
+import Library.backend.Review.service.ReviewService;
 import javafx.scene.image.Image;
 
 import static Library.ui.MainController.DEFAULT_COVER;
@@ -21,21 +21,26 @@ public class BookCardLargeController extends BookCardController {
 
         // 2. LẤY TIÊU ĐỀ
         title.setText(book.getTitle());
+        // Hiển thị rating trung bình và số lượt đánh giá (chỉ xem, không cho tương tác)
+        ReviewService reviewService = ReviewService.getInstance();
+        double rating = reviewService.getAverageRating(book.getBookID());
+        int ratingTotal = reviewService.getRatingCount(book.getBookID());
+        averageRating.setRating(rating);
+        averageRating.setDisable(true);
+        averageRating.setMouseTransparent(true);
+        ratingCount.setText("(" + ratingTotal + " đánh giá)");
 
-        if (SessionManager.getInstance().getLoggedInMember().getDuty()==0)
-            if (RequestDAOImpl.getInstance().getRequestByMemberIDAndBookID(SessionManager.getInstance().getLoggedInMember().getMemberID(), book.getBookID()) != null) {
-                if (RequestDAOImpl.getInstance().
-                        getRequestByMemberIDAndBookID
-                                (SessionManager.getInstance().getLoggedInMember().getMemberID(),
-                                        book.getBookID()).isOverdue()) {
-                    System.out.println("Overdue");
+        if (SessionManager.getInstance().getLoggedInMember().getDuty()==0) {
+            Request request = RequestService.getInstance()
+                    .getLatestRequest(SessionManager.getInstance().getLoggedInMember().getMemberID(), book.getBookID());
+            if (request != null) {
+                if (request.isOverdue()) {
                     OverdueTag.setText("Quá hạn");
                 } else {
                     OverdueTag.setVisible(false);
-
-
                 }
             }
+        }
         // 3. LẤY TÊN TÁC GIẢ
         author.setText(book.getAuthor());
 
@@ -50,20 +55,10 @@ public class BookCardLargeController extends BookCardController {
         // if request exists and returnDate is null, show due date
         // (because it is not returned yet so we can show due date)
         // add highlight to the card if overdue
-        if (RequestDAOImpl.getInstance().getRequestByMemberIDAndBookID(SessionManager.getInstance().getLoggedInMember().getMemberID(), book.getBookID()) != null) {
-            Request request = RequestDAOImpl.getInstance().
-                    getRequestByMemberIDAndBookID(SessionManager.
-                            getInstance().getLoggedInMember().
-                            getMemberID(), book.getBookID());
-            if (request.getReturnDate() == null)
-            {
-
-                System.out.println(request.getDueDate());
-            }
-
-
-
-
+        Request request = RequestService.getInstance()
+                .getLatestRequest(SessionManager.getInstance().getLoggedInMember().getMemberID(), book.getBookID());
+        if (request != null && request.getReturnDate() == null) {
+            System.out.println(request.getDueDate());
         }
 
 

@@ -1,8 +1,6 @@
 // src/main/java/Library/backend/Request/Model/Request.java
 package Library.backend.Request.Model;
 
-import Library.backend.bookModel.Book;
-
 import java.time.LocalDateTime;
 
 public class Request {
@@ -14,13 +12,6 @@ public class Request {
     private LocalDateTime returnDate;
     private String status;
     private boolean overdue;
-    private String title;
-
-    public String getTitle() {
-        return Book.getBookById(bookID).getTitle();
-    }
-
-
 
     public Request(int memberID, String bookID, LocalDateTime issueDate, LocalDateTime dueDate, LocalDateTime returnDate, String status, boolean overdue) {
         this.memberID = memberID;

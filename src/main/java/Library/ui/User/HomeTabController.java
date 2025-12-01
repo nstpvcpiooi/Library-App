@@ -1,10 +1,9 @@
 package Library.ui.User;
 
-import Library.backend.Login.Model.Member;
-import Library.backend.Recommendation.Dao.MysqlRecommendationDao;
-import Library.backend.Recommendation.Dao.RecommendationDao;
+import Library.backend.Member.Model.Member;
+import Library.backend.Recommendation.service.RecommendationService;
 import Library.backend.Session.SessionManager;
-import Library.backend.bookModel.Book;
+import Library.backend.Book.Model.Book;
 import Library.ui.BookCard.BookCardCell;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -35,7 +34,7 @@ public class HomeTabController implements Initializable {
     @FXML
     private VBox welcomeBox;
 
-    RecommendationDao recommendationDao = MysqlRecommendationDao.getInstance();
+    private final RecommendationService recommendationService = RecommendationService.getInstance();
 
     private UserMainController userMainController;
 
@@ -64,12 +63,10 @@ public class HomeTabController implements Initializable {
     }
 
 
-    // TODO Lấy reccomendation từ back-end
     private List<Book> getRecommendations() {
-
         SessionManager sessionManager = SessionManager.getInstance();
         Member member = sessionManager.getLoggedInMember();
-        return recommendationDao.getCombinedRecommendations(member.getMemberID());
+        return recommendationService.getCombinedRecommendations(member.getMemberID());
 
     }
 

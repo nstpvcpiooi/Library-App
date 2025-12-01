@@ -1,9 +1,8 @@
 // src/main/java/Library/ui/PopUpWindow/UserViewController.java
 package Library.ui.PopUpWindow;
 
-import Library.backend.Login.DAO.MemberDAO;
-import Library.backend.Login.DAO.MemberDAOImpl;
-import Library.backend.Login.Model.Member;
+import Library.backend.Member.Model.Member;
+import Library.backend.Member.Service.MemberService;
 import Library.backend.Session.SessionManager;
 import Library.ui.Admin.AdminMainController;
 import Library.ui.MainController;
@@ -49,9 +48,9 @@ public class UserViewController extends PopUpController implements Initializable
     @FXML
     void Save(ActionEvent event) {
         try {
-            MemberDAO memberDAO = MemberDAOImpl.getInstance();
+            MemberService memberService = MemberService.getInstance();
 
-            if (tabTitle.getText().equals("THÊM USER MỚI")) {
+            if (tabTitle.getText().equals("THASM USER MỚI")) {
                 // Tạo người dùng mới
                 if (!validateInputs()) return; // Kiểm tra dữ liệu hợp lệ
 
@@ -61,7 +60,7 @@ public class UserViewController extends PopUpController implements Initializable
                 newMember.setEmail(email.getText());
                 newMember.setPhone(phone.getText());
 
-                if (memberDAO.createMember(newMember)) {
+                if (memberService.createMember(newMember)) {
                     showNotification("Thành công!", "Người dùng mới đã được thêm vào.");
                 } else {
                     showNotification("Lỗi!", "Người dùng hoặc email đã tồn tại.");
@@ -83,9 +82,9 @@ public class UserViewController extends PopUpController implements Initializable
                 memberToUpdate.setPhone(phone.getText());
 
                 // Kiểm tra trùng lặp username hoặc email
-                if (isDuplicateUsernameOrEmail(memberDAO, memberToUpdate)) return;
+                if (isDuplicateUsernameOrEmail(memberService, memberToUpdate)) return;
 
-                if (memberDAO.updateMember(memberToUpdate)) {
+                if (memberService.updateMember(memberToUpdate)) {
                     if (SessionManager.getInstance().getLoggedInMember().getMemberID() == currentMemberID) {
                         SessionManager.getInstance().setLoggedInMember(memberToUpdate);
                     }
@@ -102,7 +101,7 @@ public class UserViewController extends PopUpController implements Initializable
                 adminMainController.userManageController.updateUSerList();
 
             } else {
-                showNotification("Lỗi!", "Không thể cập nhật danh sách vì không phải AdminMainController.");
+                showNotification("Lỗi!", "Không thể cập nhật danh sách và không phải AdminMainController.");
             }
 
             getPopUpWindow().close();
@@ -155,9 +154,9 @@ public class UserViewController extends PopUpController implements Initializable
     /**
      * Kiểm tra trùng lặp username hoặc email
      */
-    private boolean isDuplicateUsernameOrEmail(MemberDAO memberDAO, Member memberToUpdate) {
-        Member existingUsername = memberDAO.getMemberByUsername(memberToUpdate.getUserName());
-        Member existingEmail = memberDAO.getMemberByEmail(memberToUpdate.getEmail());
+    private boolean isDuplicateUsernameOrEmail(MemberService memberService, Member memberToUpdate) {
+        Member existingUsername = memberService.getMemberByUsername(memberToUpdate.getUserName());
+        Member existingEmail = memberService.getMemberByEmail(memberToUpdate.getEmail());
 
         if (existingUsername != null && existingUsername.getMemberID() != currentMemberID) {
             showNotification("Lỗi!", "Tên người dùng đã tồn tại.");

@@ -1,93 +1,64 @@
-/*
 package Library.backend.database;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Objects;
+import java.util.function.Supplier;
 
 public class JDBCUtil {
+    private static final String CONNECTION_ERROR_MESSAGE = "KhA'ng th ¯Ÿ k §¨t n ¯`i t ¯>i c’­ s ¯Y d ¯_ li ¯Øu.";
+    private static volatile Supplier<Connection> connectionSupplier = JDBCUtil::createConnection;
 
     public static Connection getConnection() {
-        Connection c = null;
-
-        //	com.mysql.cj.jdbc.Driver driver = new com.mysql.cj.jdbc.Driver();
         try {
-            // đăng ký mysql driver vơi drivermanager
-
-            String url = "jdbc:mySQL://localhost:3306/library";
-            String username = "root";
-
-            String password = "minhbg123";
-
-            c = DriverManager.getConnection(url, username, password);
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return c;
-    }
-
-    public static void closeConnection(Connection c) {
-        try {
-            if (c != null) {
-                c.close();
-            }
-
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
+            return connectionSupplier.get();
+        } catch (DatabaseConnectionException e) {
+            throw e;
+        } catch (RuntimeException e) {
+            System.err.println(CONNECTION_ERROR_MESSAGE);
+            throw new DatabaseConnectionException(CONNECTION_ERROR_MESSAGE, e);
         }
     }
 
-    public static void printInfo(Connection c) {
-        try {
-            if (c != null) {
-                DatabaseMetaData mtdt = c.getMetaData();
-                System.out.println(mtdt.getDatabaseProductName());
-                System.out.println(mtdt.getDatabaseProductVersion());
-            }
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+    /**
+     * Allow tests to override how connections are created (e.g., in-memory H2).
+     */
+    public static void setConnectionSupplier(Supplier<Connection> supplier) {
+        connectionSupplier = Objects.requireNonNull(supplier);
     }
 
-}
-*/
-package Library.backend.database;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-public class JDBCUtil {
-    public static Connection getConnection() {
-        Connection c = null;
-        //	com.mysql.cj.jdbc.Driver driver = new com.mysql.cj.jdbc.Driver();
+    /**
+     * Reset connection supplier back to default MySQL provider.
+     */
+    public static void resetConnectionSupplier() {
+        connectionSupplier = JDBCUtil::createConnection;
+    }
+
+    private static Connection createConnection() {
         try {
-            // đăng ký mysql driver vơi drivermanager
             DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
             String url = "jdbc:mySQL://localhost:3306/library";
             String username = "root";
-            String password = "";
-            c = DriverManager.getConnection(url, username, password);
+            String password = "root";
+            return DriverManager.getConnection(url, username, password);
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.err.println(CONNECTION_ERROR_MESSAGE);
+            throw new DatabaseConnectionException(CONNECTION_ERROR_MESSAGE, e);
         }
-        return c;
     }
+
     public static void closeConnection(Connection c) {
         try {
             if (c != null) {
                 c.close();
             }
         } catch (Exception e) {
-            // TODO: handle exception
             e.printStackTrace();
         }
     }
+
     public static void printInfo(Connection c) {
         try {
             if (c != null) {
@@ -96,8 +67,8 @@ public class JDBCUtil {
                 System.out.println(mtdt.getDatabaseProductVersion());
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 }
+

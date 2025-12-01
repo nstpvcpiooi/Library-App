@@ -1,8 +1,8 @@
 package Library.ui.LogIn;
 
-import Library.backend.Login.DAO.MemberDAO;
-import Library.backend.Login.DAO.MemberDAOImpl;
-import Library.backend.Login.Model.Member;
+import Library.backend.Member.Model.Member;
+import Library.backend.Member.Service.MemberService;
+import Library.backend.database.DatabaseConnectionException;
 import Library.backend.util.EmailUtil;
 import Library.ui.Utils.Notification;
 import javafx.event.ActionEvent;
@@ -20,25 +20,47 @@ public class ForgotPasswordController {
     @FXML
     private Button sendMailButton;
 
+    private final MemberService memberService = MemberService.getInstance();
+
     @FXML
     void sendMail(ActionEvent event) {
-        String email = this.email.getText();
-        // TODO: GỌI HÀM BACKEND GỬI MẬT KHẨU ĐẾN EMAIL
-        // close window
-        Stage stage = (Stage) sendMailButton.getScene().getWindow();
-        stage.close();
-        MemberDAO memberDAO = MemberDAOImpl.getInstance();
-        Member member = memberDAO.getMemberByEmail(email);
-        EmailUtil.sendEmail(member.getEmail(), "ForgotPass","Mật khẩu của bạn là: " + member.getPassword());
-        Notification notification = new Notification("Thông báo", "Mật khẩu đã được gửi đến email của bạn!");
-        notification.display();
+        String targetEmail = email.getText() == null ? "" : email.getText().trim();
+        if (targetEmail.isEmpty()) {
+            showNotification("Lỗi!", "Vui lòng nhập email đã đăng ký.");
+            return;
+        }
+
+        try {
+            Member member = memberService.getMemberByEmail(targetEmail);
+            if (member == null) {
+                showNotification("Thông báo", "Không tìm thấy tài khoản với email này.");
+                return;
+            }
+            EmailUtil.sendEmail(member.getEmail(), "Quên mật khẩu",
+                    "Mật khẩu của bạn là: " + member.getPassword());
+            showNotification("Thông báo", "Mật khẩu đã được gửi đến email của bạn!");
+            closeWindow();
+        } catch (DatabaseConnectionException ex) {
+            showNotification("Lỗi!", ex.getMessage());
+        }
     }
 
     @FXML
     void enter(KeyEvent event) {
-        if (event.getCode().toString().equals("ENTER")) {
+        if ("ENTER".equals(event.getCode().toString())) {
             sendMail(new ActionEvent());
         }
     }
 
+    private void closeWindow() {
+        Stage stage = (Stage) sendMailButton.getScene().getWindow();
+        stage.close();
+    }
+
+    private void showNotification(String title, String message) {
+        Notification notification = new Notification(title, message);
+        notification.display();
+    }
 }
+
+

@@ -1,8 +1,8 @@
 package Library.ui.User;
 
-import Library.backend.Request.DAO.RequestDAOImpl;
+import Library.backend.Request.service.RequestService;
 import Library.backend.Session.SessionManager;
-import Library.backend.bookModel.Book;
+import Library.backend.Book.Model.Book;
 import Library.ui.BookCard.BookCardCell;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,7 +30,7 @@ public class MyRequestTabController implements Initializable {
     private List<Book> getBorrowedBooks() {
 
 
-        return RequestDAOImpl.getInstance().getBooksByMemberID(SessionManager.getInstance().getLoggedInMember().getMemberID());
+        return RequestService.getInstance().getBooksByMember(SessionManager.getInstance().getLoggedInMember().getMemberID());
     }
 
     @Override

@@ -1,6 +1,6 @@
 package Library.backend.Session;
 
-import Library.backend.Login.Model.Member;
+import Library.backend.Member.Model.Member;
 
 public class SessionManager {
     private static SessionManager instance;

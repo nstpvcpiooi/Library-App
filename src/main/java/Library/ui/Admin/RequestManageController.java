@@ -1,7 +1,6 @@
 package Library.ui.Admin;
 
-import Library.backend.Login.Model.Admin;
-import Library.backend.Request.DAO.RequestDAOImpl;
+import Library.backend.Request.service.RequestService;
 import Library.backend.Request.Model.Request;
 import Library.ui.Utils.Notification;
 import javafx.beans.property.SimpleStringProperty;
@@ -80,31 +79,29 @@ public class RequestManageController implements Initializable {
     @FXML
     void approve(ActionEvent event) {
         Request selectedRequest = table.getSelectionModel().getSelectedItem();
-        if (selectedRequest != null) {
-
-            if (selectedRequest.getStatus().equals("approved issue")) {
-                Notification notification = new Notification("Error", "Request already approved");
-                notification.display();
-                return;
-            }
-            else if (selectedRequest.getStatus().equals("pending return")) {
-                Admin admin = new Admin();
-                admin.approveReturnRequest(selectedRequest.getRequestID());
-            } else if (selectedRequest.getStatus().equals("pending issue")) {
-                Admin admin = new Admin();
-                admin.approveIssueRequest(selectedRequest.getRequestID());
-            }
-            else {
-                Notification notification = new Notification("Error", "Request already approved");
-                notification.display();
-                return;
-            }
-            Notification notification = new Notification("Success", "Request approved successfully");
+        if (selectedRequest == null) {
+            Notification notification = new Notification("Thông báo", "Vui lòng chọn một yêu cầu trước khi cập nhật.");
             notification.display();
-            hideButtons(); // ẩn button approve sau khi đã approve xong
-            refreshData();
-            MainController.libraryManageController.refreshData();
+            return;
         }
+
+        switch (selectedRequest.getStatus()) {
+            case "Đang mượn":
+                RequestService.getInstance().approveReturn(selectedRequest.getRequestID());
+                new Notification("Thành công", "Đã xác nhận độc giả trả sách. Tồn kho đã được cập nhật.").display();
+                break;
+            case "Đang giữ":
+                RequestService.getInstance().approveIssue(selectedRequest.getRequestID());
+                new Notification("Thành công", "Đã xác nhận độc giả nhận sách và chuyển sang trạng thái đang mượn.").display();
+                break;
+            default:
+                new Notification("Thông báo", "Yêu cầu này đã hoàn tất hoặc không cần phê duyệt.").display();
+                return;
+        }
+
+        hideButtons(); // ẩn button approve sau khi đã approve xong
+        refreshData();
+        MainController.libraryManageController.refreshData();
     }
 
     /**
@@ -118,8 +115,13 @@ public class RequestManageController implements Initializable {
         // Nếu yêu cầu đang chờ duyệt thì hiển thị nút duyệt yêu cầu
         Request selectedRequest = table.getSelectionModel().getSelectedItem();
         if (selectedRequest != null) {
-            if (selectedRequest.getStatus().equals("pending issue") || selectedRequest.getStatus().equals("pending return")) {
+            if (selectedRequest.getStatus().equals("Đang giữ") || selectedRequest.getStatus().equals("Đang mượn")) {
                 showButtons();
+                if (selectedRequest.getStatus().equals("Đang giữ")) {
+                    approveButton.setText("ĐÃ LẤY");
+                } else {
+                    approveButton.setText("ĐÃ TRẢ");
+                }
                 System.out.println("SHOW");
             } else {
                 hideButtons();
@@ -135,6 +137,7 @@ public class RequestManageController implements Initializable {
      */
     public void hideButtons() {
         approveButton.setVisible(false);
+        approveButton.setText("CẬP NHẬT");
         table.getSelectionModel().clearSelection();
     }
 
@@ -198,7 +201,7 @@ public class RequestManageController implements Initializable {
      * Cập nhật dữ liệu
      */
     void refreshData() {
-        ObservableList<Request> requests = FXCollections.observableArrayList(RequestDAOImpl.getInstance().getAllRequests());
+        ObservableList<Request> requests = FXCollections.observableArrayList(RequestService.getInstance().getAllRequests());
         table.setItems(requests);
     }
 

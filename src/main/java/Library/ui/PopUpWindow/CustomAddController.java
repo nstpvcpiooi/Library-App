@@ -1,7 +1,7 @@
 package Library.ui.PopUpWindow;
 
-import Library.backend.bookDao.MysqlBookDao;
-import Library.backend.bookModel.Book;
+import Library.backend.Book.Model.Book;
+import Library.backend.Book.Service.BookService;
 import Library.ui.Utils.Notification;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,6 +9,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
 
 import static Library.ui.MainController.DEFAULT_COVER;
 
@@ -21,9 +25,12 @@ public class CustomAddController extends PopUpController {
     private ImageView cover;
 
     @FXML
-    private Button saveButton, backButton;
+    private Button saveButton, backButton, changeCoverButton;
 
     private String fetchedBookID = null; // Biến lưu tạm bookID từ API
+    private String coverPath; // Đường dẫn ảnh bìa hiện tại
+
+    private final BookService bookService = BookService.getInstance();
 
     /**
      * Hàm xử lý sự kiện khi nhấn vào nút lưu thông tin sách
@@ -46,7 +53,9 @@ public class CustomAddController extends PopUpController {
                     : java.util.UUID.randomUUID().toString();
 
             // Nếu coverCode trống, thay bằng DEFAULT_COVER
-            String coverCode = cover.getImage() != null ? cover.getImage().getUrl() : String.valueOf(DEFAULT_COVER);
+            String coverCode = (coverPath == null || coverPath.isBlank())
+                    ? DEFAULT_COVER.getUrl()
+                    : coverPath;
 
             // Tạo đối tượng sách từ dữ liệu nhập vào, sắp xếp theo thứ tự constructor
             Book newBook = new Book(
@@ -55,14 +64,13 @@ public class CustomAddController extends PopUpController {
                     authorInput.getText(),  // author
                     Integer.parseInt(publishYearInput.getText()),  // publishYear
                     categoryInput.getText(),  // category
-                    isbnCodeInput.getText().trim().isEmpty() ? bookID : isbnCodeInput.getText(),  // isbn
+                    isbnCodeInput.getText().trim().isEmpty() ? bookID : isbnCodeInput.getText().trim(),  // isbn (cho phép nhập tùy chỉnh)
                     coverCode,  // coverCode (sử dụng coverCode từ ảnh hoặc DEFAULT_COVER)
                     Integer.parseInt(quantityInput.getText())  // quantity
             );
 
-            // Lưu sách vào cơ sở dữ liệu
-            MysqlBookDao bookDao = MysqlBookDao.getInstance();
-            bookDao.addBook(newBook);
+            // Lưu sách vào cơ sở dữ liệu thông qua service
+            bookService.addBook(newBook);
 
             // Đóng popup và hiển thị thông báo thành công
             getPopUpWindow().close();
@@ -78,6 +86,27 @@ public class CustomAddController extends PopUpController {
     @FXML
     void goBack(ActionEvent event) {
         getPopUpWindow().backtoAdd();  // Kiểm tra lại phương thức này trong lớp cha nếu cần
+    }
+
+    /**
+     * Chọn ảnh bìa từ máy tính
+     */
+    @FXML
+    void chooseCover(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Chọn ảnh bìa");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp")
+        );
+        File selectedFile = fileChooser.showOpenDialog(((Stage) changeCoverButton.getScene().getWindow()));
+        if (selectedFile != null) {
+            coverPath = selectedFile.toURI().toString();
+            try {
+                cover.setImage(new Image(coverPath, true));
+            } catch (Exception e) {
+                cover.setImage(DEFAULT_COVER);
+            }
+        }
     }
 
     /**
@@ -107,11 +136,13 @@ public class CustomAddController extends PopUpController {
             // Kiểm tra coverCode có hợp lệ không, nếu không thì dùng DEFAULT_COVER
             String coverImageUrl = (book.getCoverCode() != null && !book.getCoverCode().isEmpty())
                     ? book.getCoverCode()
-                    : String.valueOf(DEFAULT_COVER);
+                    : DEFAULT_COVER.getUrl();
             Image image = new Image(coverImageUrl);
             cover.setImage(image);
+            coverPath = coverImageUrl;
         } catch (Exception e) {
             cover.setImage(DEFAULT_COVER);  // Nếu gặp lỗi thì gán DEFAULT_COVER
+            coverPath = DEFAULT_COVER.getUrl();
         }
 
         titleInput.setText(book.getTitle());
@@ -133,6 +164,7 @@ public class CustomAddController extends PopUpController {
         publishYearInput.clear();
         quantityInput.clear();
         cover.setImage(DEFAULT_COVER);
+        coverPath = DEFAULT_COVER.getUrl();
     }
 
     /**

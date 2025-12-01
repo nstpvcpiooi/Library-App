@@ -1,8 +1,7 @@
 package Library.ui.Admin;
 
 import Library.MainApplication;
-import Library.backend.bookModel.Book;
-import Library.ui.LogIn.AdminLogInController;
+import Library.backend.Book.Model.Book;
 import Library.ui.MainController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,9 +30,6 @@ public class AdminMainController extends MainController {
     @FXML
     private Pane UserManageButton;
 
-
-    /** ADMIN LOG IN*/
-    public AdminLogInController adminLogInController;
 
     /** LibraryManage Tab */
     public LibraryManageController libraryManageController;

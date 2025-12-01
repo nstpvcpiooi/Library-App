@@ -2,6 +2,7 @@ package Library.ui.LogIn;
 
 import Library.MainApplication;
 import Library.backend.Session.SessionManager;
+import Library.backend.Member.Service.MemberService;
 import Library.ui.Utils.Notification;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +16,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import Library.backend.database.DatabaseConnectionException;
 
 public class UserLogInController extends LogInTabController {
     @FXML
@@ -30,16 +32,21 @@ public class UserLogInController extends LogInTabController {
 
         String username = this.username.getText();
         String password = this.password.getText();
-        if(memberDAO.login(username, password) != null) {
-            SessionManager.getInstance().setLoggedInMember(memberDAO.login(username, password));
-            logInViewController.setReturnType(LogInViewController.LogInType.USER);
+        try {
+            var member = MemberService.getInstance().getMemberByUserNameAndPassword(username, password);
+            if (member != null) {
+                SessionManager.getInstance().setLoggedInMember(member);
+                logInViewController.setReturnType(
+                        member.getDuty() == 1 ? LogInViewController.LogInType.ADMIN : LogInViewController.LogInType.USER);
 
-            Stage current = ((Stage) submitButton.getScene().getWindow());
-            current.close();
-        }
-        else {
-            // Notify the user that they have failed to log in
-            Notification notification = new Notification("Lỗi!", "Đăng nhập thất bại!");
+                Stage current = ((Stage) submitButton.getScene().getWindow());
+                current.close();
+            } else {
+                Notification notification = new Notification("Lỗi!", "Đăng nhập thất bại!");
+                notification.display();
+            }
+        } catch (DatabaseConnectionException ex) {
+            Notification notification = new Notification("Lỗi!", ex.getMessage());
             notification.display();
         }
     }

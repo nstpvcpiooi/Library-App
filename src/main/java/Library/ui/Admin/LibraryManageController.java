@@ -1,13 +1,14 @@
 package Library.ui.Admin;
 
-import Library.backend.bookDao.GoogleBookDao;
-import Library.backend.bookDao.MysqlBookDao;
-import Library.backend.bookModel.Book;
+import Library.backend.Book.Model.Book;
+import Library.backend.Book.Service.BookService;
+import Library.backend.Review.service.ReviewService;
 import Library.ui.BookCard.BookCardCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -17,7 +18,7 @@ import javafx.scene.layout.HBox;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -27,6 +28,9 @@ import static Library.ui.BookCard.BookCardCell.BookCardType.LARGE;
  * Controller cho giao diện quản lý thư viện của admin
  */
 public class LibraryManageController implements Initializable {
+
+    private final BookService bookService = BookService.getInstance();
+    private final ReviewService reviewService = ReviewService.getInstance();
 
     private ObservableList<Book> bookList = FXCollections.observableArrayList();
 
@@ -54,6 +58,15 @@ public class LibraryManageController implements Initializable {
      */
     @FXML
     private TextField SearchText;
+
+    @FXML
+    private ComboBox<String> categoryField;
+
+    @FXML
+    private TextField authorField;
+
+    @FXML
+    private ComboBox<Double> minRatingField;
 
     /**
      * Controller chính của admin (đã được khởi tạo trong AdminMainController)
@@ -87,13 +100,8 @@ public class LibraryManageController implements Initializable {
         if (event.getCode().isLetterKey() || event.getCode().isDigitKey() ||
                 event.getCode().isWhitespaceKey() || event.getCode().equals(KeyCode.ENTER)
                 || event.getCode().equals(KeyCode.BACK_SPACE) || event.getCode().equals(KeyCode.DELETE)) {
-            String query = SearchText.getText();
-            bookList.clear();
-            bookList.addAll(getSearchList(query));
+            updateSearchResults();
         }
-//        String query = SearchText.getText();
-//        SearchResult.getItems().clear();
-//        SearchResult.getItems().addAll(getSearchList(query));
     }
 
     /**
@@ -102,20 +110,13 @@ public class LibraryManageController implements Initializable {
      * @param query từ khóa tìm kiếm
      * @return danh sách kết quả tìm kiếm
      */
-    private List<Book> getSearchList(String query) {
-        if(query.isEmpty()) {
-//            return Book.searchBooks("category","");
-            return Book.searchBooksValue("");
-        }
-        List<Book> ls = new ArrayList<>();
-
-        ls = Book.searchBooks("title", query);
-        if (ls != null) {
-//            return Collections.singletonList(ls.get(0));
-            return ls.subList(0, Math.min(ls.size(), 4));
-        } else {
-            return Collections.emptyList();
-        }
+    private void updateSearchResults() {
+        String query = SearchText.getText();
+        List<Book> base = (query == null || query.trim().isEmpty())
+                ? bookService.searchBooksValue("")
+                : bookService.searchBooksValue(query.trim());
+        List<Book> filtered = applyAdvancedFilters(base);
+        bookList.setAll(filtered);
     }
 
     /**
@@ -149,7 +150,10 @@ public class LibraryManageController implements Initializable {
         SearchResult.setCellFactory(lv -> new BookCardCell(LARGE));
 
         // Hiển thị sách trong tab Library Manage khi mới mở ứng dụng
-        bookList.addAll(getSearchList(""));
+        updateSearchResults();
+        loadCategories();
+        loadRatingOptions();
+        registerAdvancedSearchListeners();
     }
 
     public void setMainController(AdminMainController adminMainController) {
@@ -169,7 +173,73 @@ public class LibraryManageController implements Initializable {
         }
     }
     public void refreshData() {
-        bookList.clear();
-        bookList.addAll(getSearchList(""));
+        updateSearchResults();
+        loadCategories();
+        loadRatingOptions();
+    }
+
+    private List<Book> applyAdvancedFilters(List<Book> books) {
+        String category = safeLower(categoryField.getValue());
+        String author = safeLower(authorField.getText());
+        Double minRating = minRatingField.getValue();
+
+        List<Book> result = new ArrayList<>();
+        for (Book book : books) {
+            if (!category.isEmpty() && (book.getCategory() == null || !safeLower(book.getCategory()).contains(category))) {
+                continue;
+            }
+            if (!author.isEmpty() && (book.getAuthor() == null || !safeLower(book.getAuthor()).contains(author))) {
+                continue;
+            }
+            if (minRating != null) {
+                double avg = reviewService.getAverageRating(book.getBookID());
+                if (avg < minRating) {
+                    continue;
+                }
+            }
+            result.add(book);
+        }
+        return result;
+    }
+
+    private void loadCategories() {
+        List<Book> allBooks = bookService.searchBooksValue("");
+        LinkedHashSet<String> categories = new LinkedHashSet<>();
+        for (Book b : allBooks) {
+            if (b.getCategory() != null && !b.getCategory().isBlank()) {
+                categories.add(b.getCategory());
+            }
+        }
+        categoryField.getItems().setAll(categories);
+        categoryField.getItems().add(0, "");
+        categoryField.getSelectionModel().selectFirst();
+    }
+
+    private String safeLower(String value) {
+        return value == null ? "" : value.toLowerCase().trim();
+    }
+
+    private void loadRatingOptions() {
+        if (minRatingField == null) {
+            return;
+        }
+        ObservableList<Double> ratings = FXCollections.observableArrayList();
+        for (int i = 0; i <= 5; i++) {
+            ratings.add((double) i);
+        }
+        minRatingField.setItems(ratings);
+        minRatingField.getSelectionModel().clearSelection();
+    }
+
+    private void registerAdvancedSearchListeners() {
+        if (categoryField != null) {
+            categoryField.valueProperty().addListener((obs, oldV, newV) -> updateSearchResults());
+        }
+        if (authorField != null) {
+            authorField.textProperty().addListener((obs, oldV, newV) -> updateSearchResults());
+        }
+        if (minRatingField != null) {
+            minRatingField.valueProperty().addListener((obs, oldV, newV) -> updateSearchResults());
+        }
     }
 }

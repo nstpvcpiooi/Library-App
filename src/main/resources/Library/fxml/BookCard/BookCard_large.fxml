@@ -6,6 +6,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.Rating?>
 
 <HBox fx:id="container" alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="830.0" stylesheets="@../../css/BookCard.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Library.ui.BookCard.BookCardLargeController">
    <children>
@@ -29,6 +30,16 @@
                   <Font name="Barlow ExtraBold" size="16.0" />
                </font>
             </Label>
+            <HBox alignment="CENTER_LEFT" spacing="8.0">
+               <children>
+                  <Rating fx:id="averageRating" disable="true" mouseTransparent="true" />
+                  <Label fx:id="ratingCount" text="(0 đánh giá)">
+                     <font>
+                        <Font name="Barlow Medium" size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
             <Label fx:id="quantity" text="Số lượng">
                <font>
                   <Font name="Barlow ExtraBold" size="16.0" />

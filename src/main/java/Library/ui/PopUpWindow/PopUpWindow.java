@@ -1,8 +1,8 @@
 package Library.ui.PopUpWindow;
 
 import Library.MainApplication;
-import Library.backend.Login.Model.Member;
-import Library.backend.bookModel.Book;
+import Library.backend.Member.Model.Member;
+import Library.backend.Book.Model.Book;
 import Library.ui.MainController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;

@@ -25,7 +25,12 @@
             </Label>
             <HBox alignment="CENTER" prefHeight="451.0" prefWidth="900.0" spacing="20.0">
                <children>
-                  <ImageView id="cover" fx:id="cover" fitHeight="243.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                  <VBox alignment="CENTER" prefHeight="300.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <ImageView id="cover" fx:id="cover" fitHeight="243.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
+                        <Button fx:id="changeCoverButton" mnemonicParsing="false" onAction="#chooseCover" prefWidth="160.0" text="Chọn ảnh bìa" />
+                     </children>
+                  </VBox>
                   <VBox alignment="CENTER" prefHeight="440.0" prefWidth="630.0" spacing="15.0">
                      <children>
                         <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="43.0" prefWidth="620.0" styleClass="input">
@@ -61,7 +66,7 @@
                               </HBox>
                               <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="43.0" prefWidth="467.0" styleClass="input">
                                  <children>
-                                    <TextField fx:id="isbnCodeInput" disable="true" editable="false" prefHeight="46.0" prefWidth="622.0" promptText="Mã ISBN (empty)" />
+                                    <TextField fx:id="isbnCodeInput" prefHeight="46.0" prefWidth="622.0" promptText="Mã ISBN (tùy chọn)" />
                                  </children>
                               </HBox>
                            </children>
